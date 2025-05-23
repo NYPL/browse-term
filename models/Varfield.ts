@@ -4,10 +4,38 @@ import type { VarfieldMarc, Subfield } from "../types.ts";
 
 class Varfield {
   varfield: VarfieldMarc;
+  marcTag: string;
+  display: boolean;
+  label: string;
+  type: string;
+  source: string;
+  bibOnly: boolean;
   constructor(varfield: VarfieldMarc) {
     this.varfield = varfield;
+    this.display = this.getDisplay();
+    this.label = this.getLabel();
+    this.type = this.getType();
+    this.source = this.getSource();
+    this.bibOnly = this.getBibOnly();
   }
-  get display() {
+
+  getSource() {
+    return this.varfield.marcTag[0] !== "6" ? "authority" : "bib";
+  }
+
+  isValidBibSubjectSource() {
+    const cataloggedSource = this.getSubfieldContent("2").toLocaleLowerCase();
+    return !(
+      cataloggedSource.includes("bookops") || cataloggedSource.includes("local")
+    );
+  }
+
+  getBibOnly() {
+    if (this.source !== "bib") return false;
+    return this.varfield.marcTag === "690" || this.isValidBibSubjectSource();
+  }
+
+  getDisplay() {
     return true;
   }
 
@@ -26,7 +54,7 @@ class Varfield {
     );
   }
 
-  get label(): string {
+  getLabel(): string {
     return (
       [
         valuesByKeys(this.buildSubfieldMap(), firstSubfields)
@@ -45,7 +73,7 @@ class Varfield {
     );
   }
 
-  get type(): string {
+  getType(): string {
     const marcTag = this.varfield.marcTag;
     const digits = parseInt(marcTag, 10) % 100;
     return (headings as Record<number, string>)[digits];
