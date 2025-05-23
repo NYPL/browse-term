@@ -1,5 +1,7 @@
-import Varfield from "../models/Varfield.ts";
+import { describe } from "node:test";
 import { expect } from "chai"
+import Varfield from "../models/Varfield.ts";
+import { headings } from "../utils.ts"
 
 describe("Varfield", () => {
   describe("label", () => {
@@ -54,7 +56,35 @@ describe("Varfield", () => {
         "ind1": " ",
         "ind2": " ",
         "subfields": []
-      }, ['a', 'b', 'c', 'x', 'z']).label).to.be(undefined)
+      }, ['a', 'b', 'c', 'x', 'z']).label).to.eq('')
     })
   });
+  describe("type", () => {
+    it("returns headings from the headings mapping", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      })
+      expect(varfield.type).to.eq("Topical Term")
+    })
+    it("returns headings from the headings mapping for marcTag 100", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "100",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      })
+      expect(varfield.type).to.eq("Personal Name")
+    })
+  })
 });
