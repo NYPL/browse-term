@@ -1,12 +1,9 @@
-const Varfield = require("../models/Varfield.ts");
+import Varfield from "../models/Varfield.ts";
+import { expect } from "chai"
 
 describe("Varfield", () => {
-  beforeAll(() => {
-    process.env.FIRST_SUBFIELDS_TO_INDEX = "a,b,c";
-  });
   describe("label", () => {
     it("puts together a label with only one subfield", () => {
-      console.log(Varfield)
       const varfield = new Varfield({
         fieldTag: "d",
         marcTag: "150",
@@ -16,8 +13,48 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      });
+      }, ['a']);
       expect(varfield.label).to.equal("Horror in art");
     });
+    it("puts together a label with starting subfields and xyz subfields with dashes", () => {
+      const varfield = new Varfield({
+        "fieldTag": "d",
+        "marcTag": "150",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "a"
+          },
+          {
+            "tag": "b",
+            "content": "b"
+          },
+          {
+            "tag": "b",
+            "content": "c"
+          },
+          {
+            "tag": "z",
+            "content": "z"
+          },
+          {
+            "tag": "x",
+            "content": "x"
+          }
+        ]
+      }, ['a', 'b', 'c', 'x', 'z']);
+      expect(varfield.label).to.equal("a b -- z -- x");
+    });
+    it("doesn't explode with no subfields", () => {
+      expect(new Varfield({
+        "fieldTag": "d",
+        "marcTag": "150",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": []
+      }, ['a', 'b', 'c', 'x', 'z']))
+    })
   });
 });

@@ -9,7 +9,7 @@
  */
 const hashByKeys = (
   hash: Record<string, string>,
-  keys: string[],
+  keys: string[]
 ): Record<string, string> => {
   const newHash: Record<string, string> = {};
   return Object.keys(hash).reduce((newHash, key) => {
@@ -33,7 +33,7 @@ const hashByKeys = (
  */
 export const valuesByKeys = (
   hash: Record<string, string>,
-  keys: string[],
+  keys: string[]
 ): string[] => {
   hash = hashByKeys(hash, keys);
   return Object.keys(hash).map((key) => hash[key]);

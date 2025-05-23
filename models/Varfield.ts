@@ -1,5 +1,4 @@
-const { valuesByKeys, headings } = require("../utils");
-const { firstSubfieldsToIndex } = require("../config");
+import { valuesByKeys, headings } from "../utils.ts";
 
 interface Subfield {
   content: string;
@@ -15,9 +14,11 @@ interface VarfieldMarc {
 class Varfield {
   varfield: VarfieldMarc;
   display: boolean;
-  constructor(varfield: VarfieldMarc) {
+  firstSubfieldsToIndex: string[];
+  constructor(varfield: VarfieldMarc, firstSubfieldsToIndex: string[]) {
     this.varfield = varfield;
     this.display = true;
+    this.firstSubfieldsToIndex = firstSubfieldsToIndex;
   }
 
   getSubfieldContent(tag: string): string | undefined {
@@ -38,7 +39,7 @@ class Varfield {
   get label(): string {
     return (
       [
-        valuesByKeys(this.buildSubfieldMap(), firstSubfieldsToIndex)
+        valuesByKeys(this.buildSubfieldMap(), this.firstSubfieldsToIndex)
           .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
           .join(" "),
         valuesByKeys(this.buildSubfieldMap(), ["v", "x", "y", "z"])
@@ -61,4 +62,4 @@ class Varfield {
   }
 }
 
-module.exports = { default: Varfield };
+export default Varfield;

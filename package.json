@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "mocha --loader=ts-node/esm 'test/**/*.{ts,js}'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^5.2.2",
     "@types/node": "^22.15.21",
-    "jest": "^29.7.0",
+    "chai": "^5.2.0",
+    "mocha": "^11.4.0",
     "prettier": "^3.5.3",
-    "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },

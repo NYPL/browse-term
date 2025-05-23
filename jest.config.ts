@@ -4,7 +4,7 @@
  */
 
 import type { Config } from "jest";
-const { describe, expect, it, beforeAll } = require("jest");
+import { describe, expect, it, beforeAll } from "jest";
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically

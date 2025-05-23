@@ -1,1 +1,1 @@
-require("dotenv")();
+import "dotenv/config";
