@@ -32,7 +32,7 @@ describe("Varfield", () => {
             "content": "b"
           },
           {
-            "tag": "b",
+            "tag": "c",
             "content": "c"
           },
           {
@@ -44,8 +44,8 @@ describe("Varfield", () => {
             "content": "x"
           }
         ]
-      }, ['a', 'b', 'c', 'x', 'z']);
-      expect(varfield.label).to.equal("a b -- z -- x");
+      }, ['a', 'b', 'c']);
+      expect(varfield.label).to.equal("a b c -- z -- x");
     });
     it("doesn't explode with no subfields", () => {
       expect(new Varfield({
@@ -54,7 +54,7 @@ describe("Varfield", () => {
         "ind1": " ",
         "ind2": " ",
         "subfields": []
-      }, ['a', 'b', 'c', 'x', 'z']))
+      }, ['a', 'b', 'c', 'x', 'z']).label).to.be(undefined)
     })
   });
 });
