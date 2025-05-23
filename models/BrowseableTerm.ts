@@ -8,6 +8,7 @@ class BrowseableTerm {
   varfields: VarfieldMarc[];
   bibOnly: boolean;
   source: string;
+  skip: boolean;
   constructor(varfields: VarfieldMarc[]) {
     this.varfields = varfields;
     this.broaderTerms = this.fiveXXFields.filter(
@@ -18,9 +19,10 @@ class BrowseableTerm {
     );
     this.bibOnly = this.preferredTermVarfield.bibOnly;
     this.source = this.preferredTermVarfield.source;
+    this.skip = this.getSkip();
   }
 
-  get skip() {
+  getSkip() {
     let skipCriteria = [];
     skipCriteria.push(this.isDeprecatedLocalAuthority());
     skipCriteria.push(this.skipBibSubject());
