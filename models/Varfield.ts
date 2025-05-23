@@ -1,4 +1,4 @@
-import { valuesByKeys, headings } from "../utils.ts";
+import { valuesByKeys, headings, firstSubfields } from "../utils.ts";
 
 interface Subfield {
   content: string;
@@ -14,11 +14,9 @@ interface VarfieldMarc {
 class Varfield {
   varfield: VarfieldMarc;
   display: boolean;
-  firstSubfieldsToIndex: string[];
-  constructor(varfield: VarfieldMarc, firstSubfieldsToIndex: string[]) {
+  constructor(varfield: VarfieldMarc) {
     this.varfield = varfield;
     this.display = true;
-    this.firstSubfieldsToIndex = firstSubfieldsToIndex;
   }
 
   getSubfieldContent(tag: string): string | undefined {
@@ -39,7 +37,7 @@ class Varfield {
   get label(): string {
     return (
       [
-        valuesByKeys(this.buildSubfieldMap(), this.firstSubfieldsToIndex)
+        valuesByKeys(this.buildSubfieldMap(), firstSubfields)
           .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
           .join(" "),
         valuesByKeys(this.buildSubfieldMap(), ["v", "x", "y", "z"])

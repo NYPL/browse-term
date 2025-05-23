@@ -1,7 +1,6 @@
-// import { describe } from "node:test";
+import { describe, it } from "node:test";
 import { expect } from "chai"
 import Varfield from "../models/Varfield.ts";
-import { headings } from "../utils.ts"
 
 describe("Varfield", () => {
   describe("label", () => {
@@ -15,7 +14,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      }, ['a']);
+      });
       expect(varfield.label).to.equal("Horror in art");
     });
     it("puts together a label with starting subfields and xyz subfields with dashes", () => {
@@ -46,7 +45,7 @@ describe("Varfield", () => {
             "content": "x"
           }
         ]
-      }, ['a', 'b', 'c']);
+      });
       expect(varfield.label).to.equal("a b c -- z -- x");
     });
     it("doesn't explode with no subfields", () => {
@@ -56,7 +55,7 @@ describe("Varfield", () => {
         "ind1": " ",
         "ind2": " ",
         "subfields": []
-      }, ['a', 'b', 'c', 'x', 'z']).label).to.eq('')
+      }).label).to.eq('')
     })
   });
   describe("type", () => {

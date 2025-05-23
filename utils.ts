@@ -7,18 +7,17 @@
  *   1) key must be in given `keys`
  *   2) value must by truthy
  */
-const hashByKeys = (
+export const hashByKeys = (
   hash: Record<string, string>,
   keys: string[]
 ): Record<string, string> => {
   const newHash: Record<string, string> = {};
   return Object.keys(hash).reduce((newHash, key) => {
     const value = hash[key];
-    const valueIsTruthy = value !== undefined && value !== "";
     // If the keys requested include this key
     // .. and extracted value is truthy
     // .. include it in new hash.
-    if (keys.includes(key) && valueIsTruthy) newHash[key] = value;
+    if (keys.includes(key) && value) newHash[key] = value;
     return newHash;
   }, newHash);
 };
@@ -55,3 +54,28 @@ export const headings = {
   82: "Chronological Subdivision",
   85: "Form Subdivision",
 };
+
+export const firstSubfields = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "4",
+];
