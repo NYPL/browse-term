@@ -1,4 +1,5 @@
-import { valuesByKeys, headings, firstSubfields } from "../utils.ts";
+import { valuesByKeys } from "../utils.ts";
+import { headings, firstSubfields } from "../constants.js";
 
 interface Subfield {
   content: string;
