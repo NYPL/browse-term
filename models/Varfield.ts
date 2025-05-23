@@ -1,23 +1,14 @@
 import { valuesByKeys } from "../utils.ts";
 import { headings, firstSubfields } from "../constants.js";
-
-interface Subfield {
-  content: string;
-  tag: string;
-}
-
-interface VarfieldMarc {
-  fieldTag: string;
-  subfields: Subfield[];
-  marcTag: string;
-}
+import type { VarfieldMarc, Subfield } from "../types.ts";
 
 class Varfield {
   varfield: VarfieldMarc;
-  display: boolean;
   constructor(varfield: VarfieldMarc) {
     this.varfield = varfield;
-    this.display = true;
+  }
+  get display() {
+    return true;
   }
 
   getSubfieldContent(tag: string): string | undefined {
