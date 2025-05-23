@@ -1,1 +1,3 @@
-export const subfieldsToIndex = (process.env.SUBFIELDS_TO_INDEX ?? '').split(',')
+module.exports = {
+  firstSubfieldsToIndex: (process.env.SUBFIELDS_TO_INDEX ?? "").split(","),
+};
