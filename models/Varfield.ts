@@ -24,9 +24,10 @@ class Varfield {
   }
 
   isValidBibSubjectSource() {
-    const cataloggedSource = this.getSubfieldContent("2").toLocaleLowerCase();
+    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
     return !(
-      cataloggedSource.includes("bookops") || cataloggedSource.includes("local")
+      cataloggedSource?.includes("bookops") ||
+      cataloggedSource?.includes("local")
     );
   }
 

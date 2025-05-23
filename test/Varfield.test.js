@@ -3,6 +3,81 @@ import { expect } from "chai"
 import Varfield from "../models/Varfield.ts";
 
 describe("Varfield", () => {
+  describe("source", () => {
+    it("is bib when given a 600 marctag", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "650",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      expect(varfield.source).to.eq("bib")
+    })
+    it("is authority when not given a 600 marctag", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      expect(varfield.source).to.eq("authority")
+    })
+  })
+  describe("bibOnly", () => {
+    it("returns false when varfield source is not bib subject", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      expect(varfield.bibOnly).to.be.false
+    })
+    it("returns true when varfield source bib and subject source is valid", () => {
+      const isValidBibSubjectSource = Varfield.prototype.isValidBibSubjectSource
+      Varfield.prototype.isValidBibSubjectSource = () => true
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "650",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      expect(varfield.bibOnly).to.be.true
+      Varfield.prototype.isValidBibSubjectSource = isValidBibSubjectSource
+    })
+    it("returns false when varfield source bib and subject source is invalid", () => {
+      const isValidBibSubjectSource = Varfield.prototype.isValidBibSubjectSource
+      Varfield.prototype.isValidBibSubjectSource = () => false
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "650",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      expect(varfield.bibOnly).to.be.false
+      Varfield.prototype.isValidBibSubjectSource = isValidBibSubjectSource
+    })
+  })
   describe("label", () => {
     it("puts together a label with only one subfield", () => {
       const varfield = new Varfield({
