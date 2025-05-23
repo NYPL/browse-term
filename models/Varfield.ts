@@ -23,7 +23,12 @@ class Varfield {
     return this.varfield.marcTag[0] !== "6" ? "authority" : "bib";
   }
 
-  isValidBibSubjectSource() {
+  hasValidBibSubjectSource() {
+    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
+    return this.isBibOnly() || cataloggedSource?.includes("lcsh");
+  }
+
+  isBibOnly() {
     const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
     return !(
       cataloggedSource?.includes("bookops") ||
@@ -33,7 +38,7 @@ class Varfield {
 
   getBibOnly() {
     if (this.source !== "bib") return false;
-    return this.varfield.marcTag === "690" || this.isValidBibSubjectSource();
+    return this.varfield.marcTag === "690" || this.isBibOnly();
   }
 
   getDisplay() {

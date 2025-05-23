@@ -3,6 +3,7 @@ import Varfield from "./Varfield.ts";
 import VariantVarfield from "./VariantVarfield.ts";
 
 class BrowseableTerm {
+  preferredTerm: Varfield;
   seeAlso: VariantVarfield[];
   broaderTerms: VariantVarfield[];
   varfields: VarfieldMarc[];
@@ -17,8 +18,9 @@ class BrowseableTerm {
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
     );
-    this.bibOnly = this.preferredTermVarfield.bibOnly;
-    this.source = this.preferredTermVarfield.source;
+    this.preferredTerm = this.getpreferredTerm();
+    this.bibOnly = this.preferredTerm.bibOnly;
+    this.source = this.preferredTerm.source;
     this.skip = this.getSkip();
   }
 
@@ -31,8 +33,8 @@ class BrowseableTerm {
 
   skipBibSubject() {
     return (
-      this.preferredTermVarfield.source === "bib" &&
-      !this.preferredTermVarfield.isValidBibSubjectSource()
+      this.preferredTerm.source === "bib" &&
+      !this.preferredTerm.hasValidBibSubjectSource()
     );
   }
 
@@ -57,7 +59,7 @@ class BrowseableTerm {
     return fieldTagD;
   }
 
-  get preferredTermVarfield() {
+  getpreferredTerm() {
     return new Varfield(this.fieldTagD);
   }
 
