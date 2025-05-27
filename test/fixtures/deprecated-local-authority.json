@@ -1,0 +1,133 @@
+{
+  "id": 11976080,
+  "updatedDate": "2009-03-17T11:47:20Z",
+  "createdDate": "2009-03-17T11:47:20Z",
+  "deleted": false,
+  "suppressed": false,
+  "varFields": [
+    {
+      "fieldTag": "d",
+      "marcTag": "150",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Indigenous peoples"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Aborigines"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Indigenous peoples"
+        },
+        {
+          "tag": "x",
+          "content": "Government relations"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Indigenous populations"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Native peoples"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Native races"
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "667",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "NYPL LOCAL AUTHORITY RECORD (SUBJECT)"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "907",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": ".a10001530"
+        },
+        {
+          "tag": "b",
+          "content": "01-02-09"
+        },
+        {
+          "tag": "c",
+          "content": "12-14-94"
+        },
+        {
+          "tag": "d",
+          "content": "s"
+        },
+        {
+          "tag": "e",
+          "content": "x"
+        },
+        {
+          "tag": "f",
+          "content": "-"
+        }
+      ]
+    },
+    {
+      "fieldTag": "_",
+      "content": "00000nz   2200121n  4500"
+    }
+  ]
+}
