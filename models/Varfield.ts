@@ -33,7 +33,7 @@ class Varfield {
   }
 
   hasValidLocalSources() {
-    return !(
+    return !!(
       this.cataloggedSource?.includes("bookops") ||
       this.cataloggedSource?.includes("local")
     );

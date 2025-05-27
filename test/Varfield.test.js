@@ -64,16 +64,15 @@ describe("Varfield", () => {
     it("returns false when varfield source bib and subject source is invalid", () => {
       const hasValidLocalSources = Varfield.prototype.hasValidLocalSources
       Varfield.prototype.hasValidLocalSources = () => false
-      const varfield = new Varfield({
-        fieldTag: "d",
-        marcTag: "650",
-        subfields: [
-          {
-            tag: "a",
-            content: "Horror in art",
-          },
-        ],
-      });
+      const varfield = new Varfield(
+        {
+          marcTag: "600",
+          fieldTag: "d",
+          subfields: [
+            { content: "Spaghetti", tag: "a" },
+          ],
+        },
+      );
       expect(varfield.bibOnly).to.be.false
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources
     })
@@ -91,12 +90,35 @@ describe("Varfield", () => {
         ],
       });
       // this method is called after checking if a subject comes from a bib,
-      // so this return value is not relevant to Sierra authority subjects. It is
-      // also definitely a valid *source* if it comes from the Sierra Authority
-      // database, even if it might be skipped for other reasons
-      expect(varfield.hasValidLocalSources()).to.be.true
+      // so this return value is not relevant to Sierra authority subjects. 
+      expect(varfield.hasValidLocalSources()).to.be.false
     })
-    it("returns true for ")
+    it("returns true for valid source", () => {
+      const bibSubject = new Varfield(
+        {
+          marcTag: "600",
+          fieldTag: "d",
+          subfields: [
+            { content: "Spaghetti", tag: "a" },
+            { content: "Local", tag: "2" },
+          ],
+        },
+      );
+      expect(bibSubject.hasValidLocalSources()).to.be.true
+    })
+    it("returns false for invalid source", () => {
+      const bibSubject = new Varfield(
+        {
+          marcTag: "600",
+          fieldTag: "d",
+          subfields: [
+            { content: "Spaghetti", tag: "a" },
+            { content: "Dollywood", tag: "2" },
+          ],
+        },
+      );
+      expect(bibSubject.hasValidLocalSources()).to.be.false
+    })
   })
   describe("label", () => {
     it("puts together a label with only one subfield", () => {

@@ -9,7 +9,9 @@ describe("Subject", () => {
   const horrorSubject = new Subject(
     horrorTalesAuthorityRecord.varFields as VarfieldMarc[]
   );
-
+  const deprecatedLocalAuthorityRecord = new Subject(
+    deprecatedLocal.varFields as VarfieldMarc[]
+  );
   describe("fourXXfields", () => {
     it("returns 400s", () => {
       expect(horrorSubject.fourXXFields.length).to.eq(12);
@@ -48,11 +50,26 @@ describe("Subject", () => {
       expect(horrorSubject.isDeprecatedLocalAuthority()).to.be.false;
     });
     it("returns true when 667 field present with NO nypl local authority content", () => {
-      const deprecatedLocalAuthorityRecord = new Subject(
-        deprecatedLocal.varFields as VarfieldMarc[]
-      );
       expect(deprecatedLocalAuthorityRecord.isDeprecatedLocalAuthority()).to.be
         .true;
+    });
+  });
+  describe("skip", () => {
+    it("is true when record is deprecated local authority", () => {
+      expect(deprecatedLocalAuthorityRecord.skip).to.be.true;
+    });
+    it("is true when bib subject is not from a valid source", () => {
+      const bibSubject = new Subject([
+        {
+          marcTag: "600",
+          fieldTag: "d",
+          subfields: [
+            { content: "Spaghetti", tag: "a" },
+            { content: "Dollywood", tag: "2" },
+          ],
+        },
+      ]);
+      expect(bibSubject.skip).to.be.true;
     });
   });
 });
