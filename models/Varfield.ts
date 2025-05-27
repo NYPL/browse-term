@@ -8,7 +8,7 @@ class Varfield {
   display: boolean;
   label: string;
   type: string;
-  source: string;
+  source: string; 
   bibOnly: boolean;
   constructor(varfield: VarfieldMarc) {
     this.varfield = varfield;
@@ -82,7 +82,7 @@ class Varfield {
   getType(): string {
     const marcTag = this.varfield.marcTag;
     const digits = parseInt(marcTag, 10) % 100;
-    return (headings as Record<number, string>)[digits];
+    return headings[digits];
   }
 }
 

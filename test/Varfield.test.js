@@ -78,7 +78,7 @@ describe("Varfield", () => {
       Varfield.prototype.isValidBibOnlySubjectSource = isValidBibOnlySubjectSource
     })
   })
-  describe("isValidBibSubject", () => {
+  describe("isValidBibOnlySubjectSource", () => {
     it("does not explode if there is no subfield 2", () => {
       const varfield = new Varfield({
         fieldTag: "d",
