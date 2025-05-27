@@ -8,7 +8,7 @@ class Varfield {
   display: boolean;
   label: string;
   type: string;
-  source: string; 
+  source: string;
   bibOnly: boolean;
   constructor(varfield: VarfieldMarc) {
     this.varfield = varfield;
@@ -23,22 +23,26 @@ class Varfield {
     return this.varfield.marcTag[0] !== "6" ? "authority" : "bib";
   }
 
-  hasValidBibSubjectSource() {
-    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
-    return this.isBibOnly() || cataloggedSource?.includes("lcsh");
+  get cataloggedSource() {
+    return this.getSubfieldContent("2")?.toLocaleLowerCase();
   }
 
-  isBibOnly() {
-    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
+  hasValidBibSubjectSource() {
+    return (
+      this.hasValidLocalSources() || this.cataloggedSource?.includes("lcsh")
+    );
+  }
+
+  hasValidLocalSources() {
     return !(
-      cataloggedSource?.includes("bookops") ||
-      cataloggedSource?.includes("local")
+      this.cataloggedSource?.includes("bookops") ||
+      this.cataloggedSource?.includes("local")
     );
   }
 
   getBibOnly() {
     if (this.source !== "bib") return false;
-    return this.varfield.marcTag === "690" || this.isBibOnly();
+    return this.varfield.marcTag === "690" || this.hasValidLocalSources();
   }
 
   getDisplay() {
