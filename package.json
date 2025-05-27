@@ -1,11 +1,12 @@
 {
   "name": "@nypl/authority-records",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "build": "npx tsc"
   },
   "author": "",
   "license": "ISC",
