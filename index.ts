@@ -1,3 +1,3 @@
-import Subject from "./models/Subject";
+import Subject from "./models/Subject.ts";
 
 export default Subject;
