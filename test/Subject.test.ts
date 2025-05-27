@@ -49,7 +49,7 @@ describe("Subject", () => {
     it("returns false when 667 field present with NO nypl local authority content", () => {
       expect(horrorSubject.isDeprecatedLocalAuthority()).to.be.false;
     });
-    it("returns true when 667 field present with NO nypl local authority content", () => {
+    it("returns true when 667 field present with nypl local authority content", () => {
       expect(deprecatedLocalAuthorityRecord.isDeprecatedLocalAuthority()).to.be
         .true;
     });
@@ -57,6 +57,19 @@ describe("Subject", () => {
   describe("skip", () => {
     it("is true when record is deprecated local authority", () => {
       expect(deprecatedLocalAuthorityRecord.skip).to.be.true;
+    });
+    it("is false when bib subject is from a valid source", () => {
+      const bibSubject = new Subject([
+        {
+          marcTag: "600",
+          fieldTag: "d",
+          subfields: [
+            { content: "Spaghetti", tag: "a" },
+            { content: "BookOps", tag: "2" },
+          ],
+        },
+      ]);
+      expect(bibSubject.skip).to.be.false;
     });
     it("is true when bib subject is not from a valid source", () => {
       const bibSubject = new Subject([

@@ -7,8 +7,6 @@ class Subject {
   seeAlso: VariantVarfield[];
   broaderTerms: VariantVarfield[];
   varfields: VarfieldMarc[];
-  bibOnly: boolean;
-  source: string;
   skip: boolean;
   constructor(varfields: VarfieldMarc[]) {
     this.varfields = varfields;
@@ -19,8 +17,6 @@ class Subject {
       ({ isBroaderTerm }) => !isBroaderTerm
     );
     this.preferredTerm = this.getPreferredTerm();
-    this.bibOnly = this.preferredTerm.bibOnly;
-    this.source = this.preferredTerm.source;
     this.skip = this.getSkip();
   }
 
