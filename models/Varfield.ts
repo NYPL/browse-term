@@ -4,7 +4,6 @@ import type { VarfieldMarc, Subfield } from "../types.ts";
 
 class Varfield {
   varfield: VarfieldMarc;
-  marcTag: string;
   display: boolean;
   label: string;
   type: string;
