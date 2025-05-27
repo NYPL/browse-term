@@ -1,5 +1,5 @@
 import { valuesByKeys } from "../utils.ts";
-import { headings, firstSubfields } from "../constants.js";
+import { headings, firstSubfields } from "../constants.ts";
 import type { VarfieldMarc, Subfield } from "../types.ts";
 
 class Varfield {

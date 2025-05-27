@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
-import { expect } from "chai"
+import { expect } from "chai";
 import VariantVarfield from "../models/VariantVarfield.ts";
+import type { VarfieldMarc } from "../types.ts";
 
 describe("VariantVarfield", () => {
   describe("display", () => {
@@ -14,9 +15,9 @@ describe("VariantVarfield", () => {
             content: "012",
           },
         ],
-      })
-      expect(variantVarfield.display).to.be.true
-    })
+      } as VarfieldMarc);
+      expect(variantVarfield.display).to.be.true;
+    });
     it("returns true if there is no subfield w/3 is n", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "d",
@@ -27,9 +28,9 @@ describe("VariantVarfield", () => {
             content: "012n",
           },
         ],
-      })
-      expect(variantVarfield.display).to.be.true
-    })
+      } as VarfieldMarc);
+      expect(variantVarfield.display).to.be.true;
+    });
     it("returns false if subfield w/3 is in do not display array", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "e",
@@ -40,10 +41,10 @@ describe("VariantVarfield", () => {
             content: "012a",
           },
         ],
-      })
-      expect(variantVarfield.display).to.be.false
-    })
-  })
+      } as VarfieldMarc);
+      expect(variantVarfield.display).to.be.false;
+    });
+  });
   describe("isBroaderTerm", () => {
     it("returns true when g is present in subfield w/0", () => {
       const variantVarfield = new VariantVarfield({
@@ -55,9 +56,9 @@ describe("VariantVarfield", () => {
             content: "g",
           },
         ],
-      })
-      expect(variantVarfield.isBroaderTerm).to.be.true
-    })
+      } as VarfieldMarc);
+      expect(variantVarfield.isBroaderTerm).to.be.true;
+    });
     it("returns false when g is not present in subfield w/0", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "f",
@@ -68,8 +69,8 @@ describe("VariantVarfield", () => {
             content: "x",
           },
         ],
-      })
-      expect(variantVarfield.isBroaderTerm).to.be.false
-    })
-  })
-})
+      } as VarfieldMarc);
+      expect(variantVarfield.isBroaderTerm).to.be.false;
+    });
+  });
+});
