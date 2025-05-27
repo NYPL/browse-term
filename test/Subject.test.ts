@@ -3,14 +3,14 @@ import horrorTalesAuthorityRecord from "./fixtures/horror-tales.json" with { typ
 import deprecatedLocal from "./fixtures/deprecated-local-authority.json" with { type: "json" };
 import Subject from "../models/Subject.ts";
 import { expect } from "chai";
-import type { VarfieldMarc } from "../types.ts";
+import type { AuthorityRecord } from "../types.ts";
 
 describe("Subject", () => {
   const horrorSubject = new Subject(
-    horrorTalesAuthorityRecord.varFields as VarfieldMarc[]
+    horrorTalesAuthorityRecord as AuthorityRecord
   );
   const deprecatedLocalAuthorityRecord = new Subject(
-    deprecatedLocal.varFields as VarfieldMarc[]
+    deprecatedLocal as AuthorityRecord
   );
   describe("fourXXfields", () => {
     it("returns 400s", () => {
@@ -35,13 +35,15 @@ describe("Subject", () => {
       expect(horrorSubject.preferredTerm.label).to.eq("Horror tales");
     });
     it("returns field tag d varfield for bib varfields", () => {
-      const bibSubject = new Subject([
-        {
-          marcTag: "600",
-          fieldTag: "d",
-          subfields: [{ content: "Spaghetti", tag: "a" }],
-        },
-      ]);
+      const bibSubject = new Subject({
+        varFields: [
+          {
+            marcTag: "600",
+            fieldTag: "d",
+            subfields: [{ content: "Spaghetti", tag: "a" }],
+          },
+        ],
+      } as AuthorityRecord);
       expect(bibSubject.preferredTerm.label).to.eq("Spaghetti");
     });
   });
@@ -59,29 +61,37 @@ describe("Subject", () => {
       expect(deprecatedLocalAuthorityRecord.skip).to.be.true;
     });
     it("is false when bib subject is from a valid source", () => {
-      const bibSubject = new Subject([
-        {
-          marcTag: "600",
-          fieldTag: "d",
-          subfields: [
-            { content: "Spaghetti", tag: "a" },
-            { content: "BookOps", tag: "2" },
-          ],
-        },
-      ]);
+      const bibSubject = new Subject({
+        varFields: [
+          {
+            ind1: "",
+            ind2: "",
+            marcTag: "600",
+            fieldTag: "d",
+            subfields: [
+              { content: "Spaghetti", tag: "a" },
+              { content: "BookOps", tag: "2" },
+            ],
+          },
+        ],
+      });
       expect(bibSubject.skip).to.be.false;
     });
     it("is true when bib subject is not from a valid source", () => {
-      const bibSubject = new Subject([
-        {
-          marcTag: "600",
-          fieldTag: "d",
-          subfields: [
-            { content: "Spaghetti", tag: "a" },
-            { content: "Dollywood", tag: "2" },
-          ],
-        },
-      ]);
+      const bibSubject = new Subject({
+        varFields: [
+          {
+            ind1: "",
+            ind2: "",
+            marcTag: "600",
+            fieldTag: "d",
+            subfields: [
+              { content: "Spaghetti", tag: "a" },
+              { content: "Dollywood", tag: "2" },
+            ],
+          },
+        ],
+      });
       expect(bibSubject.skip).to.be.true;
     });
   });

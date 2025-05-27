@@ -1,4 +1,4 @@
-import type { VarfieldMarc } from "../types.ts";
+import type { AuthorityRecord, VarfieldMarc } from "../types.ts";
 import Varfield from "./Varfield.ts";
 import VariantVarfield from "./VariantVarfield.ts";
 
@@ -8,8 +8,10 @@ class Subject {
   broaderTerms: VariantVarfield[];
   varfields: VarfieldMarc[];
   skip: boolean;
-  constructor(varfields: VarfieldMarc[]) {
-    this.varfields = varfields;
+  uri?: number;
+  deleted: boolean;
+  constructor(authorityRecord: AuthorityRecord) {
+    this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
     );
@@ -17,11 +19,14 @@ class Subject {
       ({ isBroaderTerm }) => !isBroaderTerm
     );
     this.preferredTerm = this.getPreferredTerm();
-    this.skip = this.getSkip();
+    this.skip = this.getSkip(authorityRecord.suppressed);
+    this.uri = authorityRecord.id;
+    this.deleted = authorityRecord.deleted;
   }
 
-  getSkip() {
+  getSkip(suppressed) {
     let skipCriteria = [];
+    skipCriteria.push(suppressed);
     skipCriteria.push(this.isDeprecatedLocalAuthority());
     skipCriteria.push(this.skipBibSubject());
     return skipCriteria.some((criteria) => criteria);

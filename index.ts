@@ -1,1 +1,3 @@
-import "dotenv/config";
+import Subject from "./models/Subject";
+
+export default Subject;
