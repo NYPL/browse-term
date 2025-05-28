@@ -1,4 +1,4 @@
-{
+export default {
   "id": 11976080,
   "updatedDate": "2009-03-17T11:47:20Z",
   "createdDate": "2009-03-17T11:47:20Z",

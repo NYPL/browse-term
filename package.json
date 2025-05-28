@@ -2,11 +2,17 @@
   "name": "@nypl/authority-records",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NYPL/browse-term"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm.index.js",
   "scripts": {
-    "test": "node --test",
-    "build": "npx tsc"
+    "test": "node --test ",
+    "build": "rm -rf dist && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module CommonJS --outDir dist/csj"
   },
   "author": "",
   "license": "ISC",

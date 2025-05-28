@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
-import horrorTalesAuthorityRecord from "./fixtures/horror-tales.json" with { type: "json" };
-import deprecatedLocal from "./fixtures/deprecated-local-authority.json" with { type: "json" };
+import horrorTalesAuthorityRecord from "./fixtures/horror-tales.js";
+import deprecatedLocal from "./fixtures/deprecated-local-authority.js";
 import Subject from "../models/Subject.ts";
 import { expect } from "chai";
 import type { AuthorityRecord } from "../types.ts";
