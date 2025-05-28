@@ -1,9 +1,9 @@
 import { describe, it } from "node:test";
 import horrorTalesAuthorityRecord from "./fixtures/horror-tales.js";
 import deprecatedLocal from "./fixtures/deprecated-local-authority.js";
-import Subject from "../models/Subject";
+import Subject from "../src/models/Subject";
 import { expect } from "chai";
-import type { AuthorityRecord } from "../types";
+import type { AuthorityRecord } from "../src/types";
 
 describe("Subject", () => {
   const horrorSubject = new Subject(
