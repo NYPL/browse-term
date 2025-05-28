@@ -1,5 +1,5 @@
-import { valuesByKeys } from "../utils.js";
-import { headings, firstSubfields, lastSubfields } from "../constants.js";
+import { subjectLiteralFromSubfieldMap } from "../utils.js";
+import { headings } from "../constants.js";
 
 class Varfield {
   constructor (varfield) {

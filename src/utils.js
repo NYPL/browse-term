@@ -1,4 +1,4 @@
-import { firstSubfields, lastSubfields } from "./constants.ts";
+import { firstSubfields, lastSubfields } from "./constants.js";
 
 /**
  *  Generally usable formatting utils
@@ -41,10 +41,10 @@ export const subjectLiteralFromSubfieldMap = (subfieldMap) => {
   return (
     [
       valuesByKeys(subfieldMap, firstSubfields)
-        .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
+        .map((v) => (Array.isArray(v) ? v.join(" ") : v))
         .join(" "),
       valuesByKeys(subfieldMap, lastSubfields)
-        .map((v: string | string[]) => (Array.isArray(v) ? v.join(" -- ") : v))
+        .map((v) => (Array.isArray(v) ? v.join(" -- ") : v))
         .join(" -- "),
     ]
       // If either set of values matched nothing, drop it:
