@@ -1,3 +1,5 @@
+import { firstSubfields, lastSubfields } from "./constants";
+
 /**
  *  Generally usable formatting utils
  */
@@ -36,4 +38,21 @@ export const valuesByKeys = (
 ): string[] => {
   hash = hashByKeys(hash, keys);
   return Object.keys(hash).map((key) => hash[key]);
+};
+
+export const subjectLiteralFromSubfieldMap = (subfieldMap) => {
+  return (
+    [
+      valuesByKeys(subfieldMap, firstSubfields)
+        .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
+        .join(" "),
+      valuesByKeys(subfieldMap, lastSubfields)
+        .map((v: string | string[]) => (Array.isArray(v) ? v.join(" -- ") : v))
+        .join(" -- "),
+    ]
+      // If either set of values matched nothing, drop it:
+      .filter((v) => v)
+      // Join sets together with ' -- ':
+      .join(" -- ")
+  );
 };

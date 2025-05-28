@@ -1,5 +1,5 @@
-import { valuesByKeys } from "../utils";
-import { headings, firstSubfields, lastSubfields } from "../constants";
+import { subjectLiteralFromSubfieldMap } from "../utils";
+import { headings } from "../constants";
 import type { VarfieldMarc, Subfield } from "../types";
 
 class Varfield {
@@ -64,22 +64,7 @@ class Varfield {
   }
 
   getLabel(): string {
-    return (
-      [
-        valuesByKeys(this.buildSubfieldMap(), firstSubfields)
-          .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
-          .join(" "),
-        valuesByKeys(this.buildSubfieldMap(), lastSubfields)
-          .map((v: string | string[]) =>
-            Array.isArray(v) ? v.join(" -- ") : v
-          )
-          .join(" -- "),
-      ]
-        // If either set of values matched nothing, drop it:
-        .filter((v) => v)
-        // Join sets together with ' -- ':
-        .join(" -- ")
-    );
+    return subjectLiteralFromSubfieldMap(this.buildSubfieldMap());
   }
 
   getType(): string {
