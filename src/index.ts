@@ -1,3 +1,3 @@
-import Subject from "../models/Subject.js";
+import Subject from "./models/Subject.js";
 
 export default Subject;
