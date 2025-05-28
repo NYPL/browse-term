@@ -1,15 +1,8 @@
-import { valuesByKeys } from "../utils";
-import { headings, firstSubfields, lastSubfields } from "../constants";
-import type { VarfieldMarc, Subfield } from "../types";
+import { valuesByKeys } from "../utils.js";
+import { headings, firstSubfields, lastSubfields } from "../constants.js";
 
 class Varfield {
-  varfield: VarfieldMarc;
-  display: boolean;
-  label: string;
-  type: string;
-  source: string;
-  bibOnly: boolean;
-  constructor(varfield: VarfieldMarc) {
+  constructor (varfield) {
     this.varfield = varfield;
     this.display = this.getDisplay();
     this.label = this.getLabel();
@@ -18,44 +11,44 @@ class Varfield {
     this.bibOnly = this.getBibOnly();
   }
 
-  getSource() {
+  getSource () {
     return this.varfield.marcTag[0] !== "6" ? "authority" : "bib";
   }
 
-  get cataloggedSource() {
+  get cataloggedSource () {
     return this.getSubfieldContent("2")?.toLocaleLowerCase();
   }
 
-  hasValidBibSubjectSource() {
+  hasValidBibSubjectSource () {
     return (
       this.hasValidLocalSources() || this.cataloggedSource?.includes("lcsh")
     );
   }
 
-  hasValidLocalSources() {
+  hasValidLocalSources () {
     return !!(
       this.cataloggedSource?.includes("bookops") ||
       this.cataloggedSource?.includes("local")
     );
   }
 
-  getBibOnly() {
+  getBibOnly () {
     if (this.source !== "bib") return false;
     return this.varfield.marcTag === "690" || this.hasValidLocalSources();
   }
 
-  getDisplay() {
+  getDisplay () {
     return true;
   }
 
-  getSubfieldContent(tag: string): string | undefined {
+  getSubfieldContent (tag) {
     const subfield = this.varfield.subfields?.find((sf) => sf.tag === tag);
     return subfield?.content;
   }
 
-  buildSubfieldMap(): Record<string, string> {
+  buildSubfieldMap () {
     return this.varfield.subfields.reduce(
-      (subFieldMap: Record<string, string>, field: Subfield) => {
+      (subFieldMap, field) => {
         subFieldMap[field.tag] = field.content;
         return subFieldMap;
       },
@@ -63,14 +56,14 @@ class Varfield {
     );
   }
 
-  getLabel(): string {
+  getLabel () {
     return (
       [
         valuesByKeys(this.buildSubfieldMap(), firstSubfields)
-          .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
+          .map((v) => (Array.isArray(v) ? v.join(" ") : v))
           .join(" "),
         valuesByKeys(this.buildSubfieldMap(), lastSubfields)
-          .map((v: string | string[]) =>
+          .map((v) =>
             Array.isArray(v) ? v.join(" -- ") : v
           )
           .join(" -- "),
@@ -82,7 +75,7 @@ class Varfield {
     );
   }
 
-  getType(): string {
+  getType () {
     const marcTag = this.varfield.marcTag;
     const digits = parseInt(marcTag, 10) % 100;
     return headings[digits];

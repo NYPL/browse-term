@@ -1,16 +1,15 @@
 import { describe, it } from "node:test";
 import horrorTalesAuthorityRecord from "./fixtures/horror-tales.js";
 import deprecatedLocal from "./fixtures/deprecated-local-authority.js";
-import Subject from "../models/Subject";
+import Subject from "../src/models/Subject.js";
 import { expect } from "chai";
-import type { AuthorityRecord } from "../types";
 
 describe("Subject", () => {
   const horrorSubject = new Subject(
-    horrorTalesAuthorityRecord as AuthorityRecord
+    horrorTalesAuthorityRecord
   );
   const deprecatedLocalAuthorityRecord = new Subject(
-    deprecatedLocal as AuthorityRecord
+    deprecatedLocal
   );
   describe("fourXXfields", () => {
     it("returns 400s", () => {
@@ -43,7 +42,7 @@ describe("Subject", () => {
             subfields: [{ content: "Spaghetti", tag: "a" }],
           },
         ],
-      } as AuthorityRecord);
+      });
       expect(bibSubject.preferredTerm.label).to.eq("Spaghetti");
     });
   });

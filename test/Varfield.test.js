@@ -1,7 +1,6 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
-import Varfield from "../src/models/Varfield";
-import type { VarfieldMarc } from "../src/types";
+import Varfield from "../src/models/Varfield.js";
 
 describe("Varfield", () => {
   describe("source", () => {
@@ -15,7 +14,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.source).to.eq("bib");
     });
     it("is authority when not given a 600 marctag", () => {
@@ -28,7 +27,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.source).to.eq("authority");
     });
   });
@@ -43,7 +42,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.bibOnly).to.be.false;
     });
     it("returns true when varfield source bib and subject source is valid local source", () => {
@@ -58,7 +57,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.bibOnly).to.be.true;
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
@@ -69,7 +68,7 @@ describe("Varfield", () => {
         marcTag: "600",
         fieldTag: "d",
         subfields: [{ content: "Spaghetti", tag: "a" }],
-      } as VarfieldMarc);
+      });
       expect(varfield.bibOnly).to.be.false;
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
@@ -85,7 +84,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       // this method is called after checking if a subject comes from a bib,
       // so this return value is not relevant to Sierra authority subjects.
       expect(varfield.hasValidLocalSources()).to.be.false;
@@ -98,7 +97,7 @@ describe("Varfield", () => {
           { content: "Spaghetti", tag: "a" },
           { content: "Local", tag: "2" },
         ],
-      } as VarfieldMarc);
+      });
       expect(bibSubject.hasValidLocalSources()).to.be.true;
     });
     it("returns false for invalid source", () => {
@@ -109,7 +108,7 @@ describe("Varfield", () => {
           { content: "Spaghetti", tag: "a" },
           { content: "Dollywood", tag: "2" },
         ],
-      } as VarfieldMarc);
+      });
       expect(bibSubject.hasValidLocalSources()).to.be.false;
     });
   });
@@ -124,7 +123,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.label).to.equal("Horror in art");
     });
     it("puts together a label with starting subfields and xyz subfields with dashes", () => {
@@ -181,7 +180,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.type).to.eq("Topical Term");
     });
     it("returns headings from the headings mapping for marcTag 100", () => {
@@ -194,7 +193,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      } as VarfieldMarc);
+      });
       expect(varfield.type).to.eq("Personal Name");
     });
   });
