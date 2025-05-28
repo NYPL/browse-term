@@ -9,11 +9,8 @@ import { firstSubfields, lastSubfields } from "./constants.ts";
  *   1) key must be in given `keys`
  *   2) value must by truthy
  */
-export const hashByKeys = (
-  hash: Record<string, string>,
-  keys: string[]
-): Record<string, string> => {
-  const newHash: Record<string, string> = {};
+export const hashByKeys = (hash, keys) => {
+  const newHash = {};
   return Object.keys(hash).reduce((newHash, key) => {
     const value = hash[key];
     // If the keys requested include this key
@@ -33,9 +30,9 @@ export const hashByKeys = (
  *   => ['value2']
  */
 export const valuesByKeys = (
-  hash: Record<string, string>,
-  keys: string[]
-): string[] => {
+  hash,
+  keys
+) => {
   hash = hashByKeys(hash, keys);
   return Object.keys(hash).map((key) => hash[key]);
 };

@@ -6,8 +6,7 @@
     "type": "git",
     "url": "https://github.com/NYPL/browse-term"
   },
-  "module": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "node --test ",
     "build": "rm -rf dist && npm run build:esm ",

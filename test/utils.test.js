@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
-import { valuesByKeys } from "../src/utils.ts";
-import { firstSubfields } from "../src/constants.ts";
+import { valuesByKeys } from "../src/utils.js";
+import { firstSubfields } from "../src/constants.js";
 import { expect } from "chai";
 
 describe("utils", () => {
