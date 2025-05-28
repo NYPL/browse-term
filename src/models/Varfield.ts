@@ -1,5 +1,5 @@
 import { valuesByKeys } from "../utils";
-import { headings, firstSubfields } from "../constants";
+import { headings, firstSubfields, lastSubfields } from "../constants";
 import type { VarfieldMarc, Subfield } from "../types";
 
 class Varfield {
@@ -69,7 +69,7 @@ class Varfield {
         valuesByKeys(this.buildSubfieldMap(), firstSubfields)
           .map((v: string) => (Array.isArray(v) ? v.join(" ") : v))
           .join(" "),
-        valuesByKeys(this.buildSubfieldMap(), ["v", "x", "y", "z"])
+        valuesByKeys(this.buildSubfieldMap(), lastSubfields)
           .map((v: string | string[]) =>
             Array.isArray(v) ? v.join(" -- ") : v
           )

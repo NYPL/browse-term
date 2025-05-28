@@ -1,3 +1,2 @@
-import Subject from "./models/Subject.js";
-
-export default Subject;
+export { default as Subject } from "./models/Subject";
+export { firstSubfields, lastSubfields } from "./constants";

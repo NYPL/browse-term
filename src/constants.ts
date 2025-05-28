@@ -39,3 +39,5 @@ export const firstSubfields = [
   "u",
   "4",
 ];
+
+export const lastSubfields = ["v", "x", "y", "z"];

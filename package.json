@@ -11,7 +11,8 @@
   "scripts": {
     "test": "node --test ",
     "build": "rm -rf dist && npm run build:esm ",
-    "build:esm": "tsc"
+    "build:esm": "tsc",
+    "publish": "npm version patch && npm run build && npm publish --access public"
   },
   "author": "",
   "license": "ISC",
