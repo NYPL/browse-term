@@ -1,4 +1,4 @@
-import Varfield from "./Varfield.ts";
+import Varfield from "./Varfield";
 import type { VarfieldMarc } from "../types";
 
 class VariantVarfield extends Varfield {

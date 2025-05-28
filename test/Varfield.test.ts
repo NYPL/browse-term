@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
-import Varfield from "../models/Varfield.ts";
-import type { VarfieldMarc } from "../types.ts";
+import Varfield from "../models/Varfield";
+import type { VarfieldMarc } from "../types";
 
 describe("Varfield", () => {
   describe("source", () => {

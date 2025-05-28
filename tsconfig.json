@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "compiledJs",
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "esModuleInterop": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "incremental": true,
-    "allowImportingTsExtensions": true
-  }
+    "lib": ["es5", "es2015", "es2016", "dom", "esnext"],
+    "types": ["node"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": false,
+    "target": "esnext"
+  },
+  "include": ["src/*.ts"]
 }

@@ -1,6 +1,6 @@
-import type { AuthorityRecord, VarfieldMarc } from "../types.ts";
-import Varfield from "./Varfield.ts";
-import VariantVarfield from "./VariantVarfield.ts";
+import type { AuthorityRecord, VarfieldMarc } from "../types";
+import Varfield from "./Varfield";
+import VariantVarfield from "./VariantVarfield";
 
 class Subject {
   preferredTerm: Varfield;
@@ -9,7 +9,7 @@ class Subject {
   varfields: VarfieldMarc[];
   skip: boolean;
   uri?: number;
-  deleted: boolean;
+  deleted?: boolean;
   constructor(authorityRecord: AuthorityRecord) {
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
@@ -24,7 +24,7 @@ class Subject {
     this.deleted = authorityRecord.deleted;
   }
 
-  getSkip(suppressed) {
+  getSkip(suppressed = false) {
     let skipCriteria = [];
     skipCriteria.push(suppressed);
     skipCriteria.push(this.isDeprecatedLocalAuthority());
@@ -46,7 +46,7 @@ class Subject {
     if (!sixSixSeven) return false;
     const sixSixSevenVarfield = new Varfield(sixSixSeven);
     const subfieldA = sixSixSevenVarfield.getSubfieldContent("a");
-    return subfieldA.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
+    return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
   }
 
   getVarfieldByMarcTag(marcTagToMatch: string) {
