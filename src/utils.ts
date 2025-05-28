@@ -1,4 +1,4 @@
-import { firstSubfields, lastSubfields } from "./constants";
+import { firstSubfields, lastSubfields } from "./constants.ts";
 
 /**
  *  Generally usable formatting utils

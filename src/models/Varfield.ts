@@ -1,6 +1,6 @@
-import { subjectLiteralFromSubfieldMap } from "../utils";
-import { headings } from "../constants";
-import type { VarfieldMarc, Subfield } from "../types";
+import { subjectLiteralFromSubfieldMap } from "../utils.ts";
+import { headings } from "../constants.ts";
+import type { VarfieldMarc, Subfield } from "../types.ts";
 
 class Varfield {
   varfield: VarfieldMarc;

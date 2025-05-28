@@ -1,3 +1,3 @@
-export { default as Subject } from "./models/Subject";
-export { firstSubfields, lastSubfields } from "./constants";
-export { subjectLiteralFromSubfieldMap } from "./utils";
+export { default as Subject } from "./models/Subject.ts";
+export { firstSubfields, lastSubfields } from "./constants.ts";
+export { subjectLiteralFromSubfieldMap } from "./utils.ts";

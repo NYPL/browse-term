@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
-import VariantVarfield from "../src/models/VariantVarfield";
-import type { VarfieldMarc } from "../src/types";
+import VariantVarfield from "../src/models/VariantVarfield.ts";
+import type { VarfieldMarc } from "../src/types.ts";
 
 describe("VariantVarfield", () => {
   describe("display", () => {

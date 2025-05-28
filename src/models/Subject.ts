@@ -1,6 +1,6 @@
-import type { AuthorityRecord, VarfieldMarc } from "../types";
-import Varfield from "./Varfield";
-import VariantVarfield from "./VariantVarfield";
+import type { AuthorityRecord, VarfieldMarc } from "../types.ts";
+import Varfield from "./Varfield.ts";
+import VariantVarfield from "./VariantVarfield.ts";
 
 class Subject {
   preferredTerm: Varfield;
