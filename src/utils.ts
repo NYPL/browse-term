@@ -7,8 +7,11 @@
  *   1) key must be in given `keys`
  *   2) value must by truthy
  */
-export const hashByKeys = (hash, keys) => {
-  const newHash = {};
+export const hashByKeys = (
+  hash: Record<string, string>,
+  keys: string[]
+): Record<string, string> => {
+  const newHash: Record<string, string> = {};
   return Object.keys(hash).reduce((newHash, key) => {
     const value = hash[key];
     // If the keys requested include this key
@@ -28,9 +31,9 @@ export const hashByKeys = (hash, keys) => {
  *   => ['value2']
  */
 export const valuesByKeys = (
-  hash,
-  keys
-) => {
+  hash: Record<string, string>,
+  keys: string[]
+): string[] => {
   hash = hashByKeys(hash, keys);
   return Object.keys(hash).map((key) => hash[key]);
 };

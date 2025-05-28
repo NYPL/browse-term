@@ -1,8 +1,16 @@
-import Varfield from "./Varfield.js";
-import VariantVarfield from "./VariantVarfield.js";
+import type { AuthorityRecord, VarfieldMarc } from "../types";
+import Varfield from "./Varfield";
+import VariantVarfield from "./VariantVarfield";
 
 class Subject {
-  constructor (authorityRecord) {
+  preferredTerm: Varfield;
+  seeAlso: VariantVarfield[];
+  broaderTerms: VariantVarfield[];
+  varfields: VarfieldMarc[];
+  skip: boolean;
+  uri?: number;
+  deleted?: boolean;
+  constructor(authorityRecord: AuthorityRecord) {
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
@@ -16,7 +24,7 @@ class Subject {
     this.deleted = authorityRecord.deleted;
   }
 
-  getSkip (suppressed = false) {
+  getSkip(suppressed = false) {
     let skipCriteria = [];
     skipCriteria.push(suppressed);
     skipCriteria.push(this.isDeprecatedLocalAuthority());
@@ -24,7 +32,7 @@ class Subject {
     return skipCriteria.some((criteria) => criteria);
   }
 
-  skipBibSubject () {
+  skipBibSubject() {
     return (
       this.preferredTerm.source === "bib" &&
       !this.preferredTerm.hasValidBibSubjectSource()
@@ -33,7 +41,7 @@ class Subject {
 
   // This method is inspecting a 6xx field on an authority record, not
   // a 6xx field coming from a bib subject.
-  isDeprecatedLocalAuthority () {
+  isDeprecatedLocalAuthority() {
     const sixSixSeven = this.getVarfieldByMarcTag("667");
     if (!sixSixSeven) return false;
     const sixSixSevenVarfield = new Varfield(sixSixSeven);
@@ -41,39 +49,39 @@ class Subject {
     return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
   }
 
-  getVarfieldByMarcTag (marcTagToMatch) {
+  getVarfieldByMarcTag(marcTagToMatch: string) {
     return this.varfields.filter(
       ({ marcTag }) => marcTag === marcTagToMatch
     )[0];
   }
 
-  get fieldTagD () {
+  get fieldTagD() {
     const fieldTagD = this.varfields.find(
-      (f) => f.fieldTag === "d"
+      (f: VarfieldMarc) => f.fieldTag === "d"
     );
     return fieldTagD;
   }
 
-  getPreferredTerm () {
+  getPreferredTerm() {
     return new Varfield(this.fieldTagD);
   }
 
-  getXXFields (number) {
-    const xxFields = this.varfields.filter((field) => {
+  getXXFields(number: 400 | 500 | 600) {
+    const xxFields = this.varfields.filter((field: VarfieldMarc) => {
       const tag = parseInt(field.marcTag, 10);
       return tag >= number && tag < number + 100;
     });
     return xxFields.map((field) => new VariantVarfield(field));
   }
 
-  get sixXXfields () {
+  get sixXXfields() {
     return this.getXXFields(600);
   }
-  get fiveXXFields () {
+  get fiveXXFields() {
     return this.getXXFields(500);
   }
 
-  get fourXXFields () {
+  get fourXXFields() {
     return this.getXXFields(400);
   }
 }

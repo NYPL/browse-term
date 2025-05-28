@@ -1,17 +1,21 @@
-import Varfield from "./Varfield.js";
+import Varfield from "./Varfield";
+import type { VarfieldMarc } from "../types";
+
 class VariantVarfield extends Varfield {
-  constructor (varfield) {
+  subfieldW: string;
+  isBroaderTerm: boolean;
+  constructor(varfield: VarfieldMarc) {
     super(varfield);
     this.subfieldW = this.getSubfieldW();
     this.display = this.getDisplay();
     this.isBroaderTerm = this.getIsBroaderTerm();
   }
 
-  getSubfieldW () {
+  getSubfieldW() {
     return this.getSubfieldContent("w");
   }
 
-  getDisplay () {
+  getDisplay() {
     const referenceDisplay = this.subfieldW?.[3];
     // if there are only 2 characters, or has placeholder n
     if (!referenceDisplay || referenceDisplay === "n") {
@@ -22,7 +26,7 @@ class VariantVarfield extends Varfield {
     }
   }
 
-  getIsBroaderTerm () {
+  getIsBroaderTerm() {
     const relationshipToPreferredTerm = this.subfieldW?.[0];
     if (relationshipToPreferredTerm === "g") return true;
     else return false;

@@ -1,12 +1,13 @@
 {
   "name": "@nypl/browse-term",
-  "version": "0.0.8",
+  "version": "0.0.7",
   "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/NYPL/browse-term"
   },
-  "type": "module",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "node --test ",
     "build": "rm -rf dist && npm run build:esm ",
