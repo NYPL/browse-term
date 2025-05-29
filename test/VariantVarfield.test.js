@@ -1,6 +1,6 @@
-import { describe, it } from "node:test";
-import { expect } from "chai";
-import VariantVarfield from "../src/models/VariantVarfield.js";
+const { describe, it } = require("node:test")
+const assert = require("node:assert")
+const VariantVarfield = require("../src/models/VariantVarfield.js")
 
 describe("VariantVarfield", () => {
   describe("display", () => {
@@ -15,7 +15,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      expect(variantVarfield.display).to.be.true;
+      assert.eq(variantVarfield.display, true);
     });
     it("returns true if there is no subfield w/3 is n", () => {
       const variantVarfield = new VariantVarfield({
@@ -28,7 +28,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      expect(variantVarfield.display).to.be.true;
+      assert(variantVarfield.display).to.be.true;
     });
     it("returns false if subfield w/3 is in do not display array", () => {
       const variantVarfield = new VariantVarfield({
@@ -41,7 +41,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      expect(variantVarfield.display).to.be.false;
+      assert(variantVarfield.display).to.be.false;
     });
   });
   describe("isBroaderTerm", () => {
@@ -56,7 +56,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      expect(variantVarfield.isBroaderTerm).to.be.true;
+      assert(variantVarfield.isBroaderTerm).to.be.true;
     });
     it("returns false when g is not present in subfield w/0", () => {
       const variantVarfield = new VariantVarfield({
@@ -69,7 +69,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      expect(variantVarfield.isBroaderTerm).to.be.false;
+      assert(variantVarfield.isBroaderTerm).to.be.false;
     });
   });
 });

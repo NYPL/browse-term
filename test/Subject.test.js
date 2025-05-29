@@ -1,8 +1,8 @@
-import { describe, it } from "node:test";
-import horrorTalesAuthorityRecord from "./fixtures/horror-tales.js";
-import deprecatedLocal from "./fixtures/deprecated-local-authority.js";
-import Subject from "../src/models/Subject.js";
-import { expect } from "chai";
+const { describe, it } = require("node:test")
+const horrorTalesAuthorityRecord = require("./fixtures/horror-tales.js")
+const deprecatedLocal = require("./fixtures/deprecated-local-authority.js")
+const Subject = require("../src/models/Subject.js")
+const assert = require("node:assert")
 
 describe("Subject", () => {
   const horrorSubject = new Subject(

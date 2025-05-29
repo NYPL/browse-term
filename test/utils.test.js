@@ -1,7 +1,7 @@
-import { describe, it } from "node:test";
-import { valuesByKeys } from "../src/utils.js";
-import { firstSubfields } from "../src/constants.js";
-import { expect } from "chai";
+const { describe, it } = require("node:test")
+const { valuesByKeys } = require("../src/utils.js")
+const { firstSubfields } = require("../src/constants.js")
+const assert = require("node:assert")
 
 describe("utils", () => {
   describe("valuesBykeys", () => {
@@ -15,7 +15,7 @@ describe("utils", () => {
         z: "z",
       };
       const values = valuesByKeys(subfields, firstSubfields);
-      expect(values).to.deep.eq(["a", "b", "c"]);
+      assert.deepEqual(values, ["a", "b", "c"]);
     });
     it("skips falsey values", () => {
       const subfields = {
@@ -27,7 +27,7 @@ describe("utils", () => {
         z: "z",
       };
       const values = valuesByKeys(subfields, firstSubfields);
-      expect(values).to.deep.eq(["b", "c"]);
+      assert.deepEqual(values, ["b", "c"]);
     });
   });
 });

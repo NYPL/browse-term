@@ -1,6 +1,6 @@
-import { describe, it } from "node:test";
-import { expect } from "chai";
-import Varfield from "../src/models/Varfield.js";
+const { describe, it } = require("node:test")
+const assert = require("node:assert")
+const Varfield = require("../src/models/Varfield.js")
 
 describe("Varfield", () => {
   describe("source", () => {
@@ -15,7 +15,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.source).to.eq("bib");
+      assert.equal(varfield.source, "bib");
     });
     it("is authority when not given a 600 marctag", () => {
       const varfield = new Varfield({
@@ -28,7 +28,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.source).to.eq("authority");
+      assert.equal(varfield.source, "authority");
     });
   });
   describe("bibOnly", () => {
@@ -43,7 +43,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.bibOnly).to.be.false;
+      assert.equal(varfield.bibOnly, false);
     });
     it("returns true when varfield source bib and subject source is valid local source", () => {
       const hasValidLocalSources = Varfield.prototype.hasValidLocalSources;
@@ -58,7 +58,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.bibOnly).to.be.true;
+      assert.equal(varfield.bibOnly, true);
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
     it("returns false when varfield source bib and subject source is invalid", () => {
@@ -69,7 +69,7 @@ describe("Varfield", () => {
         fieldTag: "d",
         subfields: [{ content: "Spaghetti", tag: "a" }],
       });
-      expect(varfield.bibOnly).to.be.false;
+      assert.equal(varfield.bibOnly, false);
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
   });
@@ -87,7 +87,7 @@ describe("Varfield", () => {
       });
       // this method is called after checking if a subject comes from a bib,
       // so this return value is not relevant to Sierra authority subjects.
-      expect(varfield.hasValidLocalSources()).to.be.false;
+      assert.equal(varfield.hasValidLocalSources(), false);
     });
     it("returns true for valid source", () => {
       const bibSubject = new Varfield({
@@ -98,7 +98,7 @@ describe("Varfield", () => {
           { content: "Local", tag: "2" },
         ],
       });
-      expect(bibSubject.hasValidLocalSources()).to.be.true;
+      assert.equal(bibSubject.hasValidLocalSources(), true);
     });
     it("returns false for invalid source", () => {
       const bibSubject = new Varfield({
@@ -109,7 +109,7 @@ describe("Varfield", () => {
           { content: "Dollywood", tag: "2" },
         ],
       });
-      expect(bibSubject.hasValidLocalSources()).to.be.false;
+      assert.equal(bibSubject.hasValidLocalSources(), false);
     });
   });
   describe("label", () => {
@@ -124,7 +124,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.label).to.equal("Horror in art");
+      assert.equal(varfield.label, "Horror in art");
     });
     it("puts together a label with starting subfields and xyz subfields with dashes", () => {
       const varfield = new Varfield({
@@ -155,10 +155,10 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.label).to.equal("a b c -- z -- x");
+      assert.equal(varfield.label, "a b c -- z -- x");
     });
     it("doesn't explode with no subfields", () => {
-      expect(
+      assert.equal(
         new Varfield({
           fieldTag: "d",
           marcTag: "150",
@@ -166,7 +166,7 @@ describe("Varfield", () => {
           ind2: " ",
           subfields: [],
         }).label
-      ).to.eq("");
+        , "");
     });
   });
   describe("type", () => {
@@ -181,7 +181,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.type).to.eq("Topical Term");
+      assert.equal(varfield.type, "Topical Term");
     });
     it("returns headings from the headings mapping for marcTag 100", () => {
       const varfield = new Varfield({
@@ -194,7 +194,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      expect(varfield.type).to.eq("Personal Name");
+      assert.equal(varfield.type, "Personal Name");
     });
   });
 });
