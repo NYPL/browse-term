@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   "id": 11838157,
   "updatedDate": "2011-06-21T15:30:35Z",
   "createdDate": "2009-03-06T01:12:39Z",

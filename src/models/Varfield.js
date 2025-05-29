@@ -1,5 +1,5 @@
-import { subjectLiteralFromSubfieldMap } from "../utils.js";
-import { headings } from "../constants.js";
+const { subjectLiteralFromSubfieldMap } = require("../utils.js")
+const { headings } = require("../constants.js")
 
 class Varfield {
   constructor (varfield) {
@@ -67,4 +67,4 @@ class Varfield {
   }
 }
 
-export default Varfield;
+module.exports = Varfield;

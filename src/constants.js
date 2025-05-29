@@ -1,4 +1,4 @@
-export const headings = {
+exports.headings = {
   0: "Personal Name",
   10: "Corporate Name",
   11: "Meeting Name",
@@ -15,7 +15,7 @@ export const headings = {
   85: "Form Subdivision",
 };
 
-export const firstSubfields = [
+exports.firstSubfields = [
   "a",
   "b",
   "c",
@@ -40,4 +40,4 @@ export const firstSubfields = [
   "4",
 ];
 
-export const lastSubfields = ["v", "x", "y", "z"];
+exports.lastSubfields = ["v", "x", "y", "z"];

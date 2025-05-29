@@ -1,4 +1,4 @@
-import Varfield from "./Varfield.js";
+const Varfield = require("./Varfield.js")
 class VariantVarfield extends Varfield {
   constructor (varfield) {
     super(varfield);
@@ -29,4 +29,4 @@ class VariantVarfield extends Varfield {
   }
 }
 
-export default VariantVarfield;
+module.exports = VariantVarfield;

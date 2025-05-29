@@ -1,3 +1,5 @@
-export { default as Subject } from "./models/Subject.js";
-export { firstSubfields, lastSubfields, headings } from "./constants.js";
-export { subjectLiteralFromSubfieldMap } from './utils.js'
+const Subject = require("./models/Subject.js")
+const { firstSubfields, lastSubfields, headings } = require("./constants.js")
+const { subjectLiteralFromSubfieldMap } = require('./utils.js')
+
+module.exports = { Subject, firstSubfields, lastSubfields, subjectLiteralFromSubfieldMap }

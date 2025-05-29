@@ -1,4 +1,4 @@
-import { firstSubfields, lastSubfields } from "./constants.js";
+const { firstSubfields, lastSubfields } = require("./constants.js")
 
 /**
  *  Generally usable formatting utils
@@ -9,7 +9,7 @@ import { firstSubfields, lastSubfields } from "./constants.js";
  *   1) key must be in given `keys`
  *   2) value must by truthy
  */
-export const hashByKeys = (hash, keys) => {
+const hashByKeys = (hash, keys) => {
   const newHash = {};
   return Object.keys(hash).reduce((newHash, key) => {
     const value = hash[key];
@@ -29,7 +29,7 @@ export const hashByKeys = (hash, keys) => {
  * valuesByKeys ({ key1: 'value1', key2: 'value2', key3: null }, ['key2'])
  *   => ['value2']
  */
-export const valuesByKeys = (
+const valuesByKeys = (
   hash,
   keys
 ) => {
@@ -37,7 +37,7 @@ export const valuesByKeys = (
   return Object.keys(hash).map((key) => hash[key]);
 };
 
-export const subjectLiteralFromSubfieldMap = (subfieldMap) => {
+const subjectLiteralFromSubfieldMap = (subfieldMap) => {
   return (
     [
       valuesByKeys(subfieldMap, firstSubfields)
@@ -53,3 +53,7 @@ export const subjectLiteralFromSubfieldMap = (subfieldMap) => {
       .join(" -- ")
   );
 };
+
+module.exports = {
+  subjectLiteralFromSubfieldMap, hashByKeys, valuesByKeys
+}

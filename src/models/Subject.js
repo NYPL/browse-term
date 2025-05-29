@@ -1,5 +1,5 @@
-import Varfield from "./Varfield.js";
-import VariantVarfield from "./VariantVarfield.js";
+const Varfield = require("./Varfield.js")
+const VariantVarfield = require("./VariantVarfield.js")
 
 class Subject {
   constructor (authorityRecord) {
@@ -78,4 +78,4 @@ class Subject {
   }
 }
 
-export default Subject;
+module.exports = Subject;
