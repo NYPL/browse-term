@@ -13,25 +13,25 @@ describe("Subject", () => {
   );
   describe("fourXXfields", () => {
     it("returns 400s", () => {
-      expect(horrorSubject.fourXXFields.length).to.eq(12);
-      expect(horrorSubject.fourXXFields[0].label).to.eq("Horror -- Fiction");
+      assert.equal(horrorSubject.fourXXFields.length, 12);
+      assert.equal(horrorSubject.fourXXFields[0].label, "Horror -- Fiction");
     });
   });
   describe("broaderTerms", () => {
     it("returns specific 500 fields", () => {
-      expect(horrorSubject.broaderTerms.length).to.eq(1);
-      expect(horrorSubject.broaderTerms[0].label).to.eq("Fiction");
+      assert.equal(horrorSubject.broaderTerms.length, 1);
+      assert.equal(horrorSubject.broaderTerms[0].label, "Fiction");
     });
   });
   describe("seeAlso", () => {
     it("returns specific 500 fields", () => {
-      expect(horrorSubject.seeAlso.length).to.eq(1);
-      expect(horrorSubject.seeAlso[0].label).to.eq("Ghost stories");
+      assert.equal(horrorSubject.seeAlso.length, 1);
+      assert.equal(horrorSubject.seeAlso[0].label, "Ghost stories");
     });
   });
   describe("preferredTerm", () => {
     it("returns field tag d varfield for authority varfields", () => {
-      expect(horrorSubject.preferredTerm.label).to.eq("Horror tales");
+      assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
     it("returns field tag d varfield for bib varfields", () => {
       const bibSubject = new Subject({
@@ -43,21 +43,20 @@ describe("Subject", () => {
           },
         ],
       });
-      expect(bibSubject.preferredTerm.label).to.eq("Spaghetti");
+      assert.equal(bibSubject.preferredTerm.label, "Spaghetti");
     });
   });
   describe("isDeprecatedLocalAuthority", () => {
     it("returns false when 667 field present with NO nypl local authority content", () => {
-      expect(horrorSubject.isDeprecatedLocalAuthority()).to.be.false;
+      assert.equal(horrorSubject.isDeprecatedLocalAuthority(), false);
     });
     it("returns true when 667 field present with nypl local authority content", () => {
-      expect(deprecatedLocalAuthorityRecord.isDeprecatedLocalAuthority()).to.be
-        .true;
+      assert.equal(deprecatedLocalAuthorityRecord.isDeprecatedLocalAuthority(), true);
     });
   });
   describe("skip", () => {
     it("is true when record is deprecated local authority", () => {
-      expect(deprecatedLocalAuthorityRecord.skip).to.be.true;
+      assert.equal(deprecatedLocalAuthorityRecord.skip, true);
     });
     it("is false when bib subject is from a valid source", () => {
       const bibSubject = new Subject({
@@ -74,7 +73,7 @@ describe("Subject", () => {
           },
         ],
       });
-      expect(bibSubject.skip).to.be.false;
+      assert.equal(bibSubject.skip, false);
     });
     it("is true when bib subject is not from a valid source", () => {
       const bibSubject = new Subject({
@@ -91,7 +90,7 @@ describe("Subject", () => {
           },
         ],
       });
-      expect(bibSubject.skip).to.be.true;
+      assert.equal(bibSubject.skip, true);
     });
   });
 });
