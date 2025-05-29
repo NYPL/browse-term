@@ -15,7 +15,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.eq(variantVarfield.display, true);
+      assert.equal(variantVarfield.display, true);
     });
     it("returns true if there is no subfield w/3 is n", () => {
       const variantVarfield = new VariantVarfield({
@@ -28,7 +28,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert(variantVarfield.display).to.be.true;
+      assert.equal(variantVarfield.display, true);
     });
     it("returns false if subfield w/3 is in do not display array", () => {
       const variantVarfield = new VariantVarfield({
@@ -41,7 +41,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert(variantVarfield.display).to.be.false;
+      assert.equal(variantVarfield.display, false);
     });
   });
   describe("isBroaderTerm", () => {
@@ -56,7 +56,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert(variantVarfield.isBroaderTerm).to.be.true;
+      assert.equal(variantVarfield.isBroaderTerm, true);
     });
     it("returns false when g is not present in subfield w/0", () => {
       const variantVarfield = new VariantVarfield({
@@ -69,7 +69,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert(variantVarfield.isBroaderTerm).to.be.false;
+      assert.equal(variantVarfield.isBroaderTerm, false);
     });
   });
 });
