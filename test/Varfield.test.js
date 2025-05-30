@@ -113,6 +113,7 @@ describe("Varfield", () => {
     });
   });
   describe("label", () => {
+    it.todo("can handle a varfield with two subfields with the same tag")
     it("puts together a label with only one subfield", () => {
       const varfield = new Varfield({
         fieldTag: "d",
