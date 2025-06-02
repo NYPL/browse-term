@@ -2,7 +2,7 @@ const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
 
 class Subject {
-  constructor (authorityRecord) {
+  constructor (authorityRecord, preferredTermSubfield = "d") {
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
@@ -10,7 +10,7 @@ class Subject {
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
     );
-    this.preferredTerm = this.getPreferredTerm();
+    this.preferredTerm = this.getPreferredTerm(preferredTermSubfield);
     this.skip = this.getSkip(authorityRecord.suppressed);
     this.uri = authorityRecord.id;
     this.deleted = authorityRecord.deleted;
@@ -47,15 +47,15 @@ class Subject {
     )[0];
   }
 
-  get fieldTagD () {
-    const fieldTagD = this.varfields.find(
-      (f) => f.fieldTag === "d"
+  fieldTag (tag) {
+    const fieldTag = this.varfields.find(
+      (f) => f.fieldTag === tag
     );
-    return fieldTagD;
+    return fieldTag;
   }
 
-  getPreferredTerm () {
-    return new Varfield(this.fieldTagD);
+  getPreferredTerm (tag) {
+    return new Varfield(this.fieldTag(tag));
   }
 
   getXXFields (number) {
