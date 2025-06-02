@@ -114,6 +114,14 @@ describe("Varfield", () => {
   });
   describe("label", () => {
     it.todo("can handle a varfield with two subfields with the same tag")
+    it("returns direction zero width character when subfield six says so", () => {
+      const varfield = new Varfield({
+        fieldTag: "x",
+        marcTag: "880",
+        subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
+      })
+      assert.equal(varfield.label, "\u200Fspaghetti")
+    })
     it("puts together a label with only one subfield", () => {
       const varfield = new Varfield({
         fieldTag: "d",
