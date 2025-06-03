@@ -3,6 +3,7 @@ const horrorTalesAuthorityRecord = require("./fixtures/horror-tales.js")
 const deprecatedLocal = require("./fixtures/deprecated-local-authority.js")
 const Subject = require("../src/models/Subject.js")
 const assert = require("node:assert")
+const { InvalidSubjectDataError } = require("../src/errors.js")
 
 describe("Subject", () => {
   const horrorSubject = new Subject(
@@ -30,10 +31,36 @@ describe("Subject", () => {
     });
   });
   describe("preferredTerm", () => {
-    it("returns field tag d varfield for authority varfields", () => {
+    it("throws an error when preferred term with no subfields", () => {
+      const subject = () => new Subject({ varFields: [{ "fieldTag": "d" }] })
+      assert.throws(subject, (error) => {
+        assert(error instanceof InvalidSubjectDataError);
+        assert(/Varfield missing subfields./.test(error))
+        return true
+      })
+    })
+    it("throws an error when no field matches preferred term fieldtag", () => {
+      const subject = () => new Subject({ varFields: [{ "fieldTag": "x" }] })
+      assert.throws(subject, (error) => {
+        assert(error instanceof InvalidSubjectDataError);
+        assert(/No varfield matches preferred term tag d/.test(error))
+        return true
+      })
+    })
+    it("returns specified preferred term when provided", () => {
+      const subject = new Subject({
+        varFields: [{
+          fieldTag: "y",
+          marcTag: "880",
+          subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
+        }],
+      }, "y")
+      assert.equal(subject.preferredTerm.label, "\u200Fspaghetti")
+    })
+    it("returns field tag d default varfield for authority varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
-    it("returns field tag d varfield for bib varfields", () => {
+    it("returns field tag d default varfield for bib varfields", () => {
       const bibSubject = new Subject({
         varFields: [
           {

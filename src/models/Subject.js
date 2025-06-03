@@ -1,6 +1,6 @@
 const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
-
+const { InvalidSubjectDataError, NoPreferredTermError } = require("../errors.js")
 class Subject {
   constructor (authorityRecord, preferredTermSubfield = "d") {
     this.varfields = authorityRecord.varFields;
@@ -35,7 +35,7 @@ class Subject {
   // a 6xx field coming from a bib subject.
   isDeprecatedLocalAuthority () {
     const sixSixSeven = this.getVarfieldByMarcTag("667");
-    if (!sixSixSeven) return false;
+    if (!sixSixSeven || !sixSixSeven.subfields) return false;
     const sixSixSevenVarfield = new Varfield(sixSixSeven);
     const subfieldA = sixSixSevenVarfield.getSubfieldContent("a");
     return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
@@ -55,7 +55,15 @@ class Subject {
   }
 
   getPreferredTerm (tag) {
-    return new Varfield(this.fieldTag(tag));
+    try {
+      const fieldTag = this.fieldTag(tag)
+      if (!fieldTag) {
+        throw new NoPreferredTermError(`No varfield matches preferred term tag ${tag}`)
+      }
+      return new Varfield(this.fieldTag(tag));
+    } catch (e) {
+      throw new InvalidSubjectDataError(`Invalid subject data: \n ${e.message}`)
+    }
   }
 
   getXXFields (number) {
@@ -63,7 +71,10 @@ class Subject {
       const tag = parseInt(field.marcTag, 10);
       return tag >= number && tag < number + 100;
     });
-    return xxFields.map((field) => new VariantVarfield(field));
+    return xxFields.map((field) => {
+      if (!field?.subfields?.length) return
+      return new VariantVarfield(field)
+    }).filter(x => x);
   }
 
   get sixXXfields () {
