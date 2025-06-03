@@ -47,16 +47,13 @@ class Varfield {
   }
 
   buildSubfieldMap () {
-    try{
     return this.varfield.subfields.reduce(
       (subFieldMap, field) => {
         subFieldMap[field.tag] = field.content;
         return subFieldMap;
       },
       {}
-    );}catch(e){
-      console.log('spaghetti', this.varfield)
-    }
+    );
   }
 
   parseDirection () {
