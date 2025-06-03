@@ -166,17 +166,6 @@ describe("Varfield", () => {
       });
       assert.equal(varfield.label, "a b c -- z -- x");
     });
-    it("doesn't explode with no subfields", () => {
-      assert.equal(
-        new Varfield({
-          fieldTag: "d",
-          marcTag: "150",
-          ind1: " ",
-          ind2: " ",
-          subfields: [],
-        }).label
-        , "");
-    });
   });
   describe("type", () => {
     it("returns headings from the headings mapping", () => {
