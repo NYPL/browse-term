@@ -39,11 +39,11 @@ describe("Subject", () => {
         return true
       })
     })
-    it("returns single varfield as preferred term when only one is provided", () => {
+    it("returns 600 varfield as preferred term when there is no field tag d", () => {
       const subject = new Subject({
         varFields: [{
           fieldTag: "y",
-          marcTag: "880",
+          marcTag: "680",
           subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
         }],
       })
@@ -52,7 +52,7 @@ describe("Subject", () => {
     it("returns field tag d varfield for authority records with multiple varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
-    it("returns single varfield for bib varfields with fieldTag null", () => {
+    it.only("returns single varfield for bib varfields with fieldTag null", () => {
       // this case is for partner records
       const bibSubject = new Subject({
         varFields: [

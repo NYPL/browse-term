@@ -58,8 +58,8 @@ class Subject {
   getPreferredTerm () {
     try {
       let preferredTermMarc
-      if (this.varfields.length === 1) preferredTermMarc = this.varfields[0]
-      else preferredTermMarc = this.fieldTag('d')
+      preferredTermMarc = this.fieldTag('d')
+      if (!preferredTermMarc) preferredTermMarc = this.varfields.find((varfield) => varfield.marcTag[0] === "6")
       return new Varfield(preferredTermMarc);
     } catch (e) {
       throw new InvalidSubjectDataError(`Invalid subject data: \n ${e.message}`)
