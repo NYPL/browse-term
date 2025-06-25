@@ -14,6 +14,7 @@ class Subject {
     this.skip = this.getSkip(authorityRecord.suppressed);
     this.uri = authorityRecord.id;
     this.deleted = authorityRecord.deleted;
+    this.bibOnly = this.preferredTerm.getBibOnly();
   }
 
   getSkip (suppressed = false) {

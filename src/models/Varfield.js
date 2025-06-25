@@ -12,7 +12,6 @@ class Varfield {
     this.label = this.getLabel();
     this.type = this.getType();
     this.source = this.getSource();
-    this.bibOnly = this.getBibOnly();
   }
 
   getSource () {
@@ -51,13 +50,18 @@ class Varfield {
   }
 
   buildSubfieldMap () {
-    return this.varfield.subfields.reduce(
-      (subFieldMap, field) => {
-        subFieldMap[field.tag] = field.content;
-        return subFieldMap;
-      },
-      {}
-    );
+    return this.varfield.subfields.reduce((hash, sub) => {
+      // If there are multiple values for this tag, convert it into an array:
+      if (hash[sub.tag]) {
+        if (typeof hash[sub.tag] === 'string') {
+          hash[sub.tag] = [hash[sub.tag]]
+        }
+        hash[sub.tag].push(sub.content)
+      } else {
+        hash[sub.tag] = sub.content
+      }
+      return hash
+    }, {})
   }
 
   parseDirection () {
