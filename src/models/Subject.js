@@ -58,8 +58,11 @@ class Subject {
   getPreferredTerm () {
     try {
       let preferredTermMarc
+      // sierra subject marc and authority marc
       preferredTermMarc = this.fieldTag('d')
+      // partner records subject marc with no field tag
       if (!preferredTermMarc) preferredTermMarc = this.varfields.filter((varfield) => varfield.marcTag[0] === '6')[0]
+      // single marc varfields for building parallel subject literals
       if (!preferredTermMarc && this.varfields.length === 1) preferredTermMarc = this.varfields[0]
       return new Varfield(preferredTermMarc);
     } catch (e) {
