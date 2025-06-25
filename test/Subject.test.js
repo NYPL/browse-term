@@ -39,33 +39,26 @@ describe("Subject", () => {
         return true
       })
     })
-    it("throws an error when no field matches preferred term fieldtag", () => {
-      const subject = () => new Subject({ varFields: [{ "fieldTag": "x" }] })
-      assert.throws(subject, (error) => {
-        assert(error instanceof InvalidSubjectDataError);
-        assert(/No varfield matches preferred term tag d/.test(error))
-        return true
-      })
-    })
-    it("returns specified preferred term when provided", () => {
+    it("returns 600 varfield as preferred term when there is no field tag d", () => {
       const subject = new Subject({
         varFields: [{
           fieldTag: "y",
-          marcTag: "880",
+          marcTag: "680",
           subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
         }],
-      }, "y")
+      })
       assert.equal(subject.preferredTerm.label, "\u200Fspaghetti")
     })
-    it("returns field tag d default varfield for authority varfields", () => {
+    it("returns field tag d varfield for authority records with multiple varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
-    it("returns field tag d default varfield for bib varfields", () => {
+    it.only("returns single varfield for bib varfields with fieldTag null", () => {
+      // this case is for partner records
       const bibSubject = new Subject({
         varFields: [
           {
+            fieldTag: null,
             marcTag: "600",
-            fieldTag: "d",
             subfields: [{ content: "Spaghetti", tag: "a" }],
           },
         ],

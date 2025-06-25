@@ -43,7 +43,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      assert.equal(varfield.bibOnly, false);
+      assert.equal(varfield.getBibOnly(), false);
     });
     it("returns true when varfield source bib and subject source is valid local source", () => {
       const hasValidLocalSources = Varfield.prototype.hasValidLocalSources;
@@ -58,7 +58,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      assert.equal(varfield.bibOnly, true);
+      assert.equal(varfield.getBibOnly(), true);
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
     it("returns false when varfield source bib and subject source is invalid", () => {
@@ -69,7 +69,7 @@ describe("Varfield", () => {
         fieldTag: "d",
         subfields: [{ content: "Spaghetti", tag: "a" }],
       });
-      assert.equal(varfield.bibOnly, false);
+      assert.equal(varfield.getBibOnly(), false);
       Varfield.prototype.hasValidLocalSources = hasValidLocalSources;
     });
   });
@@ -113,7 +113,25 @@ describe("Varfield", () => {
     });
   });
   describe("label", () => {
-    it.todo("can handle a varfield with two subfields with the same tag")
+    it("can handle a varfield with two subfields with the same tag", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '0',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        },
+        {
+          tag: 'z',
+          content: 'subfield z 2'
+        }
+        ]
+      })
+      assert.equal(varfield.label, 'subfield z 1 -- subfield z 2')
+    })
     it("returns direction zero width character when subfield six says so", () => {
       const varfield = new Varfield({
         fieldTag: "x",

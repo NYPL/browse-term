@@ -10,16 +10,16 @@ const { firstSubfields, lastSubfields } = require("./constants.js")
  *   2) value must by truthy
  */
 const hashByKeys = (hash, keys) => {
-  const newHash = {};
-  return Object.keys(hash).reduce((newHash, key) => {
-    const value = hash[key];
-    // If the keys requested include this key
-    // .. and extracted value is truthy
-    // .. include it in new hash.
-    if (keys.includes(key) && value) newHash[key] = value;
-    return newHash;
-  }, newHash);
-};
+  return Object.keys(hash)
+    .reduce((newHash, key) => {
+      const value = hash[key]
+      // If the keys requested include this key
+      // .. and extracted value is truthy
+      // .. include it in new hash.
+      if (keys.indexOf(key) >= 0 && value) newHash[key] = value
+      return newHash
+    }, {})
+}
 
 /**
  * Get array of truthy values from hash matching given keys (but only if the

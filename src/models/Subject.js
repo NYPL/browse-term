@@ -1,8 +1,8 @@
 const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
-const { InvalidSubjectDataError, NoPreferredTermError } = require("../errors.js")
+const { InvalidSubjectDataError } = require("../errors.js")
 class Subject {
-  constructor (authorityRecord, preferredTermSubfield = "d") {
+  constructor (authorityRecord) {
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
@@ -10,10 +10,11 @@ class Subject {
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
     );
-    this.preferredTerm = this.getPreferredTerm(preferredTermSubfield);
+    this.preferredTerm = this.getPreferredTerm();
     this.skip = this.getSkip(authorityRecord.suppressed);
     this.uri = authorityRecord.id;
     this.deleted = authorityRecord.deleted;
+    this.bibOnly = this.preferredTerm.getBibOnly();
   }
 
   getSkip (suppressed = false) {
@@ -54,13 +55,12 @@ class Subject {
     return fieldTag;
   }
 
-  getPreferredTerm (tag) {
+  getPreferredTerm () {
     try {
-      const fieldTag = this.fieldTag(tag)
-      if (!fieldTag) {
-        throw new NoPreferredTermError(`No varfield matches preferred term tag ${tag}`)
-      }
-      return new Varfield(this.fieldTag(tag));
+      let preferredTermMarc
+      preferredTermMarc = this.fieldTag('d')
+      if (!preferredTermMarc) preferredTermMarc = this.varfields.find((varfield) => varfield.marcTag[0] === "6")
+      return new Varfield(preferredTermMarc);
     } catch (e) {
       throw new InvalidSubjectDataError(`Invalid subject data: \n ${e.message}`)
     }
