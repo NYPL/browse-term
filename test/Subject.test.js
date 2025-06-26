@@ -39,31 +39,8 @@ describe("Subject", () => {
         return true
       })
     })
-    it("returns 600 varfield as preferred term when there is no field tag d", () => {
-      const subject = new Subject({
-        varFields: [{
-          fieldTag: "y",
-          marcTag: "680",
-          subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
-        }],
-      })
-      assert.equal(subject.preferredTerm.label, "\u200Fspaghetti")
-    })
     it("returns field tag d varfield for authority records with multiple varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
-    });
-    it.only("returns single varfield for bib varfields with fieldTag null", () => {
-      // this case is for partner records
-      const bibSubject = new Subject({
-        varFields: [
-          {
-            fieldTag: null,
-            marcTag: "600",
-            subfields: [{ content: "Spaghetti", tag: "a" }],
-          },
-        ],
-      });
-      assert.equal(bibSubject.preferredTerm.label, "Spaghetti");
     });
   });
   describe("isDeprecatedLocalAuthority", () => {
@@ -74,43 +51,9 @@ describe("Subject", () => {
       assert.equal(deprecatedLocalAuthorityRecord.isDeprecatedLocalAuthority(), true);
     });
   });
-  describe("skip", () => {
+  describe("suppressed", () => {
     it("is true when record is deprecated local authority", () => {
-      assert.equal(deprecatedLocalAuthorityRecord.skip, true);
-    });
-    it("is false when bib subject is from a valid source", () => {
-      const bibSubject = new Subject({
-        varFields: [
-          {
-            ind1: "",
-            ind2: "",
-            marcTag: "600",
-            fieldTag: "d",
-            subfields: [
-              { content: "Spaghetti", tag: "a" },
-              { content: "BookOps", tag: "2" },
-            ],
-          },
-        ],
-      });
-      assert.equal(bibSubject.skip, false);
-    });
-    it("is true when bib subject is not from a valid source", () => {
-      const bibSubject = new Subject({
-        varFields: [
-          {
-            ind1: "",
-            ind2: "",
-            marcTag: "600",
-            fieldTag: "d",
-            subfields: [
-              { content: "Spaghetti", tag: "a" },
-              { content: "Dollywood", tag: "2" },
-            ],
-          },
-        ],
-      });
-      assert.equal(bibSubject.skip, true);
+      assert.equal(deprecatedLocalAuthorityRecord.suppressed, true);
     });
   });
 });

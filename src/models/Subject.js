@@ -11,37 +11,25 @@ class Subject {
       ({ isBroaderTerm }) => !isBroaderTerm
     );
     this.preferredTerm = this.getPreferredTerm();
-    // TODO: A tack we've taken elsewhere is to have a single "suppressed" value
-    // that evaluates to true if the record is suppressed, deleted, or meets some
-    // other fiddly business criteria - since usually we don't care _why_ as
-    // much as _whether. Is 'skip' synonymous with this "is suppressed" idea?
-    // "Skip" suggests knowledge of an outside process that should be "skipped",
-    // which ideally this module is unaware of. I think I'd just expose the
-    // suppressed/deleted status and let the outside process decide what to do
-    this.skip = this.getSkip(authorityRecord.suppressed);
-    // TODO This will be null for a bib-only subject?
+    this.suppressed = this.suppressed(authorityRecord.suppressed);
     this.uri = authorityRecord.id;
     this.deleted = authorityRecord.deleted;
-    this.bibOnly = this.preferredTerm.getBibOnly();
   }
 
-  getSkip (suppressed = false) {
-    let skipCriteria = [];
-    skipCriteria.push(suppressed);
-    skipCriteria.push(this.isDeprecatedLocalAuthority());
-    skipCriteria.push(this.skipBibSubject());
-    return skipCriteria.some((criteria) => criteria);
+  suppressed () {
+    let suppressCriteria = [];
+    console.log(this.isDeprecatedLocalAuthority())
+    suppressCriteria.push(this.isDeprecatedLocalAuthority());
+    return suppressCriteria.some((criteria) => criteria);
   }
 
-  skipBibSubject () {
-    return (
-      this.preferredTerm.source === "bib" &&
-      !this.preferredTerm.hasValidBibSubjectSource()
-    );
-  }
-
-  // This method is inspecting a 6xx field on an authority record, not
-  // a 6xx field coming from a bib subject.
+  /**
+   * Determine if a given authority record has metadata which indicates
+   * it is an outdated record. Note this method is inspecting an expected
+   * 667 field on a Sierra authority record, not a 667 field coming from a bib
+   * subject.
+   * @returns boolean
+   */
   isDeprecatedLocalAuthority () {
     const sixSixSeven = this.getVarfieldByMarcTag("667");
     if (!sixSixSeven || !sixSixSeven.subfields) return false;
@@ -51,10 +39,9 @@ class Subject {
   }
 
   getVarfieldByMarcTag (marcTagToMatch) {
-    // TODO use .find?
-    return this.varfields.filter(
+    return this.varfields.find(
       ({ marcTag }) => marcTag === marcTagToMatch
-    )[0];
+    );
   }
 
   fieldTag (tag) {
@@ -63,21 +50,21 @@ class Subject {
     );
     return fieldTag;
   }
-
+  /**
+   * Builds Varfield instance for the varfield with field tag 'd'. 
+   * @returns Varfield
+   */
   getPreferredTerm () {
     try {
       let preferredTermMarc
+      // sierra subject marc and authority marc
       preferredTermMarc = this.fieldTag('d')
-      // If we failed to find a fieldTag d, use any 6xx
-      // TODO: Use getXXFields for this?
-      if (!preferredTermMarc) preferredTermMarc = this.varfields.find((varfield) => varfield.marcTag[0] === "6")
       return new Varfield(preferredTermMarc);
     } catch (e) {
       throw new InvalidSubjectDataError(`Invalid subject data: \n ${e.message}`)
     }
   }
-  
-  // TODO Would love to see more documentation like:
+
   /**
   * Get varfields by matching hundreds digit
   *
@@ -89,12 +76,11 @@ class Subject {
       const tag = parseInt(field.marcTag, 10);
       return tag >= number && tag < number + 100;
     });
-    return xxFields.map((field) => {
-      // TODO Instead of mapping to null and then filtering out nulls, maybe
-      // .filter out elements without subfields and then map to instances?
-      if (!field?.subfields?.length) return
-      return new VariantVarfield(field)
-    }).filter(x => x);
+    return xxFields
+      .filter((field) => field.subfields?.length)
+      .map((field) => {
+        return new VariantVarfield(field)
+      })
   }
 
   get sixXXfields () {
