@@ -12,7 +12,8 @@ class Subject {
     ).filter(({ display }) => display);
     this.variants = this.fourXXFields.filter(({ display }) => display)
     this.preferredTerm = this.getPreferredTerm();
-    this.suppressed = this.suppressed(authorityRecord.suppressed);
+    this.suppressed = this.suppressed();
+
     this.uri = authorityRecord.id;
     this.deleted = authorityRecord.deleted;
   }
@@ -65,13 +66,13 @@ class Subject {
     }
   }
 
+
   /**
   * Get varfields by matching hundreds digit
   *
   * @param {number} number - The hundreds range. E.g. 400, 500, 700
   */
   getXXFields (number) {
-    // Match fields in range number to number+99
     const xxFields = this.varfields.filter((field) => {
       const tag = parseInt(field.marcTag, 10);
       return tag >= number && tag < number + 100;
@@ -86,7 +87,6 @@ class Subject {
   get sixXXfields () {
     return this.getXXFields(600);
   }
-
   get fiveXXFields () {
     return this.getXXFields(500);
   }
