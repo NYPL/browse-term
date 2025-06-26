@@ -9,7 +9,8 @@ class Subject {
     );
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
-    );
+    ).filter(({ display }) => display);
+    this.variants = this.fourXXFields.filter(({ display }) => display)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed(authorityRecord.suppressed);
     this.uri = authorityRecord.id;
@@ -18,7 +19,6 @@ class Subject {
 
   suppressed () {
     let suppressCriteria = [];
-    console.log(this.isDeprecatedLocalAuthority())
     suppressCriteria.push(this.isDeprecatedLocalAuthority());
     return suppressCriteria.some((criteria) => criteria);
   }
