@@ -52,7 +52,7 @@ describe("Subject", () => {
     it("returns field tag d varfield for authority records with multiple varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
-    it.only("returns single varfield for bib varfields with fieldTag null", () => {
+    it("returns single varfield for bib varfields with fieldTag null", () => {
       // this case is for partner records
       const bibSubject = new Subject({
         varFields: [
