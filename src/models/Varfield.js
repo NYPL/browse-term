@@ -11,33 +11,6 @@ class Varfield {
     this.display = this.getDisplay();
     this.label = this.getLabel();
     this.type = this.getType();
-    this.source = this.getSource();
-  }
-
-  getSource () {
-    return this.varfield.marcTag[0] !== "6" ? "authority" : "bib";
-  }
-
-  get cataloggedSource () {
-    return this.getSubfieldContent("2")?.toLocaleLowerCase();
-  }
-
-  hasValidBibSubjectSource () {
-    return (
-      this.hasValidLocalSources() || this.cataloggedSource?.includes("lcsh")
-    );
-  }
-
-  hasValidLocalSources () {
-    return !!(
-      this.cataloggedSource?.includes("bookops") ||
-      this.cataloggedSource?.includes("local")
-    );
-  }
-
-  getBibOnly () {
-    if (this.source !== "bib") return false;
-    return this.varfield.marcTag === "690" || this.hasValidLocalSources();
   }
 
   getDisplay () {
