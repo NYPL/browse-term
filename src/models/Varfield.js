@@ -4,7 +4,7 @@ const { headings } = require("../constants.js")
 class Varfield {
   constructor (varfield) {
     if (!varfield.subfields?.length) {
-      logger.warn(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
+      logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
     this.varfield = varfield;
     this.display = this.getDisplay();

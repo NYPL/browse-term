@@ -61,7 +61,7 @@ class Subject {
       return new Varfield(preferredTermMarc);
     } catch (e) {
       if (this.deleted) return
-      logger.warn(`Invalid subject data: \n ${e.message}`)
+      logger.error(`Invalid subject data: \n ${e.message}`)
     }
   }
 
