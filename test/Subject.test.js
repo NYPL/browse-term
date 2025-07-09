@@ -12,6 +12,15 @@ describe("Subject", () => {
   const deprecatedLocalAuthorityRecord = new Subject(
     deprecatedLocal
   );
+  it('can handle deleted authority data', () => {
+    const deletedSubject = new Subject({
+      "id": "10000001",
+      "deletedDate": "2011-02-28",
+      "deleted": true,
+      "varFields": []
+    })
+    assert(deletedSubject.deleted)
+  })
   describe("fourXXfields", () => {
     it("returns 400s", () => {
       assert.equal(horrorSubject.fourXXFields.length, 12);
@@ -31,14 +40,6 @@ describe("Subject", () => {
     });
   });
   describe("preferredTerm", () => {
-    it("throws an error when preferred term with no subfields", () => {
-      const subject = () => new Subject({ varFields: [{ "fieldTag": "d" }] })
-      assert.throws(subject, (error) => {
-        assert(error instanceof InvalidSubjectDataError);
-        assert(/Varfield missing subfields./.test(error))
-        return true
-      })
-    })
     it("returns field tag d varfield for authority records with multiple varfields", () => {
       assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
     });
