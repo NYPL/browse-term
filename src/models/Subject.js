@@ -1,8 +1,8 @@
 const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
-const { InvalidSubjectDataError } = require("../errors.js")
 class Subject {
   constructor (authorityRecord) {
+    this.deleted = authorityRecord.deleted;
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
@@ -13,9 +13,7 @@ class Subject {
     this.variants = this.fourXXFields.filter(({ display }) => display)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
-
     this.uri = authorityRecord.id;
-    this.deleted = authorityRecord.deleted;
   }
 
   suppressed () {
@@ -62,7 +60,8 @@ class Subject {
       preferredTermMarc = this.fieldTag('d')
       return new Varfield(preferredTermMarc);
     } catch (e) {
-      throw new InvalidSubjectDataError(`Invalid subject data: \n ${e.message}`)
+      if (this.deleted) return
+      logger.warn(`Invalid subject data: \n ${e.message}`)
     }
   }
 
