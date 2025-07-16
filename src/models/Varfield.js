@@ -1,5 +1,6 @@
 const { subjectLiteralFromSubfieldMap } = require("../utils.js")
 const { headings } = require("../constants.js")
+const logger = require("../logger.js")
 
 class Varfield {
   constructor (varfield) {

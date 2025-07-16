@@ -1,5 +1,7 @@
 const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
+const logger = require("../logger.js")
+
 class Subject {
   constructor (authorityRecord) {
     this.deleted = authorityRecord.deleted;
