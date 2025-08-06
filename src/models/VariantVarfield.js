@@ -3,7 +3,7 @@ class VariantVarfield extends Varfield {
   constructor (varfield) {
     super(varfield);
     this.subfieldW = this.getSubfieldW();
-    this.suppressed = this.getSuppressed();
+    this.suppressed = this.isSuppressed();
     this.isBroaderTerm = this.getIsBroaderTerm();
   }
 
@@ -11,7 +11,7 @@ class VariantVarfield extends Varfield {
     return this.getSubfieldContent("w");
   }
 
-  getSuppressed () {
+  isSuppressed () {
     const referenceDisplay = this.subfieldW?.[3];
     // if there are only 2 characters, or has placeholder n
     if (!referenceDisplay || referenceDisplay === "n") {

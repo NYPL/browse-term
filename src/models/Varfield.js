@@ -3,19 +3,24 @@ const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
 class Varfield {
+  allowedInd2Values = ["0"]
   constructor (varfield) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
     this.varfield = varfield;
+    // this value is made for determining if a bib 6xx field is from a valid thesaurus
     this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
   }
 
   isSuppressed () {
-    return false
+    const ind2 = this.varfield.ind2
+    if (this.allowedInd2Values.includes(ind2)) return false
+    else return true;
   }
+
 
   getSubfieldContent (tag) {
     const subfield = this.varfield.subfields?.find((sf) => sf.tag === tag);
