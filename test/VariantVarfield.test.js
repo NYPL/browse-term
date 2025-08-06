@@ -4,7 +4,7 @@ const VariantVarfield = require("../src/models/VariantVarfield.js")
 
 describe("VariantVarfield", () => {
   describe("suppressed", () => {
-    it("returns true if there is no subfield w/3 character", () => {
+    it("returns false if there is no subfield w/3 character", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "d",
         marcTag: "450",
@@ -15,9 +15,9 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, true);
+      assert.equal(variantVarfield.suppressed, false);
     });
-    it("returns true if there is no subfield w/3 is n", () => {
+    it("returns false if there is no subfield w/3 is n", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "d",
         marcTag: "450",
@@ -28,9 +28,9 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, true);
+      assert.equal(variantVarfield.suppressed, false);
     });
-    it("returns false if subfield w/3 is in do not suppressed array", () => {
+    it("returns true if subfield w/3 is in suppressed array", () => {
       const variantVarfield = new VariantVarfield({
         fieldTag: "e",
         marcTag: "450",
@@ -41,7 +41,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, false);
+      assert.equal(variantVarfield.suppressed, true);
     });
   });
   describe("isBroaderTerm", () => {
