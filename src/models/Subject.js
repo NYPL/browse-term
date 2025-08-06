@@ -11,8 +11,8 @@ class Subject {
     );
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
-    ).filter(({ display }) => display);
-    this.variants = this.fourXXFields.filter(({ display }) => display)
+    ).filter(({ suppressed }) => !suppressed);
+    this.variants = this.fourXXFields.filter(({ suppressed }) => !suppressed)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
     this.uri = authorityRecord.id;

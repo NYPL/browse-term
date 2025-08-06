@@ -8,13 +8,13 @@ class Varfield {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
     this.varfield = varfield;
-    this.display = this.getDisplay();
+    this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
   }
 
-  getDisplay () {
-    return true;
+  isSuppressed () {
+    return false
   }
 
   getSubfieldContent (tag) {
