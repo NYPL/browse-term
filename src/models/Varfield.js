@@ -14,6 +14,23 @@ class Varfield {
     this.type = this.getType();
   }
 
+  get cataloggedSource () {
+    return this.getSubfieldContent("2")?.toLocaleLowerCase();
+  }
+
+  hasValidBibSubjectSource (ind2) {
+    if (this.allowedInd2Values.includes(ind2)) return true
+    return !!(
+      this.hasValidLocalSources() || this.cataloggedSource?.includes("lcsh")
+    );
+  }
+
+  hasValidLocalSources () {
+    return !!(
+      this.cataloggedSource?.includes("bookops") ||
+      this.cataloggedSource?.includes("local")
+    );
+  }
   // Determining if a varfield is from a thesaurus we want to recognize.
   // This method is intended to determine whether or not to index a bib 6xx
   // subject field, not for use on authority records.
@@ -23,7 +40,7 @@ class Varfield {
     // This method is not meant to be called on a 1xx field, but adding it for
     // accuracy's sake.
     if (!ind2) return false
-    if (this.allowedInd2Values.includes(ind2)) return false
+    if (this.hasValidBibSubjectSource(ind2)) return false
     else return true;
   }
 
