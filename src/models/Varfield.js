@@ -3,7 +3,7 @@ const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
 class Varfield {
-  allowedInd2Values = ["0"]
+  allowedInd2Values = [0]
   constructor (varfield) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
