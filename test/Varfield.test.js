@@ -66,10 +66,10 @@ describe("Varfield", () => {
       })
       assert.equal(varfield.suppress, true)
     })
-    it("does not suppress empty ind2", () => {
+    it("does not suppress empty ind2 for 1xx field", () => {
       const varfield = new Varfield({
         fieldTag: 'd',
-        marcTag: '600',
+        marcTag: '100',
         ind1: '0',
         ind2: ' ',
         content: null,

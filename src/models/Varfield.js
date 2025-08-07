@@ -9,6 +9,7 @@ class Varfield {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
     this.varfield = varfield;
+    this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
@@ -39,8 +40,8 @@ class Varfield {
     // authority record 1xx fields have undefined ind2, so skip those. 
     // This method is not meant to be called on a 1xx field, but adding it for
     // accuracy's sake.
-    if (!ind2) return false
     if (this.hasValidBibSubjectSource(ind2)) return false
+    if (!ind2 && this.marcTag > 99 && this.marcTag < 200) return false
     else return true;
   }
 
@@ -93,9 +94,7 @@ class Varfield {
   }
 
   getType () {
-    const marcTag = this.varfield.marcTag;
-    const digits = parseInt(marcTag, 10) % 100;
-    return headings[digits];
+    return headings[this.marcTag % 100];
   }
 }
 
