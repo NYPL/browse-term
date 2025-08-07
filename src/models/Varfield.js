@@ -9,14 +9,20 @@ class Varfield {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
     this.varfield = varfield;
-    // this value is made for determining if a bib 6xx field is from a valid thesaurus
     this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
   }
 
+  // Determining if a varfield is from a thesaurus we want to recognize.
+  // This method is intended to determine whether or not to index a bib 6xx
+  // subject field, not for use on authority records.
   isSuppressed () {
-    const ind2 = this.varfield.ind2
+    const ind2 = parseInt(this.varfield.ind2, 10)
+    // authority record 1xx fields have undefined ind2, so skip those. 
+    // This method is not meant to be called on a 1xx field, but adding it for
+    // accuracy's sake.
+    if (!ind2) return false
     if (this.allowedInd2Values.includes(ind2)) return false
     else return true;
   }

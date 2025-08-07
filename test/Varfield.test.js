@@ -4,6 +4,21 @@ const Varfield = require("../src/models/Varfield.js")
 
 describe("Varfield", () => {
   describe("suppressed", () => {
+    it("does not suppress empty ind2", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: ' ',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert(!varfield.suppress)
+    })
     it("suppresses based on ind2 values", () => {
       const varfield = new Varfield({
         fieldTag: 'd',
