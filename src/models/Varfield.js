@@ -4,6 +4,7 @@ const logger = require("../logger.js")
 
 class Varfield {
   allowedInd2Values = [0]
+  allowedSubfield2Sources = ["bookops", "local", "lcsh"]
   constructor (varfield) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
@@ -15,32 +16,21 @@ class Varfield {
     this.type = this.getType();
   }
 
-  get cataloggedSource () {
-    return this.getSubfieldContent("2")?.toLocaleLowerCase();
-  }
-
   hasValidBibSubjectSource (ind2) {
     if (this.allowedInd2Values.includes(ind2)) return true
-    return !!(
-      this.hasValidLocalSources() || this.cataloggedSource?.includes("lcsh")
-    );
+    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
+    return this.allowedSubfield2Sources.includes(cataloggedSource)
   }
 
-  hasValidLocalSources () {
-    return !!(
-      this.cataloggedSource?.includes("bookops") ||
-      this.cataloggedSource?.includes("local")
-    );
-  }
   // Determining if a varfield is from a thesaurus we want to recognize.
   // This method is intended to determine whether or not to index a bib 6xx
   // subject field, not for use on authority records.
   isSuppressed () {
     const ind2 = parseInt(this.varfield.ind2, 10)
+    if (this.hasValidBibSubjectSource(ind2)) return false
     // authority record 1xx fields have undefined ind2, so skip those. 
     // This method is not meant to be called on a 1xx field, but adding it for
     // accuracy's sake.
-    if (this.hasValidBibSubjectSource(ind2)) return false
     if (!ind2 && this.marcTag > 99 && this.marcTag < 200) return false
     else return true;
   }
