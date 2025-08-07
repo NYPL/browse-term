@@ -18,8 +18,8 @@ class Varfield {
 
   hasValidBibSubjectSource (ind2) {
     if (this.allowedInd2Values.includes(ind2)) return true
-    const cataloggedSource = this.getSubfieldContent("2")?.toLocaleLowerCase();
-    return this.allowedSubfield2Sources.includes(cataloggedSource)
+    const subfield2Source = this.getSubfieldContent("2")?.toLocaleLowerCase();
+    return this.allowedSubfield2Sources.includes(subfield2Source)
   }
 
   // Determining if a varfield is from a thesaurus we want to recognize.
