@@ -15,14 +15,14 @@ class Varfield {
     this.label = this.getLabel();
     this.type = this.getType();
   }
-
+  // Determine if a varfield is from a thesaurus we want to recognize, or has
+  // a catalogged subfield 2 subject source we want to display
   hasValidBibSubjectSource (ind2) {
     if (this.allowedInd2Values.includes(ind2)) return true
     const subfield2Source = this.getSubfieldContent("2")?.toLocaleLowerCase();
     return this.allowedSubfield2Sources.includes(subfield2Source)
   }
 
-  // Determining if a varfield is from a thesaurus we want to recognize.
   // This method is intended to determine whether or not to index a bib 6xx
   // subject field, not for use on authority records.
   isSuppressed () {
