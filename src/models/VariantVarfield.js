@@ -3,7 +3,7 @@ class VariantVarfield extends Varfield {
   constructor (varfield) {
     super(varfield);
     this.subfieldW = this.getSubfieldW();
-    this.display = this.getDisplay();
+    this.suppressed = this.isSuppressed();
     this.isBroaderTerm = this.getIsBroaderTerm();
   }
 
@@ -11,14 +11,14 @@ class VariantVarfield extends Varfield {
     return this.getSubfieldContent("w");
   }
 
-  getDisplay () {
+  isSuppressed () {
     const referenceDisplay = this.subfieldW?.[3];
     // if there are only 2 characters, or has placeholder n
     if (!referenceDisplay || referenceDisplay === "n") {
-      return true;
+      return false;
       // if specific do not display codes are present
     } else if (["a", "b", "c", "d"].includes(this.subfieldW?.[3])) {
-      return false;
+      return true;
     }
   }
 

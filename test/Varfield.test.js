@@ -3,6 +3,115 @@ const assert = require("node:assert")
 const Varfield = require("../src/models/Varfield.js")
 
 describe("Varfield", () => {
+  describe("hasValidBibSubjectSource", () => {
+    it("does not explode if there is no subfield 2", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      assert.equal(varfield.hasValidBibSubjectSource(), false);
+    });
+    it("returns true for valid source", () => {
+      const bibSubject = new Varfield({
+        marcTag: "600",
+        fieldTag: "d",
+        subfields: [
+          { content: "Spaghetti", tag: "a" },
+          { content: "Local", tag: "2" },
+        ],
+      });
+      assert.equal(bibSubject.hasValidBibSubjectSource(), true);
+    });
+    it("returns false for invalid source", () => {
+      const bibSubject = new Varfield({
+        marcTag: "600",
+        fieldTag: "d",
+        subfields: [
+          { content: "Spaghetti", tag: "a" },
+          { content: "Dollywood", tag: "2" },
+        ],
+      });
+      assert.equal(bibSubject.hasValidBibSubjectSource(), false);
+    });
+  });
+  describe("suppressed", () => {
+    it("suprresses a real canadian thesaurus subject", () => {
+      // from cb17901782
+      const varfield = new Varfield({
+        "ind1": " ",
+        "ind2": "6",
+        "content": null,
+        "marcTag": "650",
+        "fieldTag": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Photographes de la nature"
+          },
+          {
+            "tag": "0",
+            "content": "(CaQQLa)201-0369077"
+          },
+          {
+            "tag": "z",
+            "content": "États-Unis"
+          },
+        ]
+      })
+      assert.equal(varfield.suppress, true)
+    })
+    it("does not suppress empty ind2 for 1xx field", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '100',
+        ind1: '0',
+        ind2: ' ',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(varfield.suppress, false)
+    })
+    it("suppresses based on ind2 values", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '1',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(varfield.suppress, true)
+    })
+    it("does not suppress allowed ind2 values", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '0',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(varfield.suppress, false)
+    })
+  })
   describe("label", () => {
     it("can handle a varfield with two subfields with the same tag", () => {
       const varfield = new Varfield({

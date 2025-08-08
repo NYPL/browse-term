@@ -1,5 +1,7 @@
 const Varfield = require("./Varfield.js")
 const VariantVarfield = require("./VariantVarfield.js")
+const logger = require("../logger.js")
+
 class Subject {
   constructor (authorityRecord) {
     this.deleted = authorityRecord.deleted;
@@ -9,11 +11,11 @@ class Subject {
     );
     this.seeAlso = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => !isBroaderTerm
-    ).filter(({ display }) => display);
-    this.variants = this.fourXXFields.filter(({ display }) => display)
+    ).filter(({ suppressed }) => !suppressed);
+    this.variants = this.fourXXFields.filter(({ suppressed }) => !suppressed)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
-    this.uri = authorityRecord.id;
+    this.sourceId = authorityRecord.id;
   }
 
   suppressed () {
