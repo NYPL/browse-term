@@ -15,7 +15,7 @@ class Subject {
     this.variants = this.fourXXFields.filter(({ suppressed }) => !suppressed)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
-    this.uri = authorityRecord.id;
+    this.sourceId = authorityRecord.id;
   }
 
   suppressed () {
