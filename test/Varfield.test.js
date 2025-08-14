@@ -113,6 +113,20 @@ describe("Varfield", () => {
     })
   })
   describe("label", () => {
+    it("trims whitespace", () => {
+      const varfield = new Varfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '0',
+        content: null,
+        subfields: [{
+          tag: 'a',
+          content: 'trim me! '
+        }]
+      })
+      assert.equal(varfield.label, 'trim me!')
+    })
     it("can handle a varfield with two subfields with the same tag", () => {
       const varfield = new Varfield({
         fieldTag: 'd',
