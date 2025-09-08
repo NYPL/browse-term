@@ -24,7 +24,6 @@ exports.firstSubfields = [
   "f",
   "g",
   "h",
-  "i",
   "j",
   "k",
   "l",
@@ -37,7 +36,6 @@ exports.firstSubfields = [
   "s",
   "t",
   "u",
-  "4",
 ];
 
 exports.lastSubfields = ["v", "x", "y", "z"];
