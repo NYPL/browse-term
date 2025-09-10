@@ -88,7 +88,7 @@ const subject = new Subject({
     }]})
 
 console.log(subject.preferredTerm) // "Horror tales spooky"
-console.log(subject.variants.map.label) // ["Horror -- Fiction"]
+console.log(subject.variants.map(v=> v.label) // ["Horror -- Fiction"]
 ```
 
 #### Bib field parsing
