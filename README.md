@@ -34,9 +34,13 @@ If you intend to bump a minor or major version:
 3. commit
 4. run `npm publish`
 
-### Authority record parsing
+### Record parsing
 
-The Subject class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
+There are two classes exposed from `index.js` file of this repo: `Subject` and `Varfield`. `Subject` uses the `Varfield` class under the hood, and organizes those varfields.
+
+#### Authority record parsing
+
+The `Subject` class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
 
 For example:
 
@@ -87,9 +91,9 @@ console.log(subject.preferredTerm) // "Horror tales spooky"
 console.log(subject.variants.map.label) // ["Horror -- Fiction"]
 ```
 
-### Bib field parsing
+#### Bib field parsing
 
-This module should also be used to build any bib data that is used to link to a browse index. To build that bib data, the Varfield class should be instantiated with a single bib varfield.
+This module should also be used to build any bib data that is used to link to a browse index. To build that bib data, the `Varfield` class should be instantiated with a single bib varfield.
 
 Example:
 
