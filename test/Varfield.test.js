@@ -113,6 +113,30 @@ describe("Varfield", () => {
     })
   })
   describe("label", () => {
+    it("trims whitespace", () => {
+      const varfield = new Varfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "6",
+            "content": "880-01"
+          },
+          {
+            "tag": "a",
+            "content": "   600 primary value a"
+          },
+          {
+            "tag": "b",
+            "content": "600 primary value b   "
+          }
+        ]
+      })
+      assert.equal(varfield.label, '600 primary value a 600 primary value b')
+    })
     it("can handle a varfield with two subfields with the same tag", () => {
       const varfield = new Varfield({
         fieldTag: 'd',
