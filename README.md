@@ -24,6 +24,16 @@ npm i
 This repo uses the native node testing library. To run tests:
 `npm test`
 
+### Publishing
+
+`npm run build-publish` will bump to the next patch version and publish to npm.
+If you intend to bump a minor or major version:
+
+1. Update the version manually in `package.json`
+2. run `npm i`
+3. commit
+4. run `npm publish`
+
 ### Authority record parsing
 
 The Subject class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
