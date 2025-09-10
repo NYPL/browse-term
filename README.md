@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This npm package was created as a central location for the logic around generating browseable terms. Currently, it is pretty hardcoded for Subject string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
+This npm package was created as a central location for the logic around generating browseable terms. It also is the source of truth for what subfields are used to index subjects, and potentially other browse terms in the future. Currently, it is pretty hardcoded for Subject string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
 
 ## Authority model
 
@@ -38,6 +38,79 @@ If you intend to bump a minor or major version:
 
 The Subject class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
 
+For example:
+
+```
+import Subject from "@nypl/browse-term"
+
+const subject = new Subject({
+  "id": 11838157,
+  "updatedDate": "2011-06-21T15:30:35Z",
+  "createdDate": "2009-03-06T01:12:39Z",
+  "deleted": false,
+  "suppressed": false,
+  "varFields": [
+    {
+      "fieldTag": "d",
+      "marcTag": "150",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Horror tales"
+        },
+        {
+          "tag": "b",
+          "content": "spooky"
+        }
+      ]
+    },
+    {
+      "fieldTag": "e",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Horror"
+        },
+        {
+          "tag": "v",
+          "content": "Fiction"
+        }
+      ]
+    }]})
+
+console.log(subject.preferredTerm) // "Horror tales spooky"
+console.log(subject.variants.map.label) // ["Horror -- Fiction"]
+```
+
 ### Bib field parsing
 
 This module should also be used to build any bib data that is used to link to a browse index. To build that bib data, the Varfield class should be instantiated with a single bib varfield.
+
+Example:
+
+```
+import Varfield from "@nypl/browse-term"
+const subjectLiteral = new Varfield({
+      "fieldTag": "d",
+      "marcTag": "450",
+      "ind1": " ",
+      "ind2": " ",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Horror"
+        },
+        {
+          "tag": "v",
+          "content": "Fiction"
+        }
+      ]
+    })
+
+console.log(subjectLiteral.label) // "Horror -- Fiction"
+```
