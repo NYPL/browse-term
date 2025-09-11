@@ -1,10 +1,10 @@
 {
   "name": "@nypl/browse-term",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NYPL/browse-term"
+    "url": "git+https://github.com/NYPL/browse-term.git"
   },
   "scripts": {
     "test": "node --test --watch",
