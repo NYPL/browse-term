@@ -80,7 +80,7 @@ class Varfield {
   getLabel () {
     const label = subjectLiteralFromSubfieldMap(this.buildSubfieldMap());
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
-    return (directionPrefix + label).trim()
+    return (directionPrefix + label).trim().replace(/(?<=[a-z0-9]{2})\.$/, '')
   }
 
   getType () {

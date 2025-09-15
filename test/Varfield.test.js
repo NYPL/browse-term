@@ -113,6 +113,42 @@ describe("Varfield", () => {
     })
   })
   describe("label", () => {
+    it("Does not trim final periods part of abbreviations", () => {
+      const varfield = new Varfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "N. Y. C."
+          }
+        ]
+      })
+      assert.equal(varfield.label, "N. Y. C.")
+    })
+    it("trims final periods", () => {
+      const varfield = new Varfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "This period stays but probably wouldn't exist IRL."
+          },
+          {
+            "tag": "b",
+            "content": "This period goes."
+          }
+        ]
+      })
+      assert.equal(varfield.label, "This period stays but probably wouldn't exist IRL. This period goes")
+    })
     it("trims whitespace", () => {
       const varfield = new Varfield({
         "fieldTag": "d",
