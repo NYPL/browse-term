@@ -3,6 +3,28 @@ const assert = require("node:assert")
 const Varfield = require("../src/models/Varfield.js")
 
 describe("Varfield", () => {
+  describe("subjectLiteralFromSubfieldArray", () => {
+    it("respects subfield order passed in", () => {
+      assert.equal(Varfield.subjectLiteralFromSubfieldArray([
+        {
+          "tag": "a",
+          "content": "France"
+        },
+        {
+          "tag": "x",
+          "content": "History"
+        },
+        {
+          "tag": "y",
+          "content": "Revolution, 1789-1799"
+        },
+        {
+          "tag": "x",
+          "content": "Influence."
+        }
+      ]), 'France -- History -- Revolution, 1789-1799 -- Influence.')
+    })
+  })
   describe("hasValidBibSubjectSource", () => {
     it("does not explode if there is no subfield 2", () => {
       const varfield = new Varfield({

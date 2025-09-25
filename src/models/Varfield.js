@@ -1,4 +1,4 @@
-const { subjectLiteralFromSubfieldMap } = require("../utils.js")
+const { firstSubfields, lastSubfields } = require("../constants.js")
 const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
@@ -14,6 +14,16 @@ class Varfield {
     this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
+  }
+
+  static subjectLiteralFromSubfieldArray = (subfields) => {
+    const subfieldsFor = (subfieldSection, joiner) => subfields
+      .filter((sf) => subfieldSection.includes(sf.tag))
+      .map(({ content }) => content)
+      .join(joiner)
+    return [
+      subfieldsFor(firstSubfields, " "),
+      subfieldsFor(lastSubfields, " -- ")].filter(Boolean).join(" -- ")
   }
   // Determine if a varfield is from a thesaurus we want to recognize, or has
   // a catalogged subfield 2 subject source we want to display
@@ -78,7 +88,7 @@ class Varfield {
   }
 
   getLabel () {
-    const label = subjectLiteralFromSubfieldMap(this.buildSubfieldMap());
+    const label = Varfield.subjectLiteralFromSubfieldArray(this.varfield.subfields)
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
     return (directionPrefix + label).trim().replace(/(?<=[a-z0-9]{2})\.$/, '')
   }
