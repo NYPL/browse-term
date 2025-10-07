@@ -90,7 +90,9 @@ class Varfield {
   getLabel () {
     const label = Varfield.subjectLiteralFromSubfieldArray(this.varfield.subfields)
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
-    return (directionPrefix + label).trim().replace(/(?<=[a-z0-9]{2})\.$/, '')
+    const finalAbbreviations = ["pub"]
+    const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
+    return (directionPrefix + label).trim().replace(matchTrailingPeriods, '')
   }
 
   getType () {
