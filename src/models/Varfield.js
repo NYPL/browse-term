@@ -37,6 +37,8 @@ class Varfield {
   // This method is intended to determine whether or not to index a bib 6xx
   // subject field, not for use on authority records.
   isSuppressed () {
+    // 653 is for uncontrolled subjects, which seem to never have ind2 values
+    if (this.marcTag === 653) return false
     const ind2 = parseInt(this.varfield.ind2, 10)
     if (this.hasValidBibSubjectSource(ind2)) return false
     // authority record 1xx fields have undefined ind2, so skip those. 

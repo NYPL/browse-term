@@ -63,6 +63,26 @@ describe("Varfield", () => {
     });
   });
   describe("suppressed", () => {
+    it("does not suppress 653 fields with no indicators", () => {
+      const varfield = new Varfield({
+        "ind1": " ",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "653",
+        "fieldTag": "d",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Poetry"
+          },
+          {
+            "tag": "a",
+            "content": "Songs"
+          }
+        ]
+      })
+      assert(!varfield.suppress)
+    })
     it("suprresses a real canadian thesaurus subject", () => {
       // from cb17901782
       const varfield = new Varfield({
@@ -150,6 +170,43 @@ describe("Varfield", () => {
         ]
       }, true)
       assert.equal(varfield.label, "N. Y. C.")
+    })
+    it("can handle two subfield a's", () => {
+      const varfield = new Varfield({
+        "ind1": " ",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "653",
+        "fieldTag": "d",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Poetry"
+          },
+          {
+            "tag": "a",
+            "content": "Songs"
+          }
+        ]
+      })
+      assert.equal(varfield.label, "Poetry Songs")
+
+    })
+    it("does not trim the elect abbreviations permitted periods", () => {
+      const varfield = new Varfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Spaghetti, pub."
+          }
+        ]
+      })
+      assert.equal(varfield.label, "Spaghetti, pub.")
     })
     it("trims final periods", () => {
       const varfield = new Varfield({
