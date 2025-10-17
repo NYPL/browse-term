@@ -135,7 +135,7 @@ describe("Varfield", () => {
     })
   })
   describe("label", () => {
-    it("Does not trim final periods part of abbreviations", () => {
+    it("Does not trim final periods part of abbreviations when flag is true", () => {
       const varfield = new Varfield({
         "fieldTag": "d",
         "marcTag": "600",
@@ -148,7 +148,7 @@ describe("Varfield", () => {
             "content": "N. Y. C."
           }
         ]
-      })
+      }, true)
       assert.equal(varfield.label, "N. Y. C.")
     })
     it("trims final periods", () => {
@@ -168,7 +168,7 @@ describe("Varfield", () => {
             "content": "This period goes."
           }
         ]
-      })
+      }, true)
       assert.equal(varfield.label, "This period stays but probably wouldn't exist IRL. This period goes")
     })
     it("trims whitespace", () => {

@@ -3,7 +3,8 @@ const VariantVarfield = require("./VariantVarfield.js")
 const logger = require("../logger.js")
 
 class Subject {
-  constructor (authorityRecord) {
+  constructor (authorityRecord, stripPeriods = false) {
+    this.stripPeriods = stripPeriods
     this.deleted = authorityRecord.deleted;
     this.varfields = authorityRecord.varFields;
     this.broaderTerms = this.fiveXXFields.filter(
@@ -16,6 +17,15 @@ class Subject {
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
     this.sourceId = authorityRecord.id;
+
+  }
+
+  newVarfield (args) {
+    return new Varfield(args, this.stripPeriods)
+  }
+
+  newVariantVarfield (args) {
+    return new VariantVarfield(args, this.stripPeriods)
   }
 
   suppressed () {
@@ -34,7 +44,7 @@ class Subject {
   isDeprecatedLocalAuthority () {
     const sixSixSeven = this.getVarfieldByMarcTag("667");
     if (!sixSixSeven || !sixSixSeven.subfields) return false;
-    const sixSixSevenVarfield = new Varfield(sixSixSeven);
+    const sixSixSevenVarfield = this.newVarfield(sixSixSeven);
     const subfieldA = sixSixSevenVarfield.getSubfieldContent("a");
     return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
   }
@@ -60,7 +70,7 @@ class Subject {
       let preferredTermMarc
       // sierra subject marc and authority marc
       preferredTermMarc = this.fieldTag('d')
-      return new Varfield(preferredTermMarc);
+      return this.newVarfield(preferredTermMarc);
     } catch (e) {
       if (this.deleted) return
       logger.error(`Invalid subject data: \n ${e.message}`)
@@ -81,7 +91,7 @@ class Subject {
     return xxFields
       .filter((field) => field.subfields?.length)
       .map((field) => {
-        return new VariantVarfield(field)
+        return this.newVariantVarfield(field)
       })
   }
 

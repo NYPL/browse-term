@@ -4,11 +4,12 @@ const logger = require("../logger.js")
 
 class Varfield {
   allowedInd2Values = [0]
-  allowedSubfield2Sources = ["bookops", "local", "lcsh"]
-  constructor (varfield) {
+  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit"]
+  constructor (varfield, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
+    this.stripPeriods = stripPeriods
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
@@ -88,9 +89,15 @@ class Varfield {
   }
 
   getLabel () {
-    const label = Varfield.subjectLiteralFromSubfieldArray(this.varfield.subfields)
+    let label = Varfield.subjectLiteralFromSubfieldArray(this.varfield.subfields)
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
-    return (directionPrefix + label).trim().replace(/(?<=[a-z0-9]{2})\.$/, '')
+    label = (directionPrefix + label).trim()
+    if (this.stripPeriods) {
+      const finalAbbreviations = ["pub"]
+      const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
+      label = label.replace(matchTrailingPeriods, '')
+    }
+    return label
   }
 
   getType () {
