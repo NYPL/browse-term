@@ -226,7 +226,7 @@ describe("Varfield", () => {
           }
         ]
       }, true)
-      assert.equal(varfield.label, "This period stays but probably wouldn't exist IRL. This period goes.")
+      assert.equal(varfield.label, "This period stays but probably wouldn't exist IRL. This period goes")
     })
     it("trims whitespace", () => {
       const varfield = new Varfield({
