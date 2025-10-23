@@ -352,4 +352,97 @@ describe("Varfield", () => {
       assert.equal(varfield.type, "Personal Name");
     });
   });
+  describe("skip adding period for special characters", () => {
+    it("skips for !", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art!",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art!");
+    })
+    it("skips for ?", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art?",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art?");
+    })
+    it("skips for \"", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: 'Horror in art"',
+          },
+        ],
+      });
+      assert.equal(varfield.label, 'Horror in art"');
+    })
+    it("skips for ]", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art]",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art]");
+    })
+    it("skips for )", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art)",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art)");
+    })
+    it("skips for >", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art>",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art>");
+    })
+    it("skips for -", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art-",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art-");
+    })
+  })
 });
