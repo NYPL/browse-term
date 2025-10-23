@@ -98,9 +98,10 @@ class Varfield {
       const finalAbbreviations = ["pub"]
       const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
       label = label.replace(matchTrailingPeriods, '')
+    } else {
+      const endingsNotRequiringPeriod = '!?"-)>.]'.split('')
+      if (!endingsNotRequiringPeriod.includes(label[label.length - 1])) { label += "." }
     }
-    const endingsNotRequiringPeriod = '!?"-)>.]'.split('')
-    if (!endingsNotRequiringPeriod.includes(label[label.length - 1])) { label += "." }
     return label
   }
 
