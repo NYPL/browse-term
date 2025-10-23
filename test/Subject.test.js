@@ -24,24 +24,24 @@ describe("Subject", () => {
   describe("fourXXfields", () => {
     it("returns 400s", () => {
       assert.equal(horrorSubject.fourXXFields.length, 12);
-      assert.equal(horrorSubject.fourXXFields[0].label, "Horror -- Fiction");
+      assert.equal(horrorSubject.fourXXFields[0].label, "Horror -- Fiction.");
     });
   });
   describe("broaderTerms", () => {
     it("returns specific 500 fields", () => {
       assert.equal(horrorSubject.broaderTerms.length, 1);
-      assert.equal(horrorSubject.broaderTerms[0].label, "Fiction");
+      assert.equal(horrorSubject.broaderTerms[0].label, "Fiction.");
     });
   });
   describe("seeAlso", () => {
     it("returns specific 500 fields", () => {
       assert.equal(horrorSubject.seeAlso.length, 1);
-      assert.equal(horrorSubject.seeAlso[0].label, "Ghost stories");
+      assert.equal(horrorSubject.seeAlso[0].label, "Ghost stories.");
     });
   });
   describe("preferredTerm", () => {
     it("returns field tag d varfield for authority records with multiple varfields", () => {
-      assert.equal(horrorSubject.preferredTerm.label, "Horror tales");
+      assert.equal(horrorSubject.preferredTerm.label, "Horror tales.");
     });
   });
   describe("isDeprecatedLocalAuthority", () => {

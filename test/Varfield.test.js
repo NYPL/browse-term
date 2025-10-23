@@ -189,7 +189,7 @@ describe("Varfield", () => {
           }
         ]
       })
-      assert.equal(varfield.label, "Poetry Songs")
+      assert.equal(varfield.label, "Poetry Songs.")
 
     })
     it("does not trim the elect abbreviations permitted periods", () => {
@@ -250,7 +250,7 @@ describe("Varfield", () => {
           }
         ]
       })
-      assert.equal(varfield.label, '600 primary value a 600 primary value b')
+      assert.equal(varfield.label, '600 primary value a 600 primary value b.')
     })
     it("can handle a varfield with two subfields with the same tag", () => {
       const varfield = new Varfield({
@@ -269,7 +269,7 @@ describe("Varfield", () => {
         }
         ]
       })
-      assert.equal(varfield.label, 'subfield z 1 -- subfield z 2')
+      assert.equal(varfield.label, 'subfield z 1 -- subfield z 2.')
     })
     it("returns direction zero width character when subfield six says so", () => {
       const varfield = new Varfield({
@@ -277,7 +277,7 @@ describe("Varfield", () => {
         marcTag: "880",
         subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
       })
-      assert.equal(varfield.label, "\u200Fspaghetti")
+      assert.equal(varfield.label, "\u200Fspaghetti.")
     })
     it("puts together a label with only one subfield", () => {
       const varfield = new Varfield({
@@ -290,7 +290,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      assert.equal(varfield.label, "Horror in art");
+      assert.equal(varfield.label, "Horror in art.");
     });
     it("puts together a label with starting subfields and xyz subfields with dashes", () => {
       const varfield = new Varfield({
@@ -321,7 +321,7 @@ describe("Varfield", () => {
           },
         ],
       });
-      assert.equal(varfield.label, "a b c -- z -- x");
+      assert.equal(varfield.label, "a b c -- z -- x.");
     });
   });
   describe("type", () => {
@@ -352,4 +352,97 @@ describe("Varfield", () => {
       assert.equal(varfield.type, "Personal Name");
     });
   });
+  describe("skip adding period for special characters", () => {
+    it("skips for !", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art!",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art!");
+    })
+    it("skips for ?", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art?",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art?");
+    })
+    it("skips for \"", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: 'Horror in art"',
+          },
+        ],
+      });
+      assert.equal(varfield.label, 'Horror in art"');
+    })
+    it("skips for ]", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art]",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art]");
+    })
+    it("skips for )", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art)",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art)");
+    })
+    it("skips for >", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art>",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art>");
+    })
+    it("skips for -", () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art-",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art-");
+    })
+  })
 });

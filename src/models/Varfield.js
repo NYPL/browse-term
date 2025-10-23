@@ -41,7 +41,7 @@ class Varfield {
     if (this.marcTag === 653) return false
     const ind2 = parseInt(this.varfield.ind2, 10)
     if (this.hasValidBibSubjectSource(ind2)) return false
-    // authority record 1xx fields have undefined ind2, so skip those. 
+    // authority record 1xx fields have undefined ind2, so skip those.
     // This method is not meant to be called on a 1xx field, but adding it for
     // accuracy's sake.
     if (!ind2 && this.marcTag > 99 && this.marcTag < 200) return false
@@ -98,6 +98,9 @@ class Varfield {
       const finalAbbreviations = ["pub"]
       const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
       label = label.replace(matchTrailingPeriods, '')
+    } else {
+      const endingsNotRequiringPeriod = '!?"-)>.]'.split('')
+      if (!endingsNotRequiringPeriod.includes(label[label.length - 1])) { label += "." }
     }
     return label
   }
