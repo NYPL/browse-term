@@ -1,3 +1,7 @@
+## v0.3.8
+
+- Include 4 digit year in skip period criteria
+
 ## v0.3.7
 
 - Add period to the end of a label unless it ends in special characters
