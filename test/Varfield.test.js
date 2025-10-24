@@ -353,6 +353,32 @@ describe("Varfield", () => {
     });
   });
   describe("skip adding period for special characters", () => {
+    it('adds period when less than 4 digit trailing', () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art 100",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art 100.");
+    })
+    it('skips for trailing 4 digits', () => {
+      const varfield = new Varfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art 1990",
+          },
+        ],
+      });
+      assert.equal(varfield.label, "Horror in art 1990");
+    })
     it("skips for !", () => {
       const varfield = new Varfield({
         fieldTag: "d",
