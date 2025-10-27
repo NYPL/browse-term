@@ -37,7 +37,12 @@ class Varfield {
   // This method is intended to determine whether or not to index a bib 6xx
   // subject field, not for use on authority records.
   isSuppressed () {
-    // 653 is for uncontrolled subjects, which seem to never have ind2 values
+    // 653 is for uncontrolled subjects, which at NYPL seem to never have ind2 values.
+    // Princeton catalogs them explicitly with ind2 = 0, so we'll never catch them
+    // Harvard uses 653 for non subject keywords, with an ind2 of 2, so we will skip:
+    const ind1 = parseInt(this.varfield.ind1, 10)
+    if (this.marcTag === 653 && ind1 == 2) return true
+    // Allow all other 653 fields
     if (this.marcTag === 653) return false
     const ind2 = parseInt(this.varfield.ind2, 10)
     if (this.hasValidBibSubjectSource(ind2)) return false
