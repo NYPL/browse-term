@@ -1,159 +1,9 @@
 const { describe, it } = require("node:test")
 const assert = require("node:assert")
-const Varfield = require("../src/models/Varfield.js")
+const Varfield = require("../src/models/Varfield.js");
+const SubjectVariantVarfield = require("../src/models/SubjectVariantVarfield.js");
 
 describe("Varfield", () => {
-  describe("subjectLiteralFromSubfieldArray", () => {
-    it("respects subfield order passed in", () => {
-      assert.equal(Varfield.subjectLiteralFromSubfieldArray([
-        {
-          "tag": "a",
-          "content": "France"
-        },
-        {
-          "tag": "x",
-          "content": "History"
-        },
-        {
-          "tag": "y",
-          "content": "Revolution, 1789-1799"
-        },
-        {
-          "tag": "x",
-          "content": "Influence."
-        }
-      ]), 'France -- History -- Revolution, 1789-1799 -- Influence.')
-    })
-  })
-  describe("hasValidBibAuthoritySource", () => {
-    it("does not explode if there is no subfield 2", () => {
-      const varfield = new Varfield({
-        fieldTag: "d",
-        marcTag: "150",
-        subfields: [
-          {
-            tag: "a",
-            content: "Horror in art",
-          },
-        ],
-      });
-      assert.equal(varfield.hasValidBibAuthoritySource(), false);
-    });
-    it("returns true for valid source", () => {
-      const bibAuthority = new Varfield({
-        marcTag: "600",
-        fieldTag: "d",
-        subfields: [
-          { content: "Spaghetti", tag: "a" },
-          { content: "Local", tag: "2" },
-        ],
-      });
-      assert.equal(bibAuthority.hasValidBibAuthoritySource(), true);
-    });
-    it("returns false for invalid source", () => {
-      const bibAuthority = new Varfield({
-        marcTag: "600",
-        fieldTag: "d",
-        subfields: [
-          { content: "Spaghetti", tag: "a" },
-          { content: "Dollywood", tag: "2" },
-        ],
-      });
-      assert.equal(bibAuthority.hasValidBibAuthoritySource(), false);
-    });
-  });
-  describe("suppressed", () => {
-    it("does not suppress 653 fields with no indicators", () => {
-      const varfield = new Varfield({
-        "ind1": " ",
-        "ind2": " ",
-        "content": null,
-        "marcTag": "653",
-        "fieldTag": "d",
-        "subfields": [
-          {
-            "tag": "a",
-            "content": "Poetry"
-          },
-          {
-            "tag": "a",
-            "content": "Songs"
-          }
-        ]
-      })
-      assert(!varfield.suppress)
-    })
-    it("suprresses a real canadian thesaurus Authority", () => {
-      // from cb17901782
-      const varfield = new Varfield({
-        "ind1": " ",
-        "ind2": "6",
-        "content": null,
-        "marcTag": "650",
-        "fieldTag": null,
-        "subfields": [
-          {
-            "tag": "a",
-            "content": "Photographes de la nature"
-          },
-          {
-            "tag": "0",
-            "content": "(CaQQLa)201-0369077"
-          },
-          {
-            "tag": "z",
-            "content": "États-Unis"
-          },
-        ]
-      })
-      assert.equal(varfield.suppress, true)
-    })
-    it("does not suppress empty ind2 for 1xx field", () => {
-      const varfield = new Varfield({
-        fieldTag: 'd',
-        marcTag: '100',
-        ind1: '0',
-        ind2: ' ',
-        content: null,
-        subfields: [{
-          tag: 'z',
-          content: 'subfield z 1'
-        }
-        ]
-      })
-      assert.equal(varfield.suppress, false)
-    })
-    it("suppresses based on ind2 values", () => {
-      const varfield = new Varfield({
-        fieldTag: 'd',
-        marcTag: '600',
-        ind1: '0',
-        ind2: '1',
-        content: null,
-        subfields: [{
-          tag: 'z',
-          content: 'subfield z 1'
-        }
-        ]
-      })
-      assert.equal(varfield.suppress, true)
-    })
-    it("does not suppress allowed ind2 values", () => {
-      const varfield = new Varfield({
-        fieldTag: 'd',
-        marcTag: '600',
-        ind1: '0',
-        ind2: '0',
-        content: null,
-        subfields: [{
-          tag: 'z',
-          content: 'subfield z 1'
-        }
-        ]
-      })
-      assert.equal(varfield.suppress, false)
-    })
-  })
   describe("label", () => {
     it("Does not trim final periods part of abbreviations when flag is true", () => {
       const varfield = new Varfield({
@@ -168,8 +18,8 @@ describe("Varfield", () => {
             "content": "N. Y. C."
           }
         ]
-      }, true)
-      assert.equal(varfield.label, "N. Y. C.")
+      }, () => "NYC.", true)
+      assert.equal(varfield.label, "NYC.")
     })
     it("can handle two subfield a's", () => {
       const varfield = new Varfield({
@@ -188,7 +38,7 @@ describe("Varfield", () => {
             "content": "Songs"
           }
         ]
-      })
+      }, SubjectVariantVarfield.literalFromSubfieldArray)
       assert.equal(varfield.label, "Poetry Songs.")
 
     })
@@ -205,7 +55,7 @@ describe("Varfield", () => {
             "content": "Spaghetti, pub."
           }
         ]
-      })
+      }, SubjectVariantVarfield.literalFromSubfieldArray)
       assert.equal(varfield.label, "Spaghetti, pub.")
     })
     it("trims final periods", () => {
@@ -225,7 +75,7 @@ describe("Varfield", () => {
             "content": "This period goes."
           }
         ]
-      }, true)
+      }, SubjectVariantVarfield.literalFromSubfieldArray, true)
       assert.equal(varfield.label, "This period stays but probably wouldn't exist IRL. This period goes")
     })
     it("trims whitespace", () => {
@@ -249,7 +99,7 @@ describe("Varfield", () => {
             "content": "600 primary value b   "
           }
         ]
-      })
+      }, SubjectVariantVarfield.literalFromSubfieldArray)
       assert.equal(varfield.label, '600 primary value a 600 primary value b.')
     })
     it("can handle a varfield with two subfields with the same tag", () => {
@@ -268,7 +118,7 @@ describe("Varfield", () => {
           content: 'subfield z 2'
         }
         ]
-      })
+      }, SubjectVariantVarfield.literalFromSubfieldArray)
       assert.equal(varfield.label, 'subfield z 1 -- subfield z 2.')
     })
     it("returns direction zero width character when subfield six says so", () => {
@@ -276,7 +126,7 @@ describe("Varfield", () => {
         fieldTag: "x",
         marcTag: "880",
         subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
-      })
+      }, SubjectVariantVarfield.literalFromSubfieldArray)
       assert.equal(varfield.label, "\u200Fspaghetti.")
     })
     it("puts together a label with only one subfield", () => {
@@ -289,7 +139,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art.");
     });
     it("puts together a label with starting subfields and xyz subfields with dashes", () => {
@@ -320,7 +170,7 @@ describe("Varfield", () => {
             content: "x",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "a b c -- z -- x.");
     });
   });
@@ -335,7 +185,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.type, "Topical Term");
     });
     it("returns headings from the headings mapping for marcTag 100", () => {
@@ -348,7 +198,7 @@ describe("Varfield", () => {
             content: "Horror in art",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.type, "Personal Name");
     });
   });
@@ -363,7 +213,7 @@ describe("Varfield", () => {
             content: "Horror in art!",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art!");
     })
     it("skips for ?", () => {
@@ -376,7 +226,7 @@ describe("Varfield", () => {
             content: "Horror in art?",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art?");
     })
     it("skips for \"", () => {
@@ -389,7 +239,7 @@ describe("Varfield", () => {
             content: 'Horror in art"',
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, 'Horror in art"');
     })
     it("skips for ]", () => {
@@ -402,7 +252,7 @@ describe("Varfield", () => {
             content: "Horror in art]",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art]");
     })
     it("skips for )", () => {
@@ -415,7 +265,7 @@ describe("Varfield", () => {
             content: "Horror in art)",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art)");
     })
     it("skips for >", () => {
@@ -428,7 +278,7 @@ describe("Varfield", () => {
             content: "Horror in art>",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art>");
     })
     it("skips for -", () => {
@@ -441,7 +291,7 @@ describe("Varfield", () => {
             content: "Horror in art-",
           },
         ],
-      });
+      }, SubjectVariantVarfield.literalFromSubfieldArray);
       assert.equal(varfield.label, "Horror in art-");
     })
   })

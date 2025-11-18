@@ -1,22 +1,34 @@
-const { firstSubfields, lastSubfields } = require("../constants.js")
 const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
 class Varfield {
-  allowedInd2Values = [0]
-  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit"]
-  constructor (varfield, stripPeriods = false) {
+  constructor (varfield, literalBuilder, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
+    console.log({ literalBuilder })
+    this.literalFromSubfieldArray = literalBuilder
     this.stripPeriods = stripPeriods
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
-    this.suppress = this.isSuppressed();
     this.label = this.getLabel();
     this.type = this.getType();
   }
 
+  getLabel () {
+    let label = this.literalFromSubfieldArray(this.varfield.subfields)
+    const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
+    label = (directionPrefix + label).trim()
+    if (this.stripPeriods) {
+      const finalAbbreviations = ["pub"]
+      const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
+      label = label.replace(matchTrailingPeriods, '')
+    } else {
+      const endingsNotRequiringPeriod = '!?"-)>.]'.split('')
+      if (!endingsNotRequiringPeriod.includes(label[label.length - 1])) { label += "." }
+    }
+    return label
+  }
 
   getSubfieldContent (tag) {
     const subfield = this.varfield.subfields?.find((sf) => sf.tag === tag);
@@ -57,21 +69,6 @@ class Varfield {
 
     const direction = dir === 'r' ? 'rtl' : 'ltr'
     return direction
-  }
-
-  getLabel () {
-    let label = Varfield.subjectLiteralFromSubfieldArray(this.varfield.subfields)
-    const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
-    label = (directionPrefix + label).trim()
-    if (this.stripPeriods) {
-      const finalAbbreviations = ["pub"]
-      const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
-      label = label.replace(matchTrailingPeriods, '')
-    } else {
-      const endingsNotRequiringPeriod = '!?"-)>.]'.split('')
-      if (!endingsNotRequiringPeriod.includes(label[label.length - 1])) { label += "." }
-    }
-    return label
   }
 
   getType () {
