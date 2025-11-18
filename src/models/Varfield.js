@@ -27,20 +27,20 @@ class Varfield {
       subfieldsFor(lastSubfields, " -- ")].filter(Boolean).join(" -- ")
   }
   // Determine if a varfield is from a thesaurus we want to recognize, or has
-  // a catalogged subfield 2 subject source we want to display
-  hasValidBibSubjectSource (ind2) {
+  // a catalogged subfield 2 Authority source we want to display
+  hasValidBibAuthoritySource (ind2) {
     if (this.allowedInd2Values.includes(ind2)) return true
     const subfield2Source = this.getSubfieldContent("2")?.toLocaleLowerCase();
     return this.allowedSubfield2Sources.includes(subfield2Source)
   }
 
   // This method is intended to determine whether or not to index a bib 6xx
-  // subject field, not for use on authority records.
+  // Authority field, not for use on authority records.
   isSuppressed () {
-    // 653 is for uncontrolled subjects, which seem to never have ind2 values
+    // 653 is for uncontrolled Authoritys, which seem to never have ind2 values
     if (this.marcTag === 653) return false
     const ind2 = parseInt(this.varfield.ind2, 10)
-    if (this.hasValidBibSubjectSource(ind2)) return false
+    if (this.hasValidBibAuthoritySource(ind2)) return false
     // authority record 1xx fields have undefined ind2, so skip those.
     // This method is not meant to be called on a 1xx field, but adding it for
     // accuracy's sake.

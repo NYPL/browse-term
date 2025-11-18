@@ -25,7 +25,7 @@ describe("Varfield", () => {
       ]), 'France -- History -- Revolution, 1789-1799 -- Influence.')
     })
   })
-  describe("hasValidBibSubjectSource", () => {
+  describe("hasValidBibAuthoritySource", () => {
     it("does not explode if there is no subfield 2", () => {
       const varfield = new Varfield({
         fieldTag: "d",
@@ -37,10 +37,10 @@ describe("Varfield", () => {
           },
         ],
       });
-      assert.equal(varfield.hasValidBibSubjectSource(), false);
+      assert.equal(varfield.hasValidBibAuthoritySource(), false);
     });
     it("returns true for valid source", () => {
-      const bibSubject = new Varfield({
+      const bibAuthority = new Varfield({
         marcTag: "600",
         fieldTag: "d",
         subfields: [
@@ -48,10 +48,10 @@ describe("Varfield", () => {
           { content: "Local", tag: "2" },
         ],
       });
-      assert.equal(bibSubject.hasValidBibSubjectSource(), true);
+      assert.equal(bibAuthority.hasValidBibAuthoritySource(), true);
     });
     it("returns false for invalid source", () => {
-      const bibSubject = new Varfield({
+      const bibAuthority = new Varfield({
         marcTag: "600",
         fieldTag: "d",
         subfields: [
@@ -59,7 +59,7 @@ describe("Varfield", () => {
           { content: "Dollywood", tag: "2" },
         ],
       });
-      assert.equal(bibSubject.hasValidBibSubjectSource(), false);
+      assert.equal(bibAuthority.hasValidBibAuthoritySource(), false);
     });
   });
   describe("suppressed", () => {
@@ -83,7 +83,7 @@ describe("Varfield", () => {
       })
       assert(!varfield.suppress)
     })
-    it("suprresses a real canadian thesaurus subject", () => {
+    it("suprresses a real canadian thesaurus Authority", () => {
       // from cb17901782
       const varfield = new Varfield({
         "ind1": " ",

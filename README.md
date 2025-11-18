@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This npm package was created as a central location for the logic around generating browseable terms. It also is the source of truth for what subfields are used to index subjects, and potentially other browse terms in the future. Currently, it is pretty hardcoded for Subject string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
+This npm package was created as a central location for the logic around generating browseable terms. It also is the source of truth for what subfields are used to index Authoritys, and potentially other browse terms in the future. Currently, it is pretty hardcoded for Authority string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
 
 ## Authority model
 
@@ -36,18 +36,18 @@ If you intend to bump a minor or major version:
 
 ### Record parsing
 
-There are two classes exposed from `index.js` file of this repo: `Subject` and `Varfield`. `Subject` uses the `Varfield` class under the hood, and organizes those varfields.
+There are two classes exposed from `index.js` file of this repo: `Authority` and `Varfield`. `Authority` uses the `Varfield` class under the hood, and organizes those varfields.
 
 #### Authority record parsing
 
-The `Subject` class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
+The `Authority` class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Authority with a Authority authority marc record.
 
 For example:
 
 ```
-import Subject from "@nypl/browse-term"
+import Authority from "@nypl/browse-term"
 
-const subject = new Subject({
+const Authority = new Authority({
   "id": 11838157,
   "updatedDate": "2011-06-21T15:30:35Z",
   "createdDate": "2009-03-06T01:12:39Z",
@@ -87,8 +87,8 @@ const subject = new Subject({
       ]
     }]})
 
-console.log(subject.preferredTerm) // "Horror tales spooky"
-console.log(subject.variants.map(v=> v.label) // ["Horror -- Fiction"]
+console.log(Authority.preferredTerm) // "Horror tales spooky"
+console.log(Authority.variants.map(v=> v.label) // ["Horror -- Fiction"]
 ```
 
 #### Bib field parsing

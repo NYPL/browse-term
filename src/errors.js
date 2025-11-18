@@ -6,11 +6,11 @@ class MissingSubfieldsError extends Error {
   }
 }
 
-class InvalidSubjectDataError extends Error {
+class InvalidAuthorityDataError extends Error {
   constructor (message) {
     super(message)
     this.message = message
-    this.name = "InvalidSubjectDataError"
+    this.name = "InvalidAuthorityDataError"
   }
 }
 
@@ -22,4 +22,4 @@ class NoPreferredTermError extends Error {
   }
 }
 
-module.exports = { MissingSubfieldsError, InvalidSubjectDataError, NoPreferredTermError }
+module.exports = { MissingSubfieldsError, InvalidAuthorityDataError, NoPreferredTermError }

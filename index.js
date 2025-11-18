@@ -1,4 +1,4 @@
-const Subject = require("./src/models/Subject.js")
+const Authority = require("./src/models/Authority.js")
 const Varfield = require("./src/models/Varfield.js")
 
-module.exports = { Subject, Varfield }
+module.exports = { Authority, Varfield }

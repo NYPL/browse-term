@@ -89,7 +89,7 @@ module.exports = {
       "subfields": [
         {
           "tag": "a",
-          "content": "NYPL LOCAL AUTHORITY RECORD (SUBJECT)"
+          "content": "NYPL LOCAL AUTHORITY RECORD (Authority)"
         }
       ]
     },
