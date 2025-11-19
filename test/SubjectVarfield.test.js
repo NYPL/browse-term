@@ -1,0 +1,420 @@
+const { describe, it } = require("node:test")
+const assert = require("node:assert")
+const SubjectVarfield = require("../src/models/SubjectVarfield.js")
+
+describe("SubjectVarfield", () => {
+  describe("subjectLiteralFromSubfieldArray", () => {
+    it("respects subfield order passed in", () => {
+      assert.equal(SubjectVarfield.literalFromSubfieldArray([
+        {
+          "tag": "a",
+          "content": "France"
+        },
+        {
+          "tag": "x",
+          "content": "History"
+        },
+        {
+          "tag": "y",
+          "content": "Revolution, 1789-1799"
+        },
+        {
+          "tag": "x",
+          "content": "Influence."
+        }
+      ]), 'France -- History -- Revolution, 1789-1799 -- Influence.')
+    })
+  })
+  describe("hasValidBibAuthoritySource", () => {
+    it("does not explode if there is no subfield 2", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      assert.equal(Subject.hasValidBibAuthoritySource(), false);
+    });
+    it("returns true for valid source", () => {
+      const bibAuthority = new SubjectVarfield({
+        marcTag: "600",
+        fieldTag: "d",
+        subfields: [
+          { content: "Spaghetti", tag: "a" },
+          { content: "Local", tag: "2" },
+        ],
+      });
+      assert.equal(bibAuthority.hasValidBibAuthoritySource(), true);
+    });
+    it("returns false for invalid source", () => {
+      const bibAuthority = new SubjectVarfield({
+        marcTag: "600",
+        fieldTag: "d",
+        subfields: [
+          { content: "Spaghetti", tag: "a" },
+          { content: "Dollywood", tag: "2" },
+        ],
+      });
+      assert.equal(bibAuthority.hasValidBibAuthoritySource(), false);
+    });
+  });
+  describe("suppressed", () => {
+    it("does not suppress 653 fields with no indicators", () => {
+      const Subject = new SubjectVarfield({
+        "ind1": " ",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "653",
+        "fieldTag": "d",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Poetry"
+          },
+          {
+            "tag": "a",
+            "content": "Songs"
+          }
+        ]
+      })
+      assert(!Subject.suppress)
+    })
+    it("suprresses a real canadian thesaurus Authority", () => {
+      // from cb17901782
+      const Subject = new SubjectVarfield({
+        "ind1": " ",
+        "ind2": "6",
+        "content": null,
+        "marcTag": "650",
+        "fieldTag": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Photographes de la nature"
+          },
+          {
+            "tag": "0",
+            "content": "(CaQQLa)201-0369077"
+          },
+          {
+            "tag": "z",
+            "content": "États-Unis"
+          },
+        ]
+      })
+      assert.equal(Subject.suppress, true)
+    })
+    it("does not suppress empty ind2 for 1xx field", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: 'd',
+        marcTag: '100',
+        ind1: '0',
+        ind2: ' ',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(Subject.suppress, false)
+    })
+    it("suppresses based on ind2 values", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '1',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(Subject.suppress, true)
+    })
+    it("does not suppress allowed ind2 values", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '0',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        }
+        ]
+      })
+      assert.equal(Subject.suppress, false)
+    })
+  })
+  describe("label", () => {
+    it("Does not trim final periods part of abbreviations when flag is true", () => {
+      const Subject = new SubjectVarfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "N. Y. C."
+          }
+        ]
+      }, true)
+      assert.equal(Subject.label, "N. Y. C.")
+    })
+    it("can handle two subfield a's", () => {
+      const Subject = new SubjectVarfield({
+        "ind1": " ",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "653",
+        "fieldTag": "d",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Poetry"
+          },
+          {
+            "tag": "a",
+            "content": "Songs"
+          }
+        ]
+      })
+      assert.equal(Subject.label, "Poetry Songs.")
+
+    })
+    it("does not trim the elect abbreviations permitted periods", () => {
+      const Subject = new SubjectVarfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Spaghetti, pub."
+          }
+        ]
+      })
+      assert.equal(Subject.label, "Spaghetti, pub.")
+    })
+    it("trims final periods", () => {
+      const Subject = new SubjectVarfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "This period stays but probably wouldn't exist IRL."
+          },
+          {
+            "tag": "b",
+            "content": "This period goes."
+          }
+        ]
+      }, true)
+      assert.equal(Subject.label, "This period stays but probably wouldn't exist IRL. This period goes")
+    })
+    it("trims whitespace", () => {
+      const Subject = new SubjectVarfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "6",
+            "content": "880-01"
+          },
+          {
+            "tag": "a",
+            "content": "   600 primary value a"
+          },
+          {
+            "tag": "b",
+            "content": "600 primary value b   "
+          }
+        ]
+      })
+      assert.equal(Subject.label, '600 primary value a 600 primary value b.')
+    })
+    it("can handle a SubjectVarfield with two subfields with the same tag", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: 'd',
+        marcTag: '600',
+        ind1: '0',
+        ind2: '0',
+        content: null,
+        subfields: [{
+          tag: 'z',
+          content: 'subfield z 1'
+        },
+        {
+          tag: 'z',
+          content: 'subfield z 2'
+        }
+        ]
+      })
+      assert.equal(Subject.label, 'subfield z 1 -- subfield z 2.')
+    })
+    it("returns direction zero width character when subfield six says so", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "x",
+        marcTag: "880",
+        subfields: [{ tag: "6", content: "245-01/(2/r" }, { tag: "a", content: "spaghetti" }]
+      })
+      assert.equal(Subject.label, "\u200Fspaghetti.")
+    })
+    it("puts together a label with only one subfield", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art.");
+    });
+    it("puts together a label with starting subfields and xyz subfields with dashes", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        ind1: " ",
+        ind2: " ",
+        subfields: [
+          {
+            tag: "a",
+            content: "a",
+          },
+          {
+            tag: "b",
+            content: "b",
+          },
+          {
+            tag: "c",
+            content: "c",
+          },
+          {
+            tag: "z",
+            content: "z",
+          },
+          {
+            tag: "x",
+            content: "x",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "a b c -- z -- x.");
+    });
+  });
+  describe("skip adding period for special characters", () => {
+    it("skips for !", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art!",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art!");
+    })
+    it("skips for ?", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art?",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art?");
+    })
+    it("skips for \"", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: 'Horror in art"',
+          },
+        ],
+      });
+      assert.equal(Subject.label, 'Horror in art"');
+    })
+    it("skips for ]", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art]",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art]");
+    })
+    it("skips for )", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art)",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art)");
+    })
+    it("skips for >", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art>",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art>");
+    })
+    it("skips for -", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "150",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art-",
+          },
+        ],
+      });
+      assert.equal(Subject.label, "Horror in art-");
+    })
+  })
+});
