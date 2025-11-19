@@ -2,12 +2,11 @@ const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
 class Varfield {
-  constructor (varfield, literalBuilder, stripPeriods = false) {
+  constructor (varfield, labelContentBuilder, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
-    console.log({ literalBuilder })
-    this.literalFromSubfieldArray = literalBuilder
+    this.labelContentBuilder = labelContentBuilder
     this.stripPeriods = stripPeriods
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
@@ -16,7 +15,7 @@ class Varfield {
   }
 
   getLabel () {
-    let label = this.literalFromSubfieldArray(this.varfield.subfields)
+    let label = this.labelContentBuilder(this.varfield.subfields)
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
     label = (directionPrefix + label).trim()
     if (this.stripPeriods) {
