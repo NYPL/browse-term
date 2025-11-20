@@ -40,5 +40,22 @@ describe("ContributorVarfield", () => {
       assert.deepEqual(floaterInTitle.parsedSubfields.title, ['Treaties, etc.', 'Senegal,', 'May 3, 1965.'])
       assert.deepEqual(floaterInTitle.parsedSubfields.name, ['France.'])
     })
+    it('n in title', () => {
+      const nameInTitle = new ContributorVarfield({
+        marcTag: "110", subfields: [
+          { tag: "a", content: "Marais, Marin," }, { tag: "d", content: "1656-1728." }, { tag: "t", content: "Pièces de violes," }, { tag: "n", content: "2e-4e livre." }, { tag: "k", content: "Selections." }
+        ]
+      })
+      assert.deepEqual(nameInTitle.parsedSubfields.title, ['Pièces de violes,', '2e-4e livre.', 'Selections.'])
+      assert.deepEqual(nameInTitle.parsedSubfields.name, ['Marais, Marin,', '1656-1728.'])
+    })
+    it('floaters in name', () => {
+      floatersInName = new ContributorVarfield({
+        marcTag: "100", subfields: [
+          { tag: "a", content: "Mahr (Family :" }, { tag: "g", content: "Mahr, Carl," }, { tag: "d", content: "1830-1899)" }
+        ]
+      })
+      assert.deepEqual(floatersInName.parsedSubfields.name, ['Mahr (Family :', 'Mahr, Carl,', '1830-1899)'])
+    })
   })
 })
