@@ -1,33 +1,37 @@
 const Varfield = require("./Varfield");
+const logger = require("../logger")
 
 class ContributorVarfield extends Varfield {
   constructor (varfield, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.warn(`Contributor varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
-    super(varfield, ContributorVarfield.literalFromSubfieldArray, stripPeriods)
+    super(varfield, stripPeriods)
     this.varfield = this.varfield
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = false
     this.portionMap = ContributorVarfield.portionMapMap[this.varfield.marcTag.substr(1,)]
   }
-  static literalFromSubfieldArray () {
+
+  labelContentBuilder () {
+    return Object.values(this.parsedSubfields).map((portion) => portion.join(" ")).join("")
+  }
+
+  get parsedSubfields () {
     const parsedSubfields = { prefix: [], name: [], title: [], role: [] }
-    let titleMode = false
-    return this.varfield.subfields.reduce((parsed, sub) => {
-      const whichPortion = Object.keys(this.portionMap).find((portion) => this.portionMap[portion].subfields.includes(sub.tag))
-      switch (whichPortion) {
-        case 'name':
-          logger.info('spaghetti name')
-          break
-        case 'role':
-          break
-        case 'title':
-          break
-        default:
-          logger.info(`Skipping subfield ${sub.tag} because not included in portion map`)
-      }
-    }, parsedSubfields)
+    let addTo = 'prefix'
+    this.varfield.subfields.forEach((sub) => {
+      const portionForTag = this.getPortionForSubfieldTag(sub.tag)
+      if (!(addTo === 'title'))
+        addTo = stateMachine[addTo][portionForTag] || addTo
+      parsedSubfields[addTo].push(sub.content)
+    })
+    return parsedSubfields
+  }
+
+  getPortionForSubfieldTag (tag) {
+    return Object.keys(this.portionMap)
+      .find((portion) => this.portionMap[portion].includes(tag))
   }
 }
 
@@ -50,6 +54,21 @@ ContributorVarfield.portionMapMap = {
     title: ['f', 'h', 'i', 'k', 'l', 'p', 's', 't', 'v', 'x'],
     floater: ['d', 'g', 'n']
   }
+}
+
+const stateMachine = {
+  prefix: {
+    name: 'name',
+    title: null,
+    floater: null,
+    role: 'role'
+  },
+  name: {
+    name: null,
+    title: 'title',
+    floater: null,
+    role: 'role'
+  },
 }
 
 module.exports = ContributorVarfield
