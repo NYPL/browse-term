@@ -12,7 +12,22 @@ class ContributorVarfield extends Varfield {
     this.portionMap = ContributorVarfield.portionMapMap[this.varfield.marcTag.substr(1,)]
   }
   static literalFromSubfieldArray () {
-
+    const parsedSubfields = { prefix: [], name: [], title: [], role: [] }
+    let titleMode = false
+    return this.varfield.subfields.reduce((parsed, sub) => {
+      const whichPortion = Object.keys(this.portionMap).find((portion) => this.portionMap[portion].subfields.includes(sub.tag))
+      switch (whichPortion) {
+        case 'name':
+          logger.info('spaghetti name')
+          break
+        case 'role':
+          break
+        case 'title':
+          break
+        default:
+          logger.info(`Skipping subfield ${sub.tag} because not included in portion map`)
+      }
+    }, parsedSubfields)
   }
 }
 

@@ -10,14 +10,14 @@ class SubjectVarfield extends Varfield {
     if (!varfield.subfields?.length) {
       logger.warn(`Subject varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
-    super(varfield, SubjectVarfield.literalFromSubfieldArray, stripPeriods)
+    super(varfield, stripPeriods)
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
   }
 
-  static literalFromSubfieldArray = (subfields) => {
-    const subfieldsFor = (subfieldSection, joiner) => subfields
+  labelContentBuilder = () => {
+    const subfieldsFor = (subfieldSection, joiner) => this.varfield.subfields
       .filter((sf) => subfieldSection.includes(sf.tag))
       .map(({ content }) => content)
       .join(joiner)

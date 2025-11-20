@@ -2,22 +2,32 @@ const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 
 class Varfield {
-  constructor (varfield, labelContentBuilder, stripPeriods = false) {
+  constructor (varfield, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.error(`Varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
-    this.labelContentBuilder = labelContentBuilder
     this.stripPeriods = stripPeriods
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
-    this.label = this.getLabel();
-    this.type = this.getType();
   }
 
-  getLabel () {
+  labelContentBuilder () {
+    return this.varfield.subfields.map(({ content }) => content)
+  }
+
+  get label () {
     let label = this.labelContentBuilder(this.varfield.subfields)
+    label = this.parseParallelActivity(label).trim()
+    label = this.formatPunctuation(label)
+    return label
+  }
+
+  parseParallelActivity (label) {
     const directionPrefix = this.parseDirection() === 'rtl' ? '\u200F' : ''
-    label = (directionPrefix + label).trim()
+    return (directionPrefix + label)
+  }
+
+  formatPunctuation (label) {
     if (this.stripPeriods) {
       const finalAbbreviations = ["pub"]
       const matchTrailingPeriods = new RegExp(`${finalAbbreviations.map(abb => `(?<!${abb})`)}(?<=[a-z0-9]{2})\\.$`)
@@ -32,21 +42,6 @@ class Varfield {
   getSubfieldContent (tag) {
     const subfield = this.varfield.subfields?.find((sf) => sf.tag === tag);
     return subfield?.content;
-  }
-
-  buildSubfieldMap () {
-    return this.varfield.subfields.reduce((hash, sub) => {
-      // If there are multiple values for this tag, convert it into an array:
-      if (hash[sub.tag]) {
-        if (typeof hash[sub.tag] === 'string') {
-          hash[sub.tag] = [hash[sub.tag]]
-        }
-        hash[sub.tag].push(sub.content)
-      } else {
-        hash[sub.tag] = sub.content
-      }
-      return hash
-    }, {})
   }
 
   parseDirection () {
@@ -70,7 +65,7 @@ class Varfield {
     return direction
   }
 
-  getType () {
+  get type () {
     return headings[this.marcTag % 100];
   }
 }
