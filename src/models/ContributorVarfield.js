@@ -22,8 +22,7 @@ class ContributorVarfield extends Varfield {
     let addTo = 'prefix'
     this.varfield.subfields.forEach((sub) => {
       const portionForTag = this.getPortionForSubfieldTag(sub.tag)
-      if (!(addTo === 'title'))
-        addTo = stateMachine[addTo][portionForTag] || addTo
+      addTo = stateMachine[addTo][portionForTag] || addTo
       parsedSubfields[addTo].push(sub.content)
     })
     return parsedSubfields
@@ -69,6 +68,12 @@ const stateMachine = {
     floater: null,
     role: 'role'
   },
+  title: {
+    name: null,
+    title: null,
+    floater: null,
+    role: null
+  }
 }
 
 module.exports = ContributorVarfield
