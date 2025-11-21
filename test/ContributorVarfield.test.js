@@ -7,6 +7,26 @@ describe("ContributorVarfield", () => {
     marcTag: "711",
     subfields: [{ content: 'spaghetti', tag: 'a' }]
   })
+  describe('portion concatenating', () => {
+    const withRole = new ContributorVarfield({
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "marcTag": "700",
+      "fieldTag": "b",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Sondheim, Stephen."
+        },
+        {
+          "tag": "4",
+          "content": "lyr"
+        }
+      ]
+    })
+    assert.equal(withRole.label, 'Sondheim, Stephen. lyr.')
+  })
   describe('portionMap', () => {
     it('correctly assigns portionMap based on varfield marcTag', () => {
       assert.deepStrictEqual(testVarfield.portionMap.role, ['j', '4'])

@@ -14,7 +14,9 @@ class ContributorVarfield extends Varfield {
   }
 
   labelContentBuilder () {
-    return Object.values(this.parsedSubfields).map((portion) => portion.join(" ")).join("")
+    return Object.values(this.parsedSubfields)
+      .filter((portion) => portion.length)
+      .map((portion) => portion.join(" ")).join(" ")
   }
 
   get parsedSubfields () {
