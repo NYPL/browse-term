@@ -26,6 +26,16 @@ class ContributorVarfield extends Varfield {
     return this.joinPortions({ portions: ['name', 'role'], joiner: "|" })
   }
 
+  get name () {
+    return this.joinPortions({ portions: ['name'] })
+  }
+  get title () {
+    return this.joinPortions({ portions: ['title'] })
+  }
+  get prefix () {
+    return this.joinPortions({ portions: ['prefix'] })
+  }
+
   get parsedSubfields () {
     const parsedSubfields = { prefix: [], name: [], title: [], role: [] }
     let addTo = 'prefix'
