@@ -13,10 +13,17 @@ class ContributorVarfield extends Varfield {
     this.portionMap = ContributorVarfield.portionMapMap[this.varfield.marcTag.substr(1,)]
   }
 
-  labelContentBuilder () {
-    return Object.values(this.parsedSubfields)
-      .filter((portion) => portion.length)
-      .map((portion) => portion.join(" ")).join(" ")
+  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], joiner = " "
+  }) {
+    return Object.entries(this.parsedSubfields)
+      .filter(([portionKey, portionValue]) => portions.includes(portionKey) && portionValue.length)
+      .map(([_, portion]) => portion.join(" ")).join(joiner)
+  }
+
+  labelContentBuilder () { return this.joinPortions({}) }
+
+  byRole () {
+    return this.joinPortions({ portions: ['name', 'role'], joiner: "|" })
   }
 
   get parsedSubfields () {
