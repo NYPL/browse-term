@@ -110,9 +110,8 @@ class Authority {
   }
 }
 
-Authority.subjectFactory = (authorityRecord) => {
-  console.log(SubjectVariantVarfield)
-  return new Authority({ authorityRecord, stripPeriods: false, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: SubjectVariantVarfield })
+Authority.subjectFactory = (authorityRecord, stripPeriods = false) => {
+  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: SubjectVariantVarfield })
 }
 
 module.exports = Authority

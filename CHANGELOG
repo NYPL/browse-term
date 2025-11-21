@@ -1,3 +1,8 @@
+## v1.0.0
+
+- Add support for Contributors
+- Create ContributorVarfield
+
 ## v0.3.7
 
 - Add period to the end of a label unless it ends in special characters
