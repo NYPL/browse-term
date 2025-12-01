@@ -1,12 +1,17 @@
-const Varfield = require("./Varfield.js")
-const VariantVarfield = require("./VariantVarfield.js")
 const logger = require("../logger.js")
+const SubjectVarfield = require("./SubjectVarfield.js")
+const SubjectVariantVarfield = require("./SubjectVariantVarfield.js")
 
-class Subject {
-  constructor (authorityRecord, stripPeriods = false) {
+class Authority {
+  constructor ({ VarfieldModel, VariantModel, authorityRecord, fieldTagValue, stripPeriods = false }) {
+    this.sourceId = authorityRecord.id;
+    this.VarfieldModel = VarfieldModel
+    this.VariantModel = VariantModel
+    this.fieldTagValue = fieldTagValue
     this.stripPeriods = stripPeriods
     this.deleted = authorityRecord.deleted;
     this.varfields = authorityRecord.varFields;
+
     this.broaderTerms = this.fiveXXFields.filter(
       ({ isBroaderTerm }) => isBroaderTerm
     );
@@ -16,16 +21,14 @@ class Subject {
     this.variants = this.fourXXFields.filter(({ suppressed }) => !suppressed)
     this.preferredTerm = this.getPreferredTerm();
     this.suppressed = this.suppressed();
-    this.sourceId = authorityRecord.id;
-
   }
 
   newVarfield (args) {
-    return new Varfield(args, this.stripPeriods)
+    return new this.VarfieldModel(args, this.stripPeriods)
   }
 
   newVariantVarfield (args) {
-    return new VariantVarfield(args, this.stripPeriods)
+    return new this.VariantModel(args, this.stripPeriods)
   }
 
   suppressed () {
@@ -38,7 +41,7 @@ class Subject {
    * Determine if a given authority record has metadata which indicates
    * it is an outdated record. Note this method is inspecting an expected
    * 667 field on a Sierra authority record, not a 667 field coming from a bib
-   * subject.
+   * Authority.
    * @returns boolean
    */
   isDeprecatedLocalAuthority () {
@@ -46,7 +49,7 @@ class Subject {
     if (!sixSixSeven || !sixSixSeven.subfields) return false;
     const sixSixSevenVarfield = this.newVarfield(sixSixSeven);
     const subfieldA = sixSixSevenVarfield.getSubfieldContent("a");
-    return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (SUBJECT)");
+    return subfieldA?.includes("NYPL LOCAL AUTHORITY RECORD (Authority)");
   }
 
   getVarfieldByMarcTag (marcTagToMatch) {
@@ -68,12 +71,12 @@ class Subject {
   getPreferredTerm () {
     try {
       let preferredTermMarc
-      // sierra subject marc and authority marc
-      preferredTermMarc = this.fieldTag('d')
+      // sierra Authority marc and authority marc
+      preferredTermMarc = this.fieldTag(this.fieldTagValue)
       return this.newVarfield(preferredTermMarc);
     } catch (e) {
       if (this.deleted) return
-      logger.error(`Invalid subject data: \n ${e.message}`)
+      logger.error(`Invalid Authority data: \n ${e.message}`)
     }
   }
 
@@ -107,4 +110,8 @@ class Subject {
   }
 }
 
-module.exports = Subject;
+Authority.subjectFactory = (authorityRecord, stripPeriods = false) => {
+  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: SubjectVariantVarfield })
+}
+
+module.exports = Authority

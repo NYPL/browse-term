@@ -1,11 +1,11 @@
 const { describe, it } = require("node:test")
 const assert = require("node:assert")
-const VariantVarfield = require("../src/models/VariantVarfield.js")
+const SubjectVariantVarfield = require("../src/models/SubjectVariantVarfield.js")
 
-describe("VariantVarfield", () => {
+describe("SubjectVariantVarfield", () => {
   describe("suppressed", () => {
     it("returns false if there is no subfield w/3 character", () => {
-      const variantVarfield = new VariantVarfield({
+      const SubjectvariantVarfield = new SubjectVariantVarfield({
         fieldTag: "d",
         marcTag: "450",
         subfields: [
@@ -15,10 +15,10 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, false);
+      assert.equal(SubjectvariantVarfield.suppressed, false);
     });
     it("returns false if there is no subfield w/3 is n", () => {
-      const variantVarfield = new VariantVarfield({
+      const SubjectvariantVarfield = new SubjectVariantVarfield({
         fieldTag: "d",
         marcTag: "450",
         subfields: [
@@ -28,10 +28,10 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, false);
+      assert.equal(SubjectvariantVarfield.suppressed, false);
     });
     it("returns true if subfield w/3 is in suppressed array", () => {
-      const variantVarfield = new VariantVarfield({
+      const SubjectvariantVarfield = new SubjectVariantVarfield({
         fieldTag: "e",
         marcTag: "450",
         subfields: [
@@ -41,12 +41,12 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.suppressed, true);
+      assert.equal(SubjectvariantVarfield.suppressed, true);
     });
   });
   describe("isBroaderTerm", () => {
     it("returns true when g is present in subfield w/0", () => {
-      const variantVarfield = new VariantVarfield({
+      const SubjectvariantVarfield = new SubjectVariantVarfield({
         fieldTag: "f",
         marcTag: "550",
         subfields: [
@@ -56,10 +56,10 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.isBroaderTerm, true);
+      assert.equal(SubjectvariantVarfield.isBroaderTerm, true);
     });
     it("returns false when g is not present in subfield w/0", () => {
-      const variantVarfield = new VariantVarfield({
+      const SubjectvariantVarfield = new SubjectVariantVarfield({
         fieldTag: "f",
         marcTag: "550",
         subfields: [
@@ -69,7 +69,7 @@ describe("VariantVarfield", () => {
           },
         ],
       });
-      assert.equal(variantVarfield.isBroaderTerm, false);
+      assert.equal(SubjectvariantVarfield.isBroaderTerm, false);
     });
   });
 });

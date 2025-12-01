@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This npm package was created as a central location for the logic around generating browseable terms. It also is the source of truth for what subfields are used to index subjects, and potentially other browse terms in the future. Currently, it is pretty hardcoded for Subject string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
+This npm package was created as a central location for the logic around generating browseable terms. It also is the source of truth for what subfields are used to index Authorities, and potentially other browse terms in the future. Currently, it is pretty hardcoded for Authority string generation. The model is based on MARC21 [authority records](https://www.loc.gov/marc/authority/).
 
 ## Authority model
 
@@ -36,18 +36,21 @@ If you intend to bump a minor or major version:
 
 ### Record parsing
 
-There are two classes exposed from `index.js` file of this repo: `Subject` and `Varfield`. `Subject` uses the `Varfield` class under the hood, and organizes those varfields.
+There are two classes exposed from `index.js` file of this repo: `Authority` and `Varfield`. `Authority` uses the `Varfield` class under the hood, and organizes those varfields.
 
 #### Authority record parsing
 
-The `Subject` class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a Subject with a subject authority marc record.
+The `Authority` class is intended to transform an entire authority record into a browseable term model with a single preferred term, and any number of variant (4xx) and broader terms (5xx), and seeAlso terms (5xx fields not covered by broader terms). For this use, instantiate a specific authority model with a Authority factory method and authority marc record. This package supports the following:
+
+- subject authority via `Authority.subjectFactory`
+- TK: name authority via `Authority.nameFactory`
 
 For example:
 
 ```
-import Subject from "@nypl/browse-term"
+import Authority from "@nypl/browse-term"
 
-const subject = new Subject({
+const subject = Authority.subjectFactory({
   "id": 11838157,
   "updatedDate": "2011-06-21T15:30:35Z",
   "createdDate": "2009-03-06T01:12:39Z",
@@ -93,13 +96,13 @@ console.log(subject.variants.map(v=> v.label) // ["Horror -- Fiction"]
 
 #### Bib field parsing
 
-This module should also be used to build any bib data that is used to link to a browse index. To build that bib data, the `Varfield` class should be instantiated with a single bib varfield.
+This module should also be used to build any bib data that is used to link to a browse index. To build that bib data, the relevant `*Varfield` class should be instantiated with a single bib varfield.
 
 Example:
 
 ```
-import Varfield from "@nypl/browse-term"
-const subjectLiteral = new Varfield({
+import SubjectVarfield from "@nypl/browse-term"
+const subjectLiteral = new SubjectVarfield({
       "fieldTag": "d",
       "marcTag": "450",
       "ind1": " ",
@@ -118,3 +121,7 @@ const subjectLiteral = new Varfield({
 
 console.log(subjectLiteral.label) // "Horror -- Fiction"
 ```
+
+### Final periods
+
+A contentious issue, finally solved with a parameter that is overridable at the `Authority` and `Varfield` model levels. We default to keeping periods that come in the marc, and adding ones that seem to be missing them. This can be adjusted by passing in a final param `true` to `Authority` and `Varfield` model instantiations, as well as authority factory methods.
