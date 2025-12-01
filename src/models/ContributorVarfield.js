@@ -68,6 +68,12 @@ ContributorVarfield.portionMapMap = {
   }
 }
 
+/**
+ * State machine captures the following logic of how to parse marc data:
+ *  Prefix (if it exists) is any non-name subfield before first name subfield. 
+ *  Title portion (if it exists) begins at the first title-portion subfield 
+ *  following the first name-portion subfield. 
+ */
 const stateMachine = {
   prefix: {
     name: 'name',
