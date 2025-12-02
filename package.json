@@ -7,7 +7,7 @@
     "url": "git+https://github.com/NYPL/browse-term.git"
   },
   "scripts": {
-    "test": "node --test --watch",
+    "test": "node --test",
     "build-publish": "node --test && npm version patch && npm publish --access public"
   },
   "author": "",

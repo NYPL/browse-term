@@ -27,6 +27,32 @@ describe("ContributorVarfield", () => {
     })
     assert.equal(withRole.label, 'Sondheim, Stephen. lyr.')
   })
+  describe('parallel varfields', () => {
+    it('can do the thing', () => {
+      const parallel = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": "0",
+        "content": null,
+        "marcTag": "880",
+        "fieldTag": "y",
+        "subfields": [
+          {
+            "tag": "6",
+            "content": "100-01/$1"
+          },
+          {
+            "tag": "a",
+            "content": "吴承恩,"
+          },
+          {
+            "tag": "d",
+            "content": "approximately 1500-approximately 1582."
+          }
+        ]
+      })
+      assert(parallel.browseTermValue)
+    })
+  })
   describe('portionMap', () => {
     it('correctly assigns portionMap based on varfield marcTag', () => {
       assert.deepStrictEqual(testVarfield.portionMap.role, ['j', '4'])
