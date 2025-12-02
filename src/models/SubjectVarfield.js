@@ -14,6 +14,7 @@ class SubjectVarfield extends Varfield {
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
+    this.browseTermValue = this.label
   }
 
   labelContentBuilder = () => {

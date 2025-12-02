@@ -11,6 +11,13 @@ class ContributorVarfield extends Varfield {
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = false
     this.portionMap = ContributorVarfield.portionMapMap[this.varfield.marcTag.substr(1,)]
+    this.browseTermValue = {
+      nameRolePacked: this.byRole(),
+      name: this.getPortion('name'),
+      title: this.getPortion('title'),
+      role: this.parsedSubfields.role,
+      prefix: this.getPortion('prefix')
+    }
   }
 
   joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], joiner = " "
