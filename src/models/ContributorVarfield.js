@@ -28,7 +28,10 @@ class ContributorVarfield extends Varfield {
       .map(([_, portion]) => portion.join(" ")).join(joiner)
   }
 
-  labelContentBuilder () { return this.joinPortions({}) }
+  labelContentBuilder () {
+    console.log('*****')
+    return this.joinPortions({})
+  }
 
   byRole () {
     return this.joinPortions({ portions: ['name', 'role'], joiner: "|" })
@@ -43,6 +46,7 @@ class ContributorVarfield extends Varfield {
     let addTo = 'prefix'
     this.varfield.subfields.forEach((sub) => {
       const portionForTag = this.getPortionForSubfieldTag(sub.tag)
+      if (!portionForTag) return
       addTo = stateMachine[addTo][portionForTag] || addTo
       parsedSubfields[addTo].push(sub.content)
     })

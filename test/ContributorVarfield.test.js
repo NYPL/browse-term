@@ -50,7 +50,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert(parallel.browseTermValue)
+      assert.equal(parallel.label, '吴承恩, approximately 1500-approximately 1582.')
     })
   })
   describe('portionMap', () => {

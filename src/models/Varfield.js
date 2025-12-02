@@ -12,6 +12,7 @@ class Varfield {
   }
 
   labelContentBuilder () {
+    console.log('spaghetto')
     return this.varfield.subfields.map(({ content }) => content)
   }
 
