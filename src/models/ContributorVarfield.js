@@ -17,7 +17,8 @@ class ContributorVarfield extends Varfield {
       name: this.getPortion('name'),
       title: this.getPortion('title'),
       role: this.parsedSubfields.role,
-      prefix: this.getPortion('prefix')
+      prefix: this.getPortion('prefix'),
+      label: this.label
     }
   }
 
