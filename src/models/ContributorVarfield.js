@@ -29,7 +29,6 @@ class ContributorVarfield extends Varfield {
   }
 
   labelContentBuilder () {
-    console.log('*****')
     return this.joinPortions({})
   }
 
