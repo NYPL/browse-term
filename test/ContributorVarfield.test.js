@@ -54,6 +54,22 @@ describe("ContributorVarfield", () => {
     })
   })
   describe('portionMap', () => {
+    it('defaults to 00', () => {
+      const _790 = new ContributorVarfield({
+        "marcTag": "791",
+        "ind1": "1",
+        "ind2": "0",
+        "content": null,
+        "fieldTag": "y",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "spaghetti,"
+          }
+        ]
+      })
+      assert.deepEqual(_790.portionMap, ContributorVarfield.portionMapMap['00'])
+    })
     it('correctly assigns portionMap based on varfield marcTag', () => {
       assert.deepStrictEqual(testVarfield.portionMap.role, ['j', '4'])
       assert.deepStrictEqual(testVarfield.portionMap, ContributorVarfield.portionMapMap['11'])
