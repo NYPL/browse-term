@@ -10,7 +10,7 @@ class ContributorVarfield extends Varfield {
     this.varfield = this.varfield
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     const portionMapMapKey = this.marcTag === 880 ? this.getSubfieldContent("6").substr(1, 2) : this.varfield.marcTag.substr(1,)
-    this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey]
+    this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
     this.suppress = false
     this.browseTermValue = {
       nameRolePacked: this.byRole(),
