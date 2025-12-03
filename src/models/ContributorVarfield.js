@@ -18,6 +18,7 @@ class ContributorVarfield extends Varfield {
       title: this.getPortion('title'),
       role: this.parsedSubfields.role,
       prefix: this.getPortion('prefix'),
+      // this.label is a getter defined on the parent class
       label: this.label
     }
   }
