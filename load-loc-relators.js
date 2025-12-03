@@ -13,9 +13,10 @@ const theThing = async () => {
   relators = relators.reduce((map, relatorEntity) => {
     if (relatorEntity['@id'].startsWith(`http://${relatorsDomain}`)) {
       const abbreviated = relatorEntity['http://www.loc.gov/mads/rdf/v1#code']?.[0]?.['@value']
-      const label = relatorEntity['http://www.loc.gov/mads/rdf/v1#authoritativeLabel']?.[0]?.['@value']
-      if (abbreviated && label)
+      let label = relatorEntity['http://www.loc.gov/mads/rdf/v1#authoritativeLabel']?.[0]?.['@value']
+      if (abbreviated && label) {
         map[abbreviated] = label
+      }
     }
     return map
   }, {})

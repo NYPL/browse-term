@@ -1,5 +1,7 @@
 const Varfield = require("./Varfield");
 const logger = require("../logger")
+const relatorMap = require('../data/relators.json');
+const { capitalize } = require("../utils");
 
 class ContributorVarfield extends Varfield {
   constructor (varfield, stripPeriods = false) {
@@ -13,7 +15,6 @@ class ContributorVarfield extends Varfield {
     this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
     this.suppress = false
     this.browseTermValue = {
-      nameRolePacked: this.byRole(),
       name: this.getPortion('name'),
       title: this.getPortion('title'),
       role: this.parsedSubfields.role,
@@ -23,19 +24,23 @@ class ContributorVarfield extends Varfield {
     }
   }
 
-  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], joiner = " "
-  }) {
+  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], portionJoiner = " "
+    , portionValueTransform = (x, i) => x }) {
     return Object.entries(this.parsedSubfields)
       .filter(([portionKey, portionValue]) => portions.includes(portionKey) && portionValue.length)
-      .map(([_, portion]) => portion.join(" ")).join(joiner)
+      .map(([_, portion]) =>
+        portion.map(portionValueTransform).join(portionJoiner))
+      .join(" ")
   }
 
   labelContentBuilder () {
-    return this.joinPortions({})
-  }
-
-  byRole () {
-    return this.joinPortions({ portions: ['name', 'role'], joiner: "|" })
+    return this.joinPortions({ portions: ['prefix', 'name', 'title'] }) + this.joinPortions({
+      portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
+        const mappedRole = relatorMap[value]
+        if (idx === 0) return capitalize(mappedRole)
+        else return mappedRole
+      }
+    })
   }
 
   getPortion (portion) {
@@ -104,6 +109,9 @@ const stateMachine = {
     name: null,
     title: null,
     floater: null,
+    role: null
+  },
+  role: {
     role: null
   }
 }

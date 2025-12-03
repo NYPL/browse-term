@@ -7,8 +7,8 @@ describe("ContributorVarfield", () => {
     marcTag: "711",
     subfields: [{ content: 'spaghetti', tag: 'a' }]
   })
-  describe('portion concatenating', () => {
-    const withRole = new ContributorVarfield({
+  describe('label', () => {
+    const withMultiRole = new ContributorVarfield({
       "ind1": "1",
       "ind2": " ",
       "content": null,
@@ -22,10 +22,43 @@ describe("ContributorVarfield", () => {
         {
           "tag": "4",
           "content": "lyr"
+        },
+        {
+          "tag": "4",
+          "content": "cmp"
+        },
+        {
+          "tag": "4",
+          "content": "lee"
         }
       ]
     })
-    assert.equal(withRole.label, 'Sondheim, Stephen. lyr.')
+    it('formats multiple roles correctly', () => {
+      console.log(withMultiRole.label)
+      assert.equal(withMultiRole.label, "Sondheim, Stephen. Lyricist, composer, libelee-appellee.")
+    })
+  })
+  describe('portion concatenating', () => {
+    it('concatenates', () => {
+      const withRole = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "700",
+        "fieldTag": "b",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Sondheim, Stephen."
+          },
+          {
+            "tag": "4",
+            "content": "lyr"
+          }
+        ]
+      })
+      assert.equal(withRole.label, 'Sondheim, Stephen. lyricist.')
+    })
   })
   describe('parallel varfields', () => {
     it('can do the thing', () => {
