@@ -57,7 +57,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(withRole.label, 'Sondheim, Stephen. lyricist.')
+      assert.equal(withRole.label, 'Sondheim, Stephen. Lyricist.')
     })
   })
   describe('parallel varfields', () => {
