@@ -15,7 +15,7 @@ class SubjectVarfield extends Varfield {
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
     // this.label is a getter defined on the parent class
-    this.browseTermValue = this.label
+    this.browseTermValue = { label: this.label }
   }
 
   labelContentBuilder = () => {

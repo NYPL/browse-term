@@ -37,6 +37,34 @@ describe("ContributorVarfield", () => {
       console.log(withMultiRole.label)
       assert.equal(withMultiRole.label, "Sondheim, Stephen. Lyricist, composer, libelee-appellee.")
     })
+    it('accounts for unmatched values', () => {
+      const ed = new ContributorVarfield({
+        "fieldTag": null,
+        "marcTag": "700",
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Ginosar, Sh."
+          },
+          {
+            "tag": "q",
+            "content": "(Shaleṿ),"
+          },
+          {
+            "tag": "d",
+            "content": "1902-"
+          },
+          {
+            "tag": "e",
+            "content": "ed."
+          }
+        ]
+      })
+      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902- ed.')
+    })
   })
   describe('portion concatenating', () => {
     it('concatenates', () => {
