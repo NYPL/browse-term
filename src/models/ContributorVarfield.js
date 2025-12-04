@@ -37,6 +37,7 @@ class ContributorVarfield extends Varfield {
     return this.joinPortions({ portions: ['prefix', 'name', 'title'] }) + " " + this.joinPortions({
       portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
         const mappedRole = relatorMap[value]
+        if (!mappedRole) return value
         if (idx === 0) return capitalize(mappedRole)
         else return mappedRole
       }
