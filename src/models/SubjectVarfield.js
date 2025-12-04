@@ -1,5 +1,4 @@
 const { firstSubfields, lastSubfields } = require("../constants.js")
-const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 const Varfield = require("./Varfield.js")
 
