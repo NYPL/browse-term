@@ -15,6 +15,7 @@ class ContributorVarfield extends Varfield {
     this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
     this.suppress = false
     this.browseTermValue = {
+      nameRoles: this.getNameRoles(),
       name: this.getPortion('name'),
       title: this.getPortion('title'),
       role: this.parsedSubfields.role,
@@ -22,6 +23,13 @@ class ContributorVarfield extends Varfield {
       // this.label is a getter defined on the parent class
       label: this.label
     }
+  }
+
+  getNameRoles () {
+    return this.parsedSubfields.role.map((role) => {
+      const mappedRole = relatorMap[role] || role
+      return `${this.getPortion('name')}|${mappedRole}`
+    })
   }
 
   joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], portionJoiner = " "

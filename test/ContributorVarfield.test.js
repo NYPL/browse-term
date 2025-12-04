@@ -66,6 +66,34 @@ describe("ContributorVarfield", () => {
       assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902- ed.')
     })
   })
+  describe('nameRoles', () => {
+    const withMultiRole = new ContributorVarfield({
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "marcTag": "700",
+      "fieldTag": "b",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Sondheim, Stephen."
+        },
+        {
+          "tag": "4",
+          "content": "lyr"
+        },
+        {
+          "tag": "4",
+          "content": "cmp"
+        },
+        {
+          "tag": "4",
+          "content": "lee"
+        }
+      ]
+    })
+    assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen.|lyricist', 'Sondheim, Stephen.|composer', 'Sondheim, Stephen.|libelee-appellee'])
+  })
   describe('portion concatenating', () => {
     it('concatenates', () => {
       const withRole = new ContributorVarfield({
