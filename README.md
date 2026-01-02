@@ -125,3 +125,16 @@ console.log(subjectLiteral.label) // "Horror -- Fiction"
 ### Final periods
 
 A contentious issue, finally solved with a parameter that is overridable at the `Authority` and `Varfield` model levels. We default to keeping periods that come in the marc, and adding ones that seem to be missing them. This can be adjusted by passing in a final param `true` to `Authority` and `Varfield` model instantiations, as well as authority factory methods.
+
+### Library of Congress Relators (aka Roles)
+
+The LSP/RC team generally records and centralizes data in our own JSON-LD repo,
+[NYPL-core](https://github.com/NYPL/nypl-core). Since LoC actually serves the
+relator data in JSON-LD format, this repo instead just calls that endpoint directly
+in `./load-loc-relators.js` and saves the transformed data to a map in `./src/data/relators.json`.
+
+To update `./src/data/relators.json` with the most recent LoC data, run:
+
+```
+node load-loc-relators.js
+```

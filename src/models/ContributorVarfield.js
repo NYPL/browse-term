@@ -1,5 +1,7 @@
 const Varfield = require("./Varfield");
 const logger = require("../logger")
+const relatorMap = require('../data/relators.json');
+const { capitalize } = require("../utils");
 
 class ContributorVarfield extends Varfield {
   constructor (varfield, stripPeriods = false) {
@@ -9,21 +11,47 @@ class ContributorVarfield extends Varfield {
     super(varfield, stripPeriods)
     this.varfield = this.varfield
     this.marcTag = parseInt(this.varfield.marcTag, 10);
+    const portionMapMapKey = this.marcTag === 880 ? this.getSubfieldContent("6").substr(1, 2) : this.varfield.marcTag.substr(1,)
+    this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
     this.suppress = false
-    this.portionMap = ContributorVarfield.portionMapMap[this.varfield.marcTag.substr(1,)]
+    this.browseTermValue = {
+      nameRoles: this.getNameRoles(),
+      name: this.getPortion('name'),
+      title: this.getPortion('title'),
+      role: this.parsedSubfields.role,
+      prefix: this.getPortion('prefix'),
+      // this.label is a getter defined on the parent class
+      label: this.label
+    }
   }
 
-  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], joiner = " "
-  }) {
+  getNameRoles () {
+    return this.parsedSubfields.role.map((role) => {
+      const mappedRole = relatorMap[role] || role
+      return `${this.getPortion('name')}|${mappedRole}`
+    })
+  }
+
+  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], portionJoiner = " "
+    , portionValueTransform = (x) => x }) {
     return Object.entries(this.parsedSubfields)
       .filter(([portionKey, portionValue]) => portions.includes(portionKey) && portionValue.length)
-      .map(([_, portion]) => portion.join(" ")).join(joiner)
+      .map(([_, portion]) =>
+        portion.map(portionValueTransform).join(portionJoiner))
+      .join(" ")
   }
 
-  labelContentBuilder () { return this.joinPortions({}) }
-
-  byRole () {
-    return this.joinPortions({ portions: ['name', 'role'], joiner: "|" })
+  labelContentBuilder () {
+    const prefixNameTitle = this.joinPortions({ portions: ['prefix', 'name', 'title'] })
+    const role = this.joinPortions({
+      portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
+        const mappedRole = relatorMap[value]
+        if (!mappedRole) return value
+        if (idx === 0) return capitalize(mappedRole)
+        else return mappedRole
+      }
+    })
+    return [prefixNameTitle, role].filter(Boolean).join(' ')
   }
 
   getPortion (portion) {
@@ -35,6 +63,7 @@ class ContributorVarfield extends Varfield {
     let addTo = 'prefix'
     this.varfield.subfields.forEach((sub) => {
       const portionForTag = this.getPortionForSubfieldTag(sub.tag)
+      if (!portionForTag) return
       addTo = stateMachine[addTo][portionForTag] || addTo
       parsedSubfields[addTo].push(sub.content)
     })
@@ -91,6 +120,9 @@ const stateMachine = {
     name: null,
     title: null,
     floater: null,
+    role: null
+  },
+  role: {
     role: null
   }
 }

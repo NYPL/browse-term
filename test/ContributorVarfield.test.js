@@ -7,8 +7,8 @@ describe("ContributorVarfield", () => {
     marcTag: "711",
     subfields: [{ content: 'spaghetti', tag: 'a' }]
   })
-  describe('portion concatenating', () => {
-    const withRole = new ContributorVarfield({
+  describe('label', () => {
+    const withMultiRole = new ContributorVarfield({
       "ind1": "1",
       "ind2": " ",
       "content": null,
@@ -22,12 +22,159 @@ describe("ContributorVarfield", () => {
         {
           "tag": "4",
           "content": "lyr"
+        },
+        {
+          "tag": "4",
+          "content": "cmp"
+        },
+        {
+          "tag": "4",
+          "content": "lee"
         }
       ]
     })
-    assert.equal(withRole.label, 'Sondheim, Stephen. lyr.')
+    it('formats multiple roles correctly', () => {
+      console.log(withMultiRole.label)
+      assert.equal(withMultiRole.label, "Sondheim, Stephen. Lyricist, composer, libelee-appellee.")
+    })
+    it('accounts for unmatched values', () => {
+      const ed = new ContributorVarfield({
+        "fieldTag": null,
+        "marcTag": "700",
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Ginosar, Sh."
+          },
+          {
+            "tag": "q",
+            "content": "(Shaleṿ),"
+          },
+          {
+            "tag": "d",
+            "content": "1902-"
+          },
+          {
+            "tag": "e",
+            "content": "ed."
+          }
+        ]
+      })
+      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902- ed.')
+    })
+  })
+  describe('nameRoles', () => {
+    const withMultiRole = new ContributorVarfield({
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "marcTag": "700",
+      "fieldTag": "b",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Sondheim, Stephen."
+        },
+        {
+          "tag": "4",
+          "content": "lyr"
+        },
+        {
+          "tag": "4",
+          "content": "cmp"
+        },
+        {
+          "tag": "4",
+          "content": "lee"
+        }
+      ]
+    })
+    assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen.|lyricist', 'Sondheim, Stephen.|composer', 'Sondheim, Stephen.|libelee-appellee'])
+  })
+  describe('portion concatenating', () => {
+    it('no roles', () => {
+      const noRole = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "700",
+        "fieldTag": "b",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Sondheim, Stephen."
+          }
+        ]
+      })
+      assert.equal(noRole.label, "Sondheim, Stephen.")
+    })
+    it('concatenates', () => {
+      const withRole = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "700",
+        "fieldTag": "b",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Sondheim, Stephen."
+          },
+          {
+            "tag": "4",
+            "content": "lyr"
+          }
+        ]
+      })
+      assert.equal(withRole.label, 'Sondheim, Stephen. Lyricist.')
+    })
+  })
+  describe('parallel varfields', () => {
+    it('can do the thing', () => {
+      const parallel = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": "0",
+        "content": null,
+        "marcTag": "880",
+        "fieldTag": "y",
+        "subfields": [
+          {
+            "tag": "6",
+            "content": "100-01/$1"
+          },
+          {
+            "tag": "a",
+            "content": "吴承恩,"
+          },
+          {
+            "tag": "d",
+            "content": "approximately 1500-approximately 1582."
+          }
+        ]
+      })
+      assert.equal(parallel.label, '吴承恩, approximately 1500-approximately 1582.')
+    })
   })
   describe('portionMap', () => {
+    it('defaults to 00', () => {
+      const _790 = new ContributorVarfield({
+        "marcTag": "791",
+        "ind1": "1",
+        "ind2": "0",
+        "content": null,
+        "fieldTag": "y",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "spaghetti,"
+          }
+        ]
+      })
+      assert.deepEqual(_790.portionMap, ContributorVarfield.portionMapMap['00'])
+    })
     it('correctly assigns portionMap based on varfield marcTag', () => {
       assert.deepStrictEqual(testVarfield.portionMap.role, ['j', '4'])
       assert.deepStrictEqual(testVarfield.portionMap, ContributorVarfield.portionMapMap['11'])

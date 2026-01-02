@@ -1,5 +1,4 @@
 const { firstSubfields, lastSubfields } = require("../constants.js")
-const { headings } = require("../constants.js")
 const logger = require("../logger.js")
 const Varfield = require("./Varfield.js")
 
@@ -14,6 +13,8 @@ class SubjectVarfield extends Varfield {
     this.varfield = varfield;
     this.marcTag = parseInt(this.varfield.marcTag, 10);
     this.suppress = this.isSuppressed();
+    // this.label is a getter defined on the parent class
+    this.browseTermValue = { label: this.label }
   }
 
   labelContentBuilder = () => {
