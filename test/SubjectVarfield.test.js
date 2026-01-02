@@ -173,7 +173,7 @@ describe("SubjectVarfield", () => {
       assert.equal(varfield.label, "a b c -- z -- x.");
     });
   });
-  describe.only("subjectLiteralFromSubfieldArray", () => {
+  describe("subjectLiteralFromSubfieldArray", () => {
     it("respects subfield order passed in", () => {
       assert.equal(new SubjectVarfield({
         subfields: [
@@ -198,6 +198,20 @@ describe("SubjectVarfield", () => {
     })
   })
   describe("hasValidBibAuthoritySource", () => {
+    it("allows 690 fields", () => {
+      const Subject = new SubjectVarfield({
+        fieldTag: "d",
+        marcTag: "690",
+        ind2: "4",
+        subfields: [
+          {
+            tag: "a",
+            content: "Horror in art",
+          },
+        ],
+      });
+      assert.equal(Subject.hasValidBibAuthoritySource(), true);
+    })
     it("does not explode if there is no subfield 2", () => {
       const Subject = new SubjectVarfield({
         fieldTag: "d",
