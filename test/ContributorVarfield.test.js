@@ -95,6 +95,22 @@ describe("ContributorVarfield", () => {
     assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen.|lyricist', 'Sondheim, Stephen.|composer', 'Sondheim, Stephen.|libelee-appellee'])
   })
   describe('portion concatenating', () => {
+    it('no roles', () => {
+      const noRole = new ContributorVarfield({
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "marcTag": "700",
+        "fieldTag": "b",
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Sondheim, Stephen."
+          }
+        ]
+      })
+      assert.equal(noRole.label, "Sondheim, Stephen.")
+    })
     it('concatenates', () => {
       const withRole = new ContributorVarfield({
         "ind1": "1",

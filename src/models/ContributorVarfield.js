@@ -33,7 +33,7 @@ class ContributorVarfield extends Varfield {
   }
 
   joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], portionJoiner = " "
-    , portionValueTransform = (x, i) => x }) {
+    , portionValueTransform = (x) => x }) {
     return Object.entries(this.parsedSubfields)
       .filter(([portionKey, portionValue]) => portions.includes(portionKey) && portionValue.length)
       .map(([_, portion]) =>
@@ -42,7 +42,8 @@ class ContributorVarfield extends Varfield {
   }
 
   labelContentBuilder () {
-    return this.joinPortions({ portions: ['prefix', 'name', 'title'] }) + " " + this.joinPortions({
+    const prefixNameTitle = this.joinPortions({ portions: ['prefix', 'name', 'title'] })
+    const role = this.joinPortions({
       portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
         const mappedRole = relatorMap[value]
         if (!mappedRole) return value
@@ -50,6 +51,7 @@ class ContributorVarfield extends Varfield {
         else return mappedRole
       }
     })
+    return [prefixNameTitle, role].filter(Boolean).join(' ')
   }
 
   getPortion (portion) {
