@@ -37,7 +37,6 @@ class SubjectVarfield extends Varfield {
       this.allowedInd2Values.includes(this.ind2),
       this.marcTag === 690 && this.ind2 === 4
     ]
-    if (this.marcTag === 690) console.log("***", validCriteria.some((x) => x))
     return validCriteria.some((x) => x)
   }
 
