@@ -34,7 +34,6 @@ describe("ContributorVarfield", () => {
       ]
     })
     it('formats multiple roles correctly', () => {
-      console.log(withMultiRole.label)
       assert.equal(withMultiRole.label, "Sondheim, Stephen. Lyricist, composer, libelee-appellee.")
     })
     it('accounts for unmatched values', () => {
