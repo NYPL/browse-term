@@ -1,8 +1,7 @@
 const logger = require("../logger.js")
 const SubjectVarfield = require("./SubjectVarfield.js")
-const SubjectVariantVarfield = require("./SubjectVariantVarfield.js")
+const VariantVarfield = require("./VariantVarfield.js")
 const ContributorVarfield = require("./ContributorVarfield.js")
-const ContributorVariantVarfield = require("./ContributorVariantVarfield.js")
 
 class Authority {
   constructor ({ VarfieldModel, VariantModel, authorityRecord, fieldTagValue, stripPeriods = false }) {
@@ -113,11 +112,11 @@ class Authority {
 }
 
 Authority.subjectFactory = (authorityRecord, stripPeriods = false) => {
-  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: SubjectVariantVarfield })
+  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: VariantVarfield })
 }
 
 Authority.contributorFactory = (authorityRecord, stripPeriods = false) => {
-  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'a', VarfieldModel: ContributorVarfield, VariantModel: ContributorVariantVarfield })
+  return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'a', VarfieldModel: ContributorVarfield, VariantModel: VariantVarfield })
 }
 
 module.exports = Authority

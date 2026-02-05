@@ -34,7 +34,7 @@ describe("ContributorVarfield", () => {
       ]
     })
     it('formats multiple roles correctly', () => {
-      assert.equal(withMultiRole.label, "Sondheim, Stephen. Lyricist, composer, libelee-appellee.")
+      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, libelee-appellee.")
     })
     it('accounts for unmatched values', () => {
       const ed = new ContributorVarfield({
@@ -62,7 +62,28 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902- ed.')
+      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, ed.')
+    })
+    it('accounts for initials', () => {
+      const ed = new ContributorVarfield({
+        "fieldTag": "b",
+        "marcTag": "700",
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Martin, George R.R."
+          },
+          {
+            "tag": "4",
+            "content": "aut"
+          }
+        ]
+      })
+      assert.equal(ed.browseTermValue.name, 'Martin, George R.R.')
+      assert.equal(ed.browseTermValue.label, 'Martin, George R.R., author.')
     })
   })
   describe('nameRoles', () => {
@@ -91,7 +112,7 @@ describe("ContributorVarfield", () => {
         }
       ]
     })
-    assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen.|lyricist', 'Sondheim, Stephen.|composer', 'Sondheim, Stephen.|libelee-appellee'])
+    assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen||lyricist', 'Sondheim, Stephen||composer', 'Sondheim, Stephen||libelee-appellee'])
   })
   describe('portion concatenating', () => {
     it('no roles', () => {
@@ -128,7 +149,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(withRole.label, 'Sondheim, Stephen. Lyricist.')
+      assert.equal(withRole.label, 'Sondheim, Stephen, lyricist.')
     })
   })
   describe('parallel varfields', () => {

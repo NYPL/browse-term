@@ -28,7 +28,7 @@ class ContributorVarfield extends Varfield {
   getNameRoles () {
     return this.parsedSubfields.role.map((role) => {
       const mappedRole = relatorMap[role] || role
-      return `${this.getPortion('name')}|${mappedRole}`
+      return `${this.getPortion('name')}||${mappedRole}`
     })
   }
 
@@ -39,6 +39,7 @@ class ContributorVarfield extends Varfield {
       .map(([_, portion]) =>
         portion.map(portionValueTransform).join(portionJoiner))
       .join(" ")
+      .replace(/(,$|(?<!\b[A-Z])\.)+$/, "") // removes trailing commas and periods except where a period is expected, i.e. an initial
   }
 
   labelContentBuilder () {
@@ -47,11 +48,10 @@ class ContributorVarfield extends Varfield {
       portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
         const mappedRole = relatorMap[value]
         if (!mappedRole) return value
-        if (idx === 0) return capitalize(mappedRole)
         else return mappedRole
       }
     })
-    return [prefixNameTitle, role].filter(Boolean).join(' ')
+    return [prefixNameTitle, role].filter(Boolean).join(', ')
   }
 
   getPortion (portion) {

@@ -1,5 +1,5 @@
-const ContributorVarfield = require("./ContributorVarfield.js");
-class ContributorVariantVarfield extends ContributorVarfield {
+const SubjectVarfield = require("./SubjectVarfield.js");
+class VariantVarfield extends SubjectVarfield {
   constructor (varfield) {
     super(varfield);
     this.subfieldW = this.getSubfieldW();
@@ -29,4 +29,4 @@ class ContributorVariantVarfield extends ContributorVarfield {
   }
 }
 
-module.exports = ContributorVariantVarfield;
+module.exports = VariantVarfield;
