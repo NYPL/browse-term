@@ -1,7 +1,7 @@
 const { describe, it } = require("node:test")
 const assert = require("node:assert")
 const Varfield = require("../src/models/Varfield.js");
-const SubjectVariantVarfield = require("../src/models/SubjectVariantVarfield.js");
+const VariantVarfield = require("../src/models/VariantVarfield.js");
 
 describe("Varfield", () => {
   describe("type", () => {
