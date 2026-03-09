@@ -1,4 +1,5 @@
 const { describe, it } = require("node:test")
+const contributorAuthorityRecord = require("./fixtures/authority-contributor.js")
 const horrorTalesAuthorityRecord = require("./fixtures/horror-tales.js")
 const deprecatedLocal = require("./fixtures/deprecated-local-authority.js")
 const Authority = require("../src/models/Authority.js")
@@ -11,6 +12,9 @@ describe("Authority", () => {
   );
   const deprecatedLocalAuthorityRecord = Authority.subjectFactory(
     deprecatedLocal
+  );
+  const contributorAuthority = Authority.contributorFactory(
+    contributorAuthorityRecord
   );
   it('can handle deleted authority data', () => {
     const deletedAuthority = Authority.subjectFactory({
@@ -55,6 +59,11 @@ describe("Authority", () => {
   describe("suppressed", () => {
     it("is true when record is deprecated local authority", () => {
       assert.equal(deprecatedLocalAuthorityRecord.suppressed, true);
+    });
+  });
+  describe("contributorAuthorityValid", () => {
+    it("is true when record is a contributor authority", () => {
+      assert.equal(contributorAuthority.preferredTerm.browseTermValue.name, "Plinius, Basilius, -1605");
     });
   });
 });

@@ -29,12 +29,20 @@ describe("ContributorVarfield", () => {
         },
         {
           "tag": "4",
+          "content": "period."
+        },
+        {
+          "tag": "4",
+          "content": "comma,"
+        },
+        {
+          "tag": "4",
           "content": "lee"
-        }
+        },
       ]
     })
     it('formats multiple roles correctly', () => {
-      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, libelee-appellee.")
+      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, period, comma, libelee-appellee.")
     })
     it('accounts for unmatched values', () => {
       const ed = new ContributorVarfield({

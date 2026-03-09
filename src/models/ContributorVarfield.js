@@ -25,9 +25,13 @@ class ContributorVarfield extends Varfield {
     }
   }
 
+  getRole(value) {
+    return relatorMap[value] || value.replace(/(\p{P}|\p{S})+$/gu, '')
+  }
+
   getNameRoles () {
     return this.parsedSubfields.role.map((role) => {
-      const mappedRole = relatorMap[role] || role
+      const mappedRole = this.getRole(role)
       return `${this.getPortion('name')}||${mappedRole}`
     })
   }
@@ -46,9 +50,7 @@ class ContributorVarfield extends Varfield {
     const prefixNameTitle = this.joinPortions({ portions: ['prefix', 'name', 'title'] })
     const role = this.joinPortions({
       portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
-        const mappedRole = relatorMap[value]
-        if (!mappedRole) return value
-        else return mappedRole
+        return this.getRole(value)
       }
     })
     return [prefixNameTitle, role].filter(Boolean).join(', ')

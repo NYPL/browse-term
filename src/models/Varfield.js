@@ -16,9 +16,9 @@ class Varfield {
   }
 
   get label () {
-    // this.labelContentBuilder is defined in this class as a default for 
+    // this.labelContentBuilder is defined in this class as a default for
     //   testing purposes. Children of this class may (and do) define their
-    //   own labelContentBuilder methods, which will override the one on this 
+    //   own labelContentBuilder methods, which will override the one on this
     //   base class.
     let label = this.labelContentBuilder(this.varfield.subfields)
     label = this.parseParallelActivity(label).trim()
