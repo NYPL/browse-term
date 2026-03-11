@@ -37,12 +37,16 @@ describe("ContributorVarfield", () => {
         },
         {
           "tag": "4",
+          "content": "http://id.loc.gov/vocabulary/relators/edt"
+        },
+        {
+          "tag": "4",
           "content": "lee"
         },
       ]
     })
     it('formats multiple roles correctly', () => {
-      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, period, comma, libelee-appellee.")
+      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, period, comma, editor, libelee-appellee.")
     })
     it('accounts for unmatched values', () => {
       const ed = new ContributorVarfield({
