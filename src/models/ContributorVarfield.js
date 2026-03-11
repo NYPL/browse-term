@@ -26,7 +26,11 @@ class ContributorVarfield extends Varfield {
   }
 
   getRole(value) {
-    return relatorMap[value] || value.replace(/(\p{P}|\p{S})+$/gu, '')
+    value = value
+      .replace(/^.*\/|(\p{P}|\p{S})+$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
+      .toLowerCase()
+      .trim()
+    return relatorMap[value] || value
   }
 
   getNameRoles () {
