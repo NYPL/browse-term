@@ -13,7 +13,7 @@ module.exports = {
         },
         {
           "tag": "d",
-          "content": "-1605."
+          "content": "-1605. "
         },
         {
           "tag": "t",

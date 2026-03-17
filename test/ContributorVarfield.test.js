@@ -95,7 +95,7 @@ describe("ContributorVarfield", () => {
         ]
       })
       assert.equal(ed.browseTermValue.name, 'Martin, George R.R.')
-      assert.equal(ed.browseTermValue.label, 'Martin, George R.R., author.')
+      assert.equal(ed.browseTermValue.label, 'Martin, George R.R., author')
     })
   })
   describe('nameRoles', () => {
