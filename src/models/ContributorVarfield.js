@@ -4,7 +4,7 @@ const relatorMap = require('../data/relators.json');
 const { capitalize } = require("../utils");
 
 class ContributorVarfield extends Varfield {
-  constructor (varfield, stripPeriods = false) {
+  constructor (varfield, stripPeriods = true) {
     if (!varfield.subfields?.length) {
       logger.warn(`Contributor varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
@@ -21,7 +21,7 @@ class ContributorVarfield extends Varfield {
       role: this.parsedSubfields.role,
       prefix: this.getPortion('prefix'),
       // this.label is a getter defined on the parent class
-      label: this.label.trim().replace(/(,$|(?<!\b[A-Z])\.)+$/, "")
+      label: this.label
     }
   }
 
