@@ -46,7 +46,7 @@ describe("ContributorVarfield", () => {
       ]
     })
     it('formats multiple roles correctly', () => {
-      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, period, comma, editor, libelee-appellee.")
+      assert.equal(withMultiRole.label, "Sondheim, Stephen, lyricist, composer, period, comma, editor, libelee-appellee")
     })
     it('accounts for unmatched values', () => {
       const ed = new ContributorVarfield({
@@ -74,7 +74,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, ed.')
+      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, ed')
     })
     it('accounts for initials', () => {
       const ed = new ContributorVarfield({
@@ -95,7 +95,7 @@ describe("ContributorVarfield", () => {
         ]
       })
       assert.equal(ed.browseTermValue.name, 'Martin, George R.R.')
-      assert.equal(ed.browseTermValue.label, 'Martin, George R.R., author.')
+      assert.equal(ed.browseTermValue.label, 'Martin, George R.R., author')
     })
   })
   describe('nameRoles', () => {
@@ -137,11 +137,11 @@ describe("ContributorVarfield", () => {
         "subfields": [
           {
             "tag": "a",
-            "content": "Sondheim, Stephen."
+            "content": "Sondheim, Stephen. "
           }
         ]
       })
-      assert.equal(noRole.label, "Sondheim, Stephen.")
+      assert.equal(noRole.label, "Sondheim, Stephen")
     })
     it('concatenates', () => {
       const withRole = new ContributorVarfield({
@@ -161,7 +161,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(withRole.label, 'Sondheim, Stephen, lyricist.')
+      assert.equal(withRole.label, 'Sondheim, Stephen, lyricist')
     })
   })
   describe('parallel varfields', () => {
@@ -187,7 +187,7 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(parallel.label, '吴承恩, approximately 1500-approximately 1582.')
+      assert.equal(parallel.label, '吴承恩, approximately 1500-approximately 1582')
     })
   })
   describe('portionMap', () => {

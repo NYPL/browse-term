@@ -4,7 +4,7 @@ const relatorMap = require('../data/relators.json');
 const { capitalize } = require("../utils");
 
 class ContributorVarfield extends Varfield {
-  constructor (varfield, stripPeriods = false) {
+  constructor (varfield, stripPeriods = true) {
     if (!varfield.subfields?.length) {
       logger.warn(`Contributor varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
     }
@@ -27,9 +27,9 @@ class ContributorVarfield extends Varfield {
 
   getRole(value) {
     value = value
+      .trim()
       .replace(/^.*\/|(\p{P}|\p{S})+$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
       .toLowerCase()
-      .trim()
     return relatorMap[value] || value
   }
 
@@ -47,6 +47,7 @@ class ContributorVarfield extends Varfield {
       .map(([_, portion]) =>
         portion.map(portionValueTransform).join(portionJoiner))
       .join(" ")
+      .trim()
       .replace(/(,$|(?<!\b[A-Z])\.)+$/, "") // removes trailing commas and periods except where a period is expected, i.e. an initial
   }
 

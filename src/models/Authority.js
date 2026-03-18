@@ -115,7 +115,7 @@ Authority.subjectFactory = (authorityRecord, stripPeriods = false) => {
   return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'd', VarfieldModel: SubjectVarfield, VariantModel: VariantVarfield })
 }
 
-Authority.contributorFactory = (authorityRecord, stripPeriods = false) => {
+Authority.contributorFactory = (authorityRecord, stripPeriods = true) => {
   return new Authority({ authorityRecord, stripPeriods, fieldTagValue: 'a', VarfieldModel: ContributorVarfield, VariantModel: VariantVarfield })
 }
 
