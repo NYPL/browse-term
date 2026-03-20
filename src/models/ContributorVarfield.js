@@ -48,6 +48,7 @@ class ContributorVarfield extends Varfield {
         portion.map(portionValueTransform).join(portionJoiner))
       .join(" ")
       .trim()
+      .replace(/[.,]\"$/, "\"") // removes final commas and periods within quotes
       .replace(/(,$|(?<!\b[A-Z])\.)+$/, "") // removes trailing commas and periods except where a period is expected, i.e. an initial
   }
 
