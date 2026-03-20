@@ -76,6 +76,27 @@ describe("ContributorVarfield", () => {
       })
       assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, ed')
     })
+    it('accounts for encompassing ', () => {
+      const ed = new ContributorVarfield({
+        "fieldTag": "b",
+        "marcTag": "700",
+        "ind1": "1",
+        "ind2": " ",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Народна библиотека \"Стефан Првовенчани,\""
+          },
+          {
+            "tag": "e",
+            "content": "issuing body."
+          }
+        ]
+      })
+      assert.equal(ed.browseTermValue.name, 'Народна библиотека "Стефан Првовенчани"')
+      assert.equal(ed.browseTermValue.label, 'Народна библиотека "Стефан Првовенчани", issuing body')
+    })
     it('accounts for initials', () => {
       const ed = new ContributorVarfield({
         "fieldTag": "b",
