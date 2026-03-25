@@ -14,11 +14,12 @@ class ContributorVarfield extends Varfield {
     const portionMapMapKey = this.marcTag === 880 ? this.getSubfieldContent("6").substr(1, 2) : this.varfield.marcTag.substr(1,)
     this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
     this.suppress = false
+    this.roles = this.getRoles() // used in several functions building the browseTermValue, build this list just once
     this.browseTermValue = {
       nameRoles: this.getNameRoles(),
       name: this.getPortion('name'),
       title: this.getPortion('title'),
-      role: this.parsedSubfields.role,
+      role: this.roles,
       prefix: this.getPortion('prefix'),
       // this.label is a getter defined on the parent class
       label: this.label
@@ -28,15 +29,18 @@ class ContributorVarfield extends Varfield {
   getRole(value) {
     value = value
       .trim()
-      .replace(/^.*\/|(\p{P}|\p{S})+$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
+      .replace(/^.*\/|([.,])+$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
       .toLowerCase()
     return relatorMap[value] || value
   }
 
+  getRoles() {
+    return [... new Set(this.parsedSubfields.role.map((role) => this.getRole(role)))]
+  }
+
   getNameRoles () {
-    return this.parsedSubfields.role.map((role) => {
-      const mappedRole = this.getRole(role)
-      return `${this.getPortion('name')}||${mappedRole}`
+    return this.roles.map((role) => {
+      return `${this.getPortion('name')}||${role}`
     })
   }
 
@@ -54,12 +58,7 @@ class ContributorVarfield extends Varfield {
 
   labelContentBuilder () {
     const prefixNameTitle = this.joinPortions({ portions: ['prefix', 'name', 'title'] })
-    const role = this.joinPortions({
-      portions: ['role'], portionJoiner: ', ', portionValueTransform: (value, idx) => {
-        return this.getRole(value)
-      }
-    })
-    return [prefixNameTitle, role].filter(Boolean).join(', ')
+    return [prefixNameTitle, this.roles.join(', ')].filter(Boolean).join(', ')
   }
 
   getPortion (portion) {
@@ -107,9 +106,9 @@ ContributorVarfield.portionMapMap = {
 
 /**
  * State machine captures the following logic of how to parse marc data:
- *  Prefix (if it exists) is any non-name subfield before first name subfield. 
- *  Title portion (if it exists) begins at the first title-portion subfield 
- *  following the first name-portion subfield. 
+ *  Prefix (if it exists) is any non-name subfield before first name subfield.
+ *  Title portion (if it exists) begins at the first title-portion subfield
+ *  following the first name-portion subfield.
  */
 const stateMachine = {
   prefix: {
@@ -131,7 +130,8 @@ const stateMachine = {
     role: null
   },
   role: {
-    role: null
+    role: null,
+    title: 'title'
   }
 }
 

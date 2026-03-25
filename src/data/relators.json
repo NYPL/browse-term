@@ -303,5 +303,16 @@
   "crt": "court reporter",
   "fmk": "filmmaker",
   "nan": "news anchor",
-  "prd": "production personnel"
+  "prd": "production personnel",
+
+  "tr": "translator",
+  "joint tr": "joint translator",
+  "ed": "editor",
+  "joint ed": "joint editor",
+  "comp": "compiler",
+  "joint comp": "joint compiler",
+  "illus": "illustrator",
+  "dir": "director",
+  "pub": "publisher",
+  "engr": "engraver"
 }
