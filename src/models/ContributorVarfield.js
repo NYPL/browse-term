@@ -29,7 +29,7 @@ class ContributorVarfield extends Varfield {
   getRole(value) {
     value = value
       .trim()
-      .replace(/^.*\/|([.,])+$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
+      .replace(/^.*\/|[.,]$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
       .toLowerCase()
     return relatorMap[value] || value
   }
