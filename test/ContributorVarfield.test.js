@@ -41,6 +41,14 @@ describe("ContributorVarfield", () => {
         },
         {
           "tag": "4",
+          "content": "edt"
+        },
+        {
+          "tag": "4",
+          "content": "editor"
+        },
+        {
+          "tag": "4",
           "content": "lee"
         },
       ]
@@ -74,9 +82,9 @@ describe("ContributorVarfield", () => {
           }
         ]
       })
-      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, ed')
+      assert.equal(ed.label, 'Ginosar, Sh. (Shaleṿ), 1902-, editor')
     })
-    it('accounts for encompassing ', () => {
+    it('accounts for encompassing quotes on punctuation', () => {
       const ed = new ContributorVarfield({
         "fieldTag": "b",
         "marcTag": "700",
@@ -147,6 +155,7 @@ describe("ContributorVarfield", () => {
     })
     assert.deepEqual(withMultiRole.browseTermValue.nameRoles, ['Sondheim, Stephen||lyricist', 'Sondheim, Stephen||composer', 'Sondheim, Stephen||libelee-appellee'])
   })
+
   describe('portion concatenating', () => {
     it('no roles', () => {
       const noRole = new ContributorVarfield({
@@ -277,5 +286,54 @@ describe("ContributorVarfield", () => {
       })
       assert.deepEqual(floatersInName.parsedSubfields.name, ['Mahr (Family :', 'Mahr, Carl,', '1830-1899)'])
     })
+  })
+  describe('nameRolesWithTitle', () => {
+    const withTitle = new ContributorVarfield({
+      "ind1": "1",
+      "ind2": "2",
+      "content": null,
+      "marcTag": "700",
+      "fieldTag": "b",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Golden, Jane,"
+        },
+        {
+          "tag": "d",
+          "content": "1953-"
+        },
+        {
+          "tag": "e",
+          "content": "author."
+        },
+        {
+          "tag": "t",
+          "content": "Growing up, growing out, putting down roots."
+        }
+      ]
+    })
+    assert.deepEqual(withTitle.browseTermValue.nameRoles, ['Golden, Jane, 1953-||author'])
+  })
+  describe('nameRolesWithTrailingParen', () => {
+    const withParen = new ContributorVarfield({
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "marcTag": "700",
+      "fieldTag": "b",
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Barroche, Adrienne,"
+        },
+        {
+          "tag": "e",
+          "content": "photographer (expression)"
+        }
+      ]
+    })
+    assert.deepEqual(withParen.browseTermValue.nameRoles, ['Barroche, Adrienne||photographer (expression)'])
+    assert.deepEqual(withParen.browseTermValue.label, 'Barroche, Adrienne, photographer (expression)')
   })
 })
