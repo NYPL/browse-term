@@ -1,7 +1,8 @@
-const Varfield = require("./Varfield");
-const logger = require("../logger")
-const relatorMap = require('../data/relators.json');
-const { capitalize } = require("../utils");
+const Varfield = require('./Varfield')
+const logger = require('../logger')
+const relatorMap = require('../data/relators.json')
+const mappings = require('../data/mappings.json')
+const { capitalize } = require('../utils')
 
 class ContributorVarfield extends Varfield {
   constructor (varfield, stripPeriods = true) {
@@ -10,9 +11,9 @@ class ContributorVarfield extends Varfield {
     }
     super(varfield, stripPeriods)
     this.varfield = this.varfield
-    this.marcTag = parseInt(this.varfield.marcTag, 10);
-    const portionMapMapKey = this.marcTag === 880 ? this.getSubfieldContent("6").substr(1, 2) : this.varfield.marcTag.substr(1,)
-    this.portionMap = ContributorVarfield.portionMapMap[portionMapMapKey] || ContributorVarfield.portionMapMap['00']
+    this.marcTag = parseInt(this.varfield.marcTag, 10)
+    const portionMapMapKey = (this.marcTag === 880 ? this.getSubfieldContent('6').substr(1, 2) : this.varfield.marcTag.substr(1))
+    this.portionMap = mappings.contributors[portionMapMapKey] || mappings.contributors['00']
     this.suppress = false
     this.roles = this.getRoles() // used in several functions building the browseTermValue, build this list just once
     this.browseTermValue = {
@@ -26,7 +27,7 @@ class ContributorVarfield extends Varfield {
     }
   }
 
-  getRole(value) {
+  getRole (value) {
     value = value
       .trim()
       .replace(/^.*\/|[.,]$/gu, '') // remove trailing periods, commas or url paths, some recap records begin with http://id.loc.gov/vocabulary/relators/
@@ -34,8 +35,8 @@ class ContributorVarfield extends Varfield {
     return relatorMap[value] || value
   }
 
-  getRoles() {
-    return [... new Set(this.parsedSubfields.role.map((role) => this.getRole(role)))]
+  getRoles () {
+    return [...new Set(this.parsedSubfields.role.map((role) => this.getRole(role)))]
   }
 
   getNameRoles () {
@@ -44,16 +45,18 @@ class ContributorVarfield extends Varfield {
     })
   }
 
-  joinPortions ({ portions = ['prefix', 'name', 'title', 'role'], portionJoiner = " "
-    , portionValueTransform = (x) => x }) {
+  joinPortions ({
+    portions = ['prefix', 'name', 'title', 'role'], portionJoiner = ' '
+    , portionValueTransform = (x) => x
+  }) {
     return Object.entries(this.parsedSubfields)
       .filter(([portionKey, portionValue]) => portions.includes(portionKey) && portionValue.length)
       .map(([_, portion]) =>
         portion.map(portionValueTransform).join(portionJoiner))
-      .join(" ")
+      .join(' ')
       .trim()
-      .replace(/[.,]\"$/, "\"") // removes final commas and periods within quotes
-      .replace(/(,$|(?<!\b[A-Z])\.)+$/, "") // removes trailing commas and periods except where a period is expected, i.e. an initial
+      .replace(/[.,]\"$/, '"') // removes final commas and periods within quotes
+      .replace(/(,$|(?<!\b[A-Z])\.)+$/, '') // removes trailing commas and periods except where a period is expected, i.e. an initial
   }
 
   labelContentBuilder () {
@@ -80,27 +83,6 @@ class ContributorVarfield extends Varfield {
   getPortionForSubfieldTag (tag) {
     return Object.keys(this.portionMap)
       .find((portion) => this.portionMap[portion].includes(tag))
-  }
-}
-
-ContributorVarfield.portionMapMap = {
-  '00': {
-    name: ['a', 'b', 'c', 'd', 'j', 'q', 'u'],
-    role: ['e', '4'],
-    title: ['f', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'v', 'x'],
-    floater: ['g']
-  },
-  '10': {
-    name: ['a', 'b', 'c', 'u'],
-    role: ['e', '4'],
-    title: ['f', 'h', 'i', 'k', 'l', 'm', 'o', 'p', 'r', 's', 't', 'v', 'x'],
-    floater: ['d', 'g', 'n']
-  },
-  '11': {
-    name: ['a', 'c', 'e', 'q', 'u'],
-    role: ['j', '4'],
-    title: ['f', 'h', 'i', 'k', 'l', 'p', 's', 't', 'v', 'x'],
-    floater: ['d', 'g', 'n']
   }
 }
 
