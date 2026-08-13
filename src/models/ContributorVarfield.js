@@ -13,7 +13,7 @@ class ContributorVarfield extends Varfield {
     this.varfield = this.varfield
     this.marcTag = parseInt(this.varfield.marcTag, 10)
     const portionMapMapKey = (this.marcTag === 880 ? this.getSubfieldContent('6').substr(1, 2) : this.varfield.marcTag.substr(1))
-    this.portionMap = mappings.contributors[portionMapMapKey] || mappings.contributors['00']
+    this.portionMap = this.mappingGroup[portionMapMapKey] || this.mappingGroup['00']
     this.suppress = false
     this.roles = this.getRoles() // used in several functions building the browseTermValue, build this list just once
     this.browseTermValue = {
@@ -25,6 +25,10 @@ class ContributorVarfield extends Varfield {
       // this.label is a getter defined on the parent class
       label: this.label
     }
+  }
+
+  get mappingGroup () {
+    return mappings.contributors
   }
 
   getRole (value) {

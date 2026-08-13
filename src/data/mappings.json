@@ -1,10 +1,10 @@
 {
-   "contributors" : {
-      "00" : {
-         "floater" : [
+   "contributors": {
+      "00": {
+         "floater": [
             "g"
          ],
-         "name" : [
+         "name": [
             "a",
             "b",
             "c",
@@ -13,11 +13,11 @@
             "q",
             "u"
          ],
-         "role" : [
+         "role": [
             "e",
             "4"
          ],
-         "title" : [
+         "title": [
             "f",
             "h",
             "i",
@@ -34,23 +34,23 @@
             "x"
          ]
       },
-      "10" : {
-         "floater" : [
+      "10": {
+         "floater": [
             "d",
             "g",
             "n"
          ],
-         "name" : [
+         "name": [
             "a",
             "b",
             "c",
             "u"
          ],
-         "role" : [
+         "role": [
             "e",
             "4"
          ],
-         "title" : [
+         "title": [
             "f",
             "h",
             "i",
@@ -66,24 +66,24 @@
             "x"
          ]
       },
-      "11" : {
-         "floater" : [
+      "11": {
+         "floater": [
             "d",
             "g",
             "n"
          ],
-         "name" : [
+         "name": [
             "a",
             "c",
             "e",
             "q",
             "u"
          ],
-         "role" : [
+         "role": [
             "j",
             "4"
          ],
-         "title" : [
+         "title": [
             "f",
             "h",
             "i",
@@ -97,8 +97,8 @@
          ]
       }
    },
-   "subjects" : {
-      "first" : [
+   "subjects": {
+      "first": [
          "a",
          "b",
          "c",
@@ -120,11 +120,103 @@
          "t",
          "u"
       ],
-      "last" : [
+      "last": [
          "v",
          "x",
          "y",
          "z"
       ]
+   },
+   "seriesAddedEntry": {
+      "00": {
+         "floater": [
+            "g"
+         ],
+         "name": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "j",
+            "q",
+            "u"
+         ],
+         "role": [
+            "e",
+            "4"
+         ],
+         "title": [
+            "f",
+            "h",
+            "i",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "r",
+            "s",
+            "t"
+         ]
+      },
+      "10": {
+         "floater": [
+            "d",
+            "g",
+            "n"
+         ],
+         "name": [
+            "a",
+            "b",
+            "c",
+            "u"
+         ],
+         "role": [
+            "e",
+            "4"
+         ],
+         "title": [
+            "f",
+            "h",
+            "i",
+            "k",
+            "l",
+            "m",
+            "o",
+            "p",
+            "r",
+            "s",
+            "t"
+         ]
+      },
+      "11": {
+         "floater": [
+            "d",
+            "g",
+            "n"
+         ],
+         "name": [
+            "a",
+            "c",
+            "e",
+            "q",
+            "u"
+         ],
+         "role": [
+            "j",
+            "4"
+         ],
+         "title": [
+            "f",
+            "h",
+            "i",
+            "k",
+            "l",
+            "p",
+            "s",
+            "t"
+         ]
+      }
    }
 }
