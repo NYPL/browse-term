@@ -1,7 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
 const SeriesVarfield = require("../src/models/SeriesVarfield.js");
-const mappings = require("../src/data/mappings.json");
 
 describe("SeriesVarfield", () => {
   const testVarfield = new SeriesVarfield({
@@ -144,13 +143,13 @@ describe("SeriesVarfield", () => {
         marcTag: "830",
         subfields: [{ tag: "a", content: "spaghetti," }],
       });
-      assert.deepEqual(_830.portionMap, mappings.seriesAddedEntry["00"]);
+      assert.deepEqual(_830.portionMap, _830.mappingGroup["00"]);
     });
     it("correctly assigns portionMap based on varfield marcTag", () => {
       assert.deepStrictEqual(testVarfield.portionMap.role, ["j", "4"]);
       assert.deepStrictEqual(
         testVarfield.portionMap,
-        mappings.seriesAddedEntry["11"]
+        testVarfield.mappingGroup["11"]
       );
     });
   });
