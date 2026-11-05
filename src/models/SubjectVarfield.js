@@ -4,7 +4,7 @@ const Varfield = require("./Varfield.js")
 
 class SubjectVarfield extends Varfield {
   allowedInd2Values = [0]
-  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit"]
+  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit", "tgn"]
   constructor (varfield, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.warn(`Subject varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)

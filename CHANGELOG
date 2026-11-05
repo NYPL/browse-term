@@ -1,3 +1,7 @@
+
+## v1.2.0
+- include TGN as accepted subject vocabulary source (SCC-5767)
+
 ## v1.1.8
 
 - Add SeriesVarfield for series added entry contributors
