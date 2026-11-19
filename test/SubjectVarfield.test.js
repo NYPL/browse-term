@@ -4,6 +4,34 @@ const SubjectVarfield = require("../src/models/SubjectVarfield.js")
 
 describe("SubjectVarfield", () => {
   describe("label", () => {
+    it("delimits every subfield of a tgn subject with '--'", () => {
+       const varfield = new SubjectVarfield({
+        "fieldTag": "d",
+        "marcTag": "600",
+        "ind1": "0",
+        "ind2": "0",
+        "content": null,
+        "subfields": [
+          {
+            "tag": "2",
+            "content": "tgn"
+          },
+          {
+            "tag": "a",
+            "content": "spaghetti"
+          },
+          {
+            "tag": "b",
+            "content": "meatballs"
+          },
+          {
+            "tag": "c",
+            "content": "parm"
+          },
+        ]
+      })
+      assert.equal(varfield.label, "spaghetti -- meatballs -- parm.")
+    })
     it("Does not trim final periods part of abbreviations when flag is true", () => {
       const varfield = new SubjectVarfield({
         "fieldTag": "d",

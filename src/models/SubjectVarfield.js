@@ -4,7 +4,7 @@ const Varfield = require("./Varfield.js")
 
 class SubjectVarfield extends Varfield {
   allowedInd2Values = [0]
-  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit"]
+  allowedSubfield2Sources = ["bookops", "local", "lcsh", "homoit", "tgn"]
   constructor (varfield, stripPeriods = false) {
     if (!varfield.subfields?.length) {
       logger.warn(`Subject varfield missing subfields. Varfield marc: \n ${JSON.stringify(varfield)}`)
@@ -16,6 +16,8 @@ class SubjectVarfield extends Varfield {
     this.suppress = this.isSuppressed();
     // this.label is a getter defined on the parent class
     this.browseTermValue = { label: this.label }
+    this.subfield2 = this.getSubfieldContent("2")?.toLocaleLowerCase();
+    this.tgn = this.subfield2 === 'tgn'
   }
 
   labelContentBuilder = () => {
@@ -23,6 +25,9 @@ class SubjectVarfield extends Varfield {
       .filter((sf) => subfieldSection.includes(sf.tag))
       .map(({ content }) => content)
       .join(joiner)
+    if(this.tgn) {
+      return subfieldsFor([...firstSubfields, ...lastSubfields], " -- ")
+    }
     return [
       subfieldsFor(firstSubfields, " "),
       subfieldsFor(lastSubfields, " -- ")].filter(Boolean).join(" -- ")
@@ -31,9 +36,8 @@ class SubjectVarfield extends Varfield {
   // Determine if a varfield is from a thesaurus we want to recognize, or has
   // a catalogged subfield 2 Authority source we want to display
   hasValidBibAuthoritySource () {
-    const subfield2Source = this.getSubfieldContent("2")?.toLocaleLowerCase();
     const validCriteria = [
-      this.allowedSubfield2Sources.includes(subfield2Source),
+      this.allowedSubfield2Sources.includes(this.subfield2),
       this.allowedInd2Values.includes(this.ind2),
       this.marcTag === 690 && this.ind2 === 4
     ]
